@@ -1,0 +1,365 @@
+!------------------
+! Much of this grammar is heavily based on the C# Specification
+! and an LALR grammar for it written by Devin Cook
+!------------------
+
+"Name"     = 'TBD'
+"Version"  = '1.0'
+"Author"   = 'Andrew Glaude'           
+
+"About"    = 'TBD was created as an ideal CS1 language at RIT for an MS Project.'
+           | 'Based heavily on other OOP languages like C# and Java.'
+
+"Start Symbol" = <Compilation Unit>
+
+! ----------------------------------------------------------------- Sets
+
+{ID Head}        = {Letter} + [_]
+{ID Tail}        = {AlphaNumeric} + [_]
+{String Ch}      = {Printable} - ["]
+{Char Ch}        = {Printable} - ['']
+{Hex Digit}      = {Digit} + [abcdef] + [ABCDEF]
+
+! ----------------------------------------------------------------- Terminals
+
+Identifier     = {ID Head} {ID Tail}*        !The @ is an override char
+
+MemberName     =  '.' {ID Head} {ID Tail}*       
+
+DecLiteral     = {Digit}+            ( [UuLl] | [Uu][Ll] | [Ll][Uu] )?
+HexLiteral     = '0'[xX]{Hex Digit}+ ( [UuLl] | [Uu][Ll] | [Ll][Uu] )?
+RealLiteral    = {Digit}*'.'{Digit}+
+
+StringLiteral  = '"'( {String Ch} | '\'{Printable} )* '"'
+CharLiteral    = '' ( {Char Ch} | '\'{Printable} )''
+
+! ----------------------------------------------------------------- Comments
+
+Comment Line = '//'
+Comment Start = '/*'
+Comment End = '*/'
+
+! ===========================================================================
+! Shared by multiple sections
+! ===========================================================================
+
+<Valid ID>
+      ::= Identifier
+       |  this !-- Might need this later
+       |  <Type>
+
+<Qualified ID>
+       ::= <Valid ID> <Member List>
+     
+<Member List>
+       ::= <Member List> MemberName
+        |  !Zero or more 
+
+!------------------
+
+
+<Literal>
+       ::= true 
+        |  false
+        |  DecLiteral
+        |  HexLiteral
+        |  RealLiteral
+        |  CharLiteral
+        |  StringLiteral
+        |  null
+
+<Type>
+		::= int
+		 |  double
+		 |  String
+		 |  void
+		 |  bool
+		 |  List '<' <Qualified ID> '>'
+
+!------------------
+! Expressions
+!------------------
+
+<Expression Opt>
+       ::= <Expression>
+        |  !Nothing 
+
+<Expression List>
+       ::= <Expression>
+        |  <Expression> ',' <Expression List> 
+
+
+<Expression>
+       ::= <Conditional Exp> '='   <Expression>
+        |  <Conditional Exp> '+='  <Expression>
+        |  <Conditional Exp> '-='  <Expression>
+        |  <Conditional Exp> '*='  <Expression>
+        |  <Conditional Exp> '/='  <Expression>
+        |  <Conditional Exp>
+
+<Conditional Exp>      
+       ::= <Or Exp> '?' <Or Exp> ':' <Conditional Exp>
+        |  <Or Exp>
+
+<Or Exp>
+       ::= <Or Exp> '||' <And Exp>
+        |  <And Exp>
+
+<And Exp>
+       ::= <And Exp> '&&' <Equality Exp>
+        |  <Equality Exp>
+
+<Equality Exp>  
+       ::= <Equality Exp> '==' <Compare Exp>
+        |  <Equality Exp> '!=' <Compare Exp>
+        |  <Compare Exp>
+
+<Compare Exp>
+       ::= <Compare Exp> '<'  <Shift Exp>
+        |  <Compare Exp> '>'  <Shift Exp>
+        |  <Compare Exp> '<=' <Shift Exp>
+        |  <Compare Exp> '>=' <Shift Exp> 
+        |  <Shift Exp>
+
+<Shift Exp>
+       ::= <Shift Exp> '<<' <Add Exp>
+        |  <Shift Exp> '>>' <Add Exp>
+        |  <Add Exp>
+
+<Add Exp>
+       ::= <Add Exp> '+' <Mult Exp>
+        |  <Add Exp> '-' <Mult Exp>
+        |  <Mult Exp>
+
+<Mult Exp>
+       ::= <Mult Exp> '*' <Unary Exp>  
+        |  <Mult Exp> '/' <Unary Exp>  
+        |  <Mult Exp> '%' <Unary Exp>  
+        |  <Unary Exp>  
+
+<Unary Exp>  
+       ::= '!'  <Unary Exp>
+        |  '-'  <Unary Exp>
+        |  '++' <Unary Exp>
+        |  '--' <Unary Exp>
+!------ |  '(' <Expression> ')' <Object Exp>     !Cast "expression" (Maybe optional)
+        |  <Object Exp>
+
+<Object Exp>
+       ::= <Method Exp>
+
+<Method Exp>
+       ::= <Method Exp> <Method>
+        |  <Primary Exp>
+
+<Primary Exp>
+       ::= new <Valid ID> '(' <Arg List Opt> ')'     !Object creation
+        |  <Primary>
+        |  '(' <Expression> ')' 
+       
+<Primary>
+       ::= <Valid ID>
+        |  <Valid ID> '(' <Arg List Opt> ')'    !Current object method
+        |  <Literal>        
+
+! ===========================================================================
+! Arguments
+! ===========================================================================
+
+<Arg List Opt>
+       ::= <Arg List>
+        |  !Nothing
+       
+<Arg List>
+       ::= <Arg List> ',' <Argument>
+        |  <Argument>
+
+<Argument>
+       ::= <Expression>
+        |  ref <Expression>
+        |  out <Expression>
+            
+! ===========================================================================
+! C.2.5 Statements 
+! ===========================================================================
+
+<Stm List>
+       ::= <Stm List> <Statement>
+        |  <Statement>
+
+<Statement>
+       ::= <Local Var Decl> ';'
+        |  if       '(' <Expression> ')' <Statement>
+        |  if       '(' <Expression> ')' <Then Stm> else <Statement>        
+        |  for      '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
+        |  foreach  '(' <Valid ID> Identifier in <Expression> ')' <Statement>  
+        |  while    '(' <Expression> ')' <Statement>
+        |  <Normal Stm>   
+
+
+<Then Stm>   
+       ::= if       '(' <Expression> ')' <Then Stm> else <Then Stm>        
+        |  for      '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Then Stm>
+        |  foreach  '(' <Valid ID> Identifier in <Expression> ')' <Then Stm>  
+        |  while    '(' <Expression> ')' <Then Stm>       
+        |  <Normal Stm>   
+          
+          
+          
+<Normal Stm>                   
+       ::= break ';'
+        |  continue ';'
+        |  return <Expression Opt> ';'
+        |  <Statement Exp> ';'        
+        |  ';'
+        |  <Block>
+
+<Block>
+       ::= '{' <Stm List> '}'
+        |  '{' '}' 
+         
+<Variable Decs>
+        ::= <Variable Declarator>
+         |  <Variable Decs> ',' <Variable Declarator>
+
+<Variable Declarator>
+        ::= Identifier
+         |  Identifier '=' <Variable Initializer>
+
+<Variable Initializer>
+        ::= <Expression>
+         |  <Array Initializer>
+
+! ----- Array Initializations
+
+<Array Initializer>
+       ::= '{' <Variable Initializer List Opt> '}'
+        |  '{' <Variable Initializer List> ',' '}'
+
+<Variable Initializer List Opt>
+       ::= <Variable Initializer List>
+        |  ! Nothing 
+
+<Variable Initializer List>
+       ::= <Variable Initializer>
+        |  <Variable Initializer List> ',' <Variable Initializer>
+
+! ===========================================================================
+! For Clauses
+! ===========================================================================
+
+<For Init Opt>
+        ::= <Local Var Decl>
+         |  <Statement Exp List>
+         |  !Nothing
+
+<For Iterator Opt>
+        ::= <Statement Exp List>
+         |  !Nothing 
+
+<For Condition Opt>
+        ::= <Expression>
+         |  !Nothing 
+
+<Statement Exp List>
+        ::= <Statement Exp List> ',' <Statement Exp>
+         |  <Statement Exp>
+
+! ===========================================================================
+! Statement Expressions & Local Variable Declaration
+! ===========================================================================
+
+! ----
+! The following notes are from Devin Cook regarding LALR parsing of the C# spec. 
+! Due to this languages similarity to C# much of this section is reusable after
+! modification to reduce complexity.
+! ----
+! The complex productions below are able to avoid the shift-reduce error caused
+! by declaring an array. The notation used by C# (and the rest of the C++
+! family) prevents an array declaration to be distinguished from an array 
+! assignment statement until a number of characters are read.
+!
+! a.b.c[2] = "Test"
+! a.b.c[] = new String[3]
+!
+! The system CANNOT make a decision between the two until it is reading the 
+! contents the [ ... ]. 
+!
+! As a result, the local variable declaration below contains the full notation
+! for each of the C# methods at the same level as local variable declarations. 
+! Since the system does not have to reduce UNTIL it is within the [ ... ], no
+! shift-reduce error will occur. Nasty, huh?
+
+<Local Var Decl>
+       ::= <Qualified ID> <Variable Decs>    
+
+<Statement Exp>
+       ::= <Qualified ID> '(' <Arg List Opt> ')'
+        |  <Qualified ID> '(' <Arg List Opt> ')'       <Methods Opt> <Assign Tail>          
+        |  <Qualified ID> '[' <Expression List> ']'    <Methods Opt> <Assign Tail>   
+        |  <Qualified ID> '++'                         <Methods Opt> <Assign Tail>    
+        |  <Qualified ID> '--'                         <Methods Opt> <Assign Tail>    
+        |  <Qualified ID>                                            <Assign Tail>
+
+<Assign Tail>
+       ::= '++'
+        |  '--'       
+        |  '='   <Expression>
+        |  '+='  <Expression>
+        |  '-='  <Expression>
+        |  '*='  <Expression>
+        |  '/='  <Expression>
+
+<Methods Opt>
+        ::= <Methods Opt> <Method>
+         |  ! Nothing
+
+<Method>
+        ::= MemberName
+         |  MemberName '(' <Arg List Opt> ')'    !Invocation
+         |  '++'
+         |  '--'
+
+<Compilation Unit>
+	::= <Program Items>
+
+<Program Items>
+	::= <Program Items> <Program Item>
+	 |  ! Nothing
+
+<Program Item>
+	::= <Method Dec>
+	 |  <Class Decl>
+
+! ===========================================================================
+! Methods
+! ===========================================================================
+
+<Method Dec>
+       ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
+
+<Formal Param List Opt>
+       ::= <Formal Param List>
+        |  !Nothing 
+
+<Formal Param List>
+       ::= <Formal Param>
+        |  <Formal Param List> ',' <Formal Param>
+
+<Formal Param>
+       ::= <Qualified ID> Identifier  
+
+! ===========================================================================
+! Class Declarations
+! ===========================================================================
+
+
+<Class Decl>
+       ::= class Identifier '(' <Formal Param List Opt> ')' '{' <Class Item Decs Opt> '}'
+
+<Class Item Decs Opt>
+       ::= <Class Item Decs Opt> <Class Item>
+        |  !Nothing 
+
+<Class Item>
+	   ::= <Method Dec>
