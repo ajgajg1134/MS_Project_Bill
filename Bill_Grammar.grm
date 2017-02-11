@@ -71,6 +71,7 @@ Comment End = '*/'
 <Type>
 		::= int
 		 |  double
+     |  char
 		 |  String
 		 |  void
 		 |  bool
