@@ -1,0 +1,169 @@
+//Basic example program (C to F)
+//Shows IO, basic expressions, some built-ins
+void main(){
+	print("Enter a temperature in Celsius: ");
+	int tempC = toInt(input());
+	int tempF = tempC * 1.8 + 32;
+	println(tempC + " Celsius is " + tempF + " in Fahrenheit."); 
+		//Do I want to allow string concatenation directly with ints?
+		//Or force explicit conversion like python?
+		//No implicit "stuff"
+}
+------
+
+
+.assembly Hello {}
+.assembly extern mscorlib {}
+.method static void Main()
+{
+	.entrypoint
+	.maxstack 3
+	ldstr "Enter a temperature in Celsius: "
+	call void [mscorlib]System.Console::WriteLine(string)
+	call String [mscorlib]System.Console::ReadLine()
+	stloc.0
+	ldloc.0
+	call int [mscorlib]System.Int32::Parse(string)
+	stloc.1
+	ldloc.1
+	conv.r8
+	ldc.r8 CDCC CCCC CCCC FC3F
+	mul
+	ldc.r8 0000 0000 0000 4040
+	add
+	conv.i4
+	stloc.2
+	ldloc.2
+	call void [mscorlib]System.Console::WriteLine(int)
+	ret
+}
+
+----------------------------------------------------------------
+
+//Basic example program (C to F)
+//Shows IO, functions with parameters
+void main(){
+	print("Enter a temperature in Celsius: ");
+	int tempC = toInt(input());
+	int tempF = celsiusToF(tempC);
+	println(tempC + " Celsius is " + tempF + " in Fahrenheit.");
+}
+
+int celsiusToF(int tempC)
+{
+	return tempC * 1.8 + 32;
+}
+
+----------------------------------------------------------------
+
+//Recursive example program (Fibonacci)
+//Shows recursion, conditionals
+
+int fibNumber(int n)
+{
+	return fibNumber(n, 0, 1);
+}
+
+int fibNumber(int n, int a, int b)
+{
+	if (n == 0)
+	{
+		return b;
+	}
+	return fibNumber(n - 1, b, a + b);
+}
+
+----------------------------------------------------------------
+
+//List example program (findMax)
+//Shows lists, for loop
+
+void main()
+{
+	List<int> nums = {5, 2, 8, -4, 10, 3};
+	int max = nums[0];
+	for(int i = 1; i < nums.size(); i++) //Add foreach
+	{
+		if (nums[i] > max)
+		{
+			max = nums[i];
+		}
+	}
+	println("The max is: " + max);
+}
+
+----------------------------------------------------------------
+
+//Command line example program(cmdLine)
+//Shows access to command line args
+
+void main(List<string> args)
+{
+	println("Arguments entered:");
+	for(int i = 0; i < args.size(); i++)
+	{
+		println("Arg #" + i + " is " + args[i]);
+	}
+}
+
+----------------------------------------------------------------
+
+//Dynamic List example (listInput)
+//Shows dynamic lists, while loop
+
+void main()
+{
+	List<int> nums = new List<int>();//Possibly provide size
+	println("Enter integers (-1 to quit)");
+	int num = toInt(input());
+	while(num != -1)
+	{
+		nums.add(num);
+		num = toInt(input());
+	}
+	println("You entered " + nums.size() + " numbers.");
+}
+
+----------------------------------------------------------------
+
+//Object example program (studentObj)
+//Shows objects, constructors, methods
+
+class Student(double gpa, String name, Student s){ //Immutable String (class)
+	String getLetterGrade()
+	{
+		if (gpa >= 4.0)
+		{
+			return "A";
+		}
+		else if (gpa >= 3.67)
+		{
+			return "A-";
+		}
+		else if (gpa >= 3.33)
+		{
+			return "B+";
+		}
+		else if (gpa >= 3.0)
+		{
+			return "B";
+		}
+		else if (gpa >= 2.67)
+		{
+			return "B-";
+		}
+		else
+		{
+			return "Below B-";
+		}
+	} //not implemented possibly
+}
+
+void main(){
+	Student a = new Student(3.8, "Andrew G");
+	println(a.name + " has a grade of " + a.getLetterGrade(), new File("out.txt"));
+}
+
+//FILE IO, (C# approach, or open/close)
+//import, (Lists, files are global)
+//Dictionaries maps
