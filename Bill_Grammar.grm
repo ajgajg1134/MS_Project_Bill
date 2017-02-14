@@ -45,7 +45,7 @@ Comment End = '*/'
 
 <Valid ID>
       ::= Identifier
-       |  this !-- Might need this later
+       |  this
        |  <Type>
 
 <Qualified ID>
@@ -116,15 +116,10 @@ Comment End = '*/'
         |  <Compare Exp>
 
 <Compare Exp>
-       ::= <Compare Exp> '<'  <Shift Exp>
-        |  <Compare Exp> '>'  <Shift Exp>
-        |  <Compare Exp> '<=' <Shift Exp>
-        |  <Compare Exp> '>=' <Shift Exp> 
-        |  <Shift Exp>
-
-<Shift Exp>
-       ::= <Shift Exp> '<<' <Add Exp>
-        |  <Shift Exp> '>>' <Add Exp>
+       ::= <Compare Exp> '<'  <Add Exp>
+        |  <Compare Exp> '>'  <Add Exp>
+        |  <Compare Exp> '<=' <Add Exp>
+        |  <Compare Exp> '>=' <Add Exp> 
         |  <Add Exp>
 
 <Add Exp>
@@ -177,8 +172,6 @@ Comment End = '*/'
 
 <Argument>
        ::= <Expression>
-        |  ref <Expression>
-        |  out <Expression>
             
 ! ===========================================================================
 ! C.2.5 Statements 
@@ -364,3 +357,5 @@ Comment End = '*/'
 
 <Class Item>
 	   ::= <Method Dec>
+
+
