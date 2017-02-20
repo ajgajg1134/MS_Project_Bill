@@ -5,8 +5,7 @@
 
 "Name"     = 'TBD'
 "Version"  = '1.0'
-"Author"   = 'Andrew Glaude'           
-
+"Author"   = 'Andrew Glaude'
 "About"    = 'TBD was created as an ideal CS1 language at RIT for an MS Project.'
            | 'Based heavily on other OOP languages like C# and Java.'
 
@@ -69,13 +68,13 @@ Comment End = '*/'
         |  null
 
 <Type>
-		::= int
-		 |  double
+        ::= int
+         |  double
      |  char
-		 |  String
-		 |  void
-		 |  bool
-		 |  List '<' <Qualified ID> '>'
+         |  String
+         |  void
+         |  bool
+         |  List '<' <Qualified ID> '>'
 
 !------------------
 ! Expressions
@@ -315,15 +314,15 @@ Comment End = '*/'
          |  '--'
 
 <Compilation Unit>
-	::= <Program Items>
+    ::= <Program Items>
 
 <Program Items>
-	::= <Program Items> <Program Item>
-	 |  ! Nothing
+    ::= <Program Items> <Program Item>
+     |  ! Nothing
 
 <Program Item>
-	::= <Method Dec>
-	 |  <Class Decl>
+    ::= <Method Dec>
+     |  <Class Decl>
 
 ! ===========================================================================
 ! Methods
@@ -356,6 +355,6 @@ Comment End = '*/'
         |  !Nothing 
 
 <Class Item>
-	   ::= <Method Dec>
+       ::= <Method Dec>
 
 
