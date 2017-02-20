@@ -58,6 +58,7 @@
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />
     <Compile Include="TreeNodes\Literal.cs" />
+    <Compile Include="TreeNodes\LocalVarDecl.cs" />
     <Compile Include="TreeNodes\ProgramNode.cs" />
     <Compile Include="TreeNodes\Statement.cs" />
   </ItemGroup>
