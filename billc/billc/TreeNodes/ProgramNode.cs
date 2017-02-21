@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class ProgramNode
+    class ProgramNode : Node
     {
         List<FunctionDecl> functions;
         List<ClassDecl> classes;
@@ -24,6 +24,12 @@ namespace billc.TreeNodes
         public void addClass(ClassDecl c)
         {
             classes.Add(c);
+        }
+
+        public override string ToString()
+        {
+            return classes.Select(s => s.ToString()).Aggregate("", (a, b) => a + "\n" + b) +
+                functions.Select(f => f.ToString()).Aggregate("", (a, b) => a + "\n" + b);
         }
     }
 }

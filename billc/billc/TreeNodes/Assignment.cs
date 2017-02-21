@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class LocalVarDecl : Statement
+    class Assignment : Statement
     {
         string id;
-        Expression val;
+        Expression rhs;
 
-        public LocalVarDecl(string i, Expression v)
+        //todo: add other kinds of assignment
+
+        public Assignment(string i, Expression r)
         {
             id = i;
-            val = v;
+            rhs = r;
         }
 
         public override string ToString()
         {
-            return id + " = " + val.ToString();
+            return id + " = " + rhs.ToString() + "\n";
         }
     }
 }

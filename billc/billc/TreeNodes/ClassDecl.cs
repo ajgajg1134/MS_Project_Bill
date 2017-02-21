@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class ClassDecl
+    class ClassDecl : Node
     {
         List<FormalParam> fields;
         //List<FunctionDecl> methods; //To be implemented as possible future work

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class FunctionDecl
+    class FunctionDecl : Node
     {
         List<FormalParam> fParams;
         string id;
@@ -21,6 +21,10 @@ namespace billc.TreeNodes
             block = b;
         }
 
-
+        public override string ToString()
+        {
+            return retType + " " + id + " (" + fParams.Select(f => f.ToString()).Aggregate("", (a, b) => a +  ", " + b) + ") {\n" +
+                block.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + ";\n") + "}\n";
+        }
     }
 }

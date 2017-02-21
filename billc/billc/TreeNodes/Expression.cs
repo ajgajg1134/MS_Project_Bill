@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class Expression
+    class Expression : Node
     {
     }
 }

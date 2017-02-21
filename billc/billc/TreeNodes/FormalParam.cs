@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class FormalParam
+    class FormalParam : Node
     {
         string id;
         string type;

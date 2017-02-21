@@ -57,5 +57,27 @@ namespace billc.TreeNodes
         {
             type = lit_type.null_l;
         }
+
+        public override string ToString()
+        {
+            switch (type)
+            {
+                case lit_type.boolean:
+                    return b.ToString();
+                case lit_type.character:
+                    return c.ToString();
+                case lit_type.floating:
+                    return d.ToString();
+                case lit_type.integer:
+                    return i.ToString();
+                case lit_type.null_l:
+                    return "null";
+                case lit_type.string_l:
+                    return s;
+                default:
+                    Console.Error.WriteLine("Error in Literal node, unexpected literal type");
+                    return "ERROR";
+            }
+        }
     }
 }

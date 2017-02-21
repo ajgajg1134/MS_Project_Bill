@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using com.calitha.goldparser;
+using billc.TreeNodes;
 
 namespace billc
 {
@@ -15,8 +16,11 @@ namespace billc
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            parser.Parse(test);
+            ProgramNode program = (ProgramNode)parser.Parse(test);
 
+            Console.WriteLine(program.ToString());
+
+            Console.ReadLine();
         }
     }
 }

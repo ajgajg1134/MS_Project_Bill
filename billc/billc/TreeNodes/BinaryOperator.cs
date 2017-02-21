@@ -34,5 +34,46 @@ namespace billc.TreeNodes
             right = r;
             op = o;
         }
+
+        public override string ToString()
+        {
+            return left.ToString() + " " + binopToString(op) + " " + right.ToString();
+        }
+
+        public static string binopToString(binops binop)
+        {
+            switch (binop)
+            {
+                case binops.add:
+                    return "+";
+                case binops.and:
+                    return "&&";
+                case binops.div:
+                    return "/";
+                case binops.eq:
+                    return "==";
+                case binops.gt:
+                    return ">";
+                case binops.gte:
+                    return ">=";
+                case binops.lt:
+                    return "<";
+                case binops.lte:
+                    return "<=";
+                case binops.mod:
+                    return "%";
+                case binops.mul:
+                    return "*";
+                case binops.neq:
+                    return "!=";
+                case binops.or:
+                    return "||";
+                case binops.sub:
+                    return "-";
+                default:
+                    Console.Error.WriteLine("Error in BinaryOperator node, unexpected literal type");
+                    return "ERROR";
+            }
+        }
     }
 }
