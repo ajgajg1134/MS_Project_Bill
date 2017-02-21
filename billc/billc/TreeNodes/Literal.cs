@@ -53,6 +53,9 @@ namespace billc.TreeNodes
             this.s = s;
             type = lit_type.string_l;
         }
+        /// <summary>
+        /// Defaults this literal to null
+        /// </summary>
         public Literal()
         {
             type = lit_type.null_l;

@@ -18,5 +18,6 @@ namespace billc.TreeNodes
         void visit(FormalParam fparam);
         void visit(Expression exp);
         void visit(LocalVarDecl ldecl);
+        void visit(Conditional cond);
     }
 }

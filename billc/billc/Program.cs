@@ -12,7 +12,7 @@ namespace billc
     {
         static void Main(string[] args)
         {
-            string test = "void main() {\n a = 2 + 2; }";
+            string test = "void main() {\n int a = 5; \n}";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 

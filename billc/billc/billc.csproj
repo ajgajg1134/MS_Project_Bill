@@ -55,6 +55,7 @@
     <Compile Include="TreeNodes\Assignment.cs" />
     <Compile Include="TreeNodes\BinaryOperator.cs" />
     <Compile Include="TreeNodes\ClassDecl.cs" />
+    <Compile Include="TreeNodes\Conditional.cs" />
     <Compile Include="TreeNodes\Expression.cs" />
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="TreeNodes\Node.cs" />
     <Compile Include="TreeNodes\ProgramNode.cs" />
     <Compile Include="TreeNodes\Statement.cs" />
+    <Compile Include="TreeNodes\Visitable.cs" />
+    <Compile Include="TreeNodes\Visitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

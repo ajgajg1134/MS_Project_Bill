@@ -24,7 +24,7 @@ namespace billc.TreeNodes
         public override string ToString()
         {
             return retType + " " + id + " (" + fParams.Select(f => f.ToString()).Aggregate("", (a, b) => a +  ", " + b) + ") {\n" +
-                block.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + ";\n") + "}\n";
+                Statement.toString(block) + "}\n";
         }
 
         public override void accept(Visitor v)

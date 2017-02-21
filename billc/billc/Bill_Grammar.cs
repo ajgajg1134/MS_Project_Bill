@@ -1041,67 +1041,54 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LITERAL_FALSE:
                     //<Literal> ::= false
-                    //todo: Create a new object using the stored tokens.
                     return new Literal(false);
 
                 case (int)RuleConstants.RULE_LITERAL_DECLITERAL:
                     //<Literal> ::= DecLiteral
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_HEXLITERAL:
                     //<Literal> ::= HexLiteral
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_REALLITERAL:
                     //<Literal> ::= RealLiteral
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_CHARLITERAL:
                     //<Literal> ::= CharLiteral
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_STRINGLITERAL:
                     //<Literal> ::= StringLiteral
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_NULL:
                     //<Literal> ::= null
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_TYPE_INT:
                     //<Type> ::= int
-                    //todo: Create a new object using the stored tokens.
                     return "int";
 
                 case (int)RuleConstants.RULE_TYPE_DOUBLE:
                     //<Type> ::= double
-                    //todo: Create a new object using the stored tokens.
                     return "double";
 
                 case (int)RuleConstants.RULE_TYPE_CHAR:
                     //<Type> ::= char
-                    //todo: Create a new object using the stored tokens.
                     return "char";
 
                 case (int)RuleConstants.RULE_TYPE_STRING:
                     //<Type> ::= String
-                    //todo: Create a new object using the stored tokens.
                     return "String";
 
                 case (int)RuleConstants.RULE_TYPE_VOID:
                     //<Type> ::= void
-                    //todo: Create a new object using the stored tokens.
                     return "void";
 
                 case (int)RuleConstants.RULE_TYPE_BOOL:
                     //<Type> ::= bool
-                    //todo: Create a new object using the stored tokens.
                     return "bool";
 
                 case (int)RuleConstants.RULE_TYPE_LIST_LT_GT:
@@ -1166,23 +1153,23 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_CONDITIONALEXP:
                     //<Conditional Exp> ::= <Or Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_OREXP_PIPEPIPE:
                     //<Or Exp> ::= <Or Exp> '||' <And Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_or = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_or = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_or, rhs_or, binops.or);
 
                 case (int)RuleConstants.RULE_OREXP:
                     //<Or Exp> ::= <And Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_ANDEXP_AMPAMP:
                     //<And Exp> ::= <And Exp> '&&' <Equality Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_and = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_and = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_and, rhs_and, binops.and);
 
                 case (int)RuleConstants.RULE_ANDEXP:
                     //<And Exp> ::= <Equality Exp>
@@ -1191,13 +1178,15 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EQUALITYEXP_EQEQ:
                     //<Equality Exp> ::= <Equality Exp> '==' <Compare Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_eq = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_eq = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_eq, rhs_eq, binops.eq);
 
                 case (int)RuleConstants.RULE_EQUALITYEXP_EXCLAMEQ:
                     //<Equality Exp> ::= <Equality Exp> '!=' <Compare Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_neq = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_neq = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_neq, rhs_neq, binops.neq);
 
                 case (int)RuleConstants.RULE_EQUALITYEXP:
                     //<Equality Exp> ::= <Compare Exp>
@@ -1206,60 +1195,67 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_COMPAREEXP_LT:
                     //<Compare Exp> ::= <Compare Exp> '<' <Add Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_lt = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_lt = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_lt, rhs_lt, binops.lt);
 
                 case (int)RuleConstants.RULE_COMPAREEXP_GT:
                     //<Compare Exp> ::= <Compare Exp> '>' <Add Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_gt = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_gt = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_gt, rhs_gt, binops.gt);
 
                 case (int)RuleConstants.RULE_COMPAREEXP_LTEQ:
                     //<Compare Exp> ::= <Compare Exp> '<=' <Add Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_lte = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_lte = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_lte, rhs_lte, binops.lte);
 
                 case (int)RuleConstants.RULE_COMPAREEXP_GTEQ:
                     //<Compare Exp> ::= <Compare Exp> '>=' <Add Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_gte = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_gte = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_gte, rhs_gte, binops.gte);
 
                 case (int)RuleConstants.RULE_COMPAREEXP:
                     //<Compare Exp> ::= <Add Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_ADDEXP_PLUS:
                     //<Add Exp> ::= <Add Exp> '+' <Mult Exp>
-                    //todo: Create a new object using the stored tokens.
                     Expression lhs_add = (Expression)CreateObject(token.Tokens[0]);
                     Expression rhs_add = (Expression)CreateObject(token.Tokens[2]);
                     return new BinaryOperator(lhs_add, rhs_add, binops.add);
 
                 case (int)RuleConstants.RULE_ADDEXP_MINUS:
                     //<Add Exp> ::= <Add Exp> '-' <Mult Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_sub = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_sub = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_sub, rhs_sub, binops.sub);
 
                 case (int)RuleConstants.RULE_ADDEXP:
                     //<Add Exp> ::= <Mult Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_MULTEXP_TIMES:
                     //<Mult Exp> ::= <Mult Exp> '*' <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_mul = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_mul = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_mul, rhs_mul, binops.mul);
 
                 case (int)RuleConstants.RULE_MULTEXP_DIV:
                     //<Mult Exp> ::= <Mult Exp> '/' <Unary Exp>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_div = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_div = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_div, rhs_div, binops.div);
 
                 case (int)RuleConstants.RULE_MULTEXP_PERCENT:
                     //<Mult Exp> ::= <Mult Exp> '%' <Unary Exp>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lhs_mod = (Expression)CreateObject(token.Tokens[0]);
+                    Expression rhs_mod = (Expression)CreateObject(token.Tokens[2]);
+                    return new BinaryOperator(lhs_mod, rhs_mod, binops.mod);
 
                 case (int)RuleConstants.RULE_MULTEXP:
                     //<Mult Exp> ::= <Unary Exp>
@@ -1364,12 +1360,13 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_STMLIST:
                     //<Stm List> ::= <Stm List> <Statement>
                     //todo: Create a new object using the stored tokens.
-
-                    return null;
+                    var more_stmts = (List<Statement>)CreateObject(token.Tokens[0]);
+                    var stm = (Statement)CreateObject(token.Tokens[1]);
+                    more_stmts.Add(stm);
+                    return more_stmts;
 
                 case (int)RuleConstants.RULE_STMLIST2:
                     //<Stm List> ::= <Statement>
-                    //todo: Create a new object using the stored tokens.
                     var stmts = new List<Statement>();
                     stmts.Add((Statement)CreateObject(token.Tokens[0]));
                     return stmts;
@@ -1377,17 +1374,20 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_STATEMENT_SEMI:
                     //<Statement> ::= <Local Var Decl> ';'
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_STATEMENT_IF_LPAREN_RPAREN:
                     //<Statement> ::= if '(' <Expression> ')' <Statement>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression cond = (Expression) CreateObject(token.Tokens[2]);
+                    var tblock = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
+                    return new Conditional(tblock, new List<Statement>(), cond);
 
                 case (int)RuleConstants.RULE_STATEMENT_IF_LPAREN_RPAREN_ELSE:
                     //<Statement> ::= if '(' <Expression> ')' <Then Stm> else <Statement>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression condelse = (Expression)CreateObject(token.Tokens[2]);
+                    var teblock = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
+                    var eblock = (List<Statement>)CreateObject(token.Tokens[6]) ?? new List<Statement>();
+                    return new Conditional(teblock, eblock, condelse);
 
                 case (int)RuleConstants.RULE_STATEMENT_FOR_LPAREN_SEMI_SEMI_RPAREN:
                     //<Statement> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
@@ -1432,7 +1432,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_THENSTM:
                     //<Then Stm> ::= <Normal Stm>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_NORMALSTM_BREAK_SEMI:
                     //<Normal Stm> ::= break ';'
@@ -1462,7 +1462,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_NORMALSTM:
                     //<Normal Stm> ::= <Block>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_BLOCK_LBRACE_RBRACE:
                     //<Block> ::= '{' <Stm List> '}'
@@ -1477,7 +1477,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_VARIABLEDECS:
                     //<Variable Decs> ::= <Variable Declarator>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_VARIABLEDECS_COMMA:
                     //<Variable Decs> ::= <Variable Decs> ',' <Variable Declarator>
@@ -1487,22 +1487,23 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER:
                     //<Variable Declarator> ::= Identifier
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    string ideclnu = (string)CreateObject(token.Tokens[0]);
+                    return new LocalVarDecl(ideclnu, new Literal());
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER_EQ:
                     //<Variable Declarator> ::= Identifier '=' <Variable Initializer>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    string idecl = (string)CreateObject(token.Tokens[0]);
+                    Expression rdecl = (Expression)CreateObject(token.Tokens[2]);
+                    return new LocalVarDecl(idecl, rdecl);
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZER:
                     //<Variable Initializer> ::= <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZER2:
                     //<Variable Initializer> ::= <Array Initializer>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_ARRAYINITIALIZER_LBRACE_RBRACE:
                     //<Array Initializer> ::= '{' <Variable Initializer List Opt> '}'
@@ -1582,7 +1583,10 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_LOCALVARDECL:
                     //<Local Var Decl> ::= <Qualified ID> <Variable Decs>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    string typeDecl = (string)CreateObject(token.Tokens[0]);
+                    LocalVarDecl declNoType = (LocalVarDecl)CreateObject(token.Tokens[1]);
+                    declNoType.addType(typeDecl);
+                    return declNoType;
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')'
