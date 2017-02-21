@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class Node : Visitable
+    interface Visitable
     {
-        
+        void accept(Visitor v);
     }
 }

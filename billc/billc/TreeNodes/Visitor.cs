@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class Node : Visitable
+    interface Visitor
     {
-        
+        //TODO: Add more concrete visit functions for every node type
+        void visit(ProgramNode node);
     }
 }
