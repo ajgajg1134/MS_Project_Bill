@@ -64,8 +64,9 @@
     <Compile Include="TreeNodes\Node.cs" />
     <Compile Include="TreeNodes\ProgramNode.cs" />
     <Compile Include="TreeNodes\Statement.cs" />
+    <Compile Include="TreeNodes\UnaryOperator.cs" />
     <Compile Include="TreeNodes\Visitable.cs" />
-    <Compile Include="TreeNodes\Visitor.cs" />
+    <Compile Include="Visitors\Visitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

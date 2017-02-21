@@ -61,6 +61,11 @@ namespace billc.TreeNodes
             type = lit_type.null_l;
         }
 
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
+
         public override string ToString()
         {
             switch (type)

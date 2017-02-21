@@ -1108,8 +1108,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSIONLIST:
                     //<Expression List> ::= <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_EXPRESSIONLIST_COMMA:
                     //<Expression List> ::= <Expression> ',' <Expression List>
@@ -1264,13 +1263,14 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_UNARYEXP_EXCLAM:
                     //<Unary Exp> ::= '!' <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression inner_not = (Expression)CreateObject(token.Tokens[1]);
+                    return new UnaryOperator(inner_not, unops.not);
 
                 case (int)RuleConstants.RULE_UNARYEXP_MINUS:
                     //<Unary Exp> ::= '-' <Unary Exp>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression inner_minus = (Expression)CreateObject(token.Tokens[1]);
+                    return new UnaryOperator(inner_minus, unops.negate);
 
                 case (int)RuleConstants.RULE_UNARYEXP_PLUSPLUS:
                     //<Unary Exp> ::= '++' <Unary Exp>
@@ -1727,7 +1727,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHODDEC_IDENTIFIER_LPAREN_RPAREN:
                     //<Method Dec> ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
-                    //todo: Create a new object using the stored tokens.
                     string retType = (string)CreateObject(token.Tokens[0]);
                     string func_id = (string)CreateObject(token.Tokens[1]);
                     var fParams = (List<FormalParam>)CreateObject(token.Tokens[3]) ?? new List<FormalParam>();
@@ -1736,28 +1735,31 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_FORMALPARAMLISTOPT:
                     //<Formal Param List Opt> ::= <Formal Param List>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_FORMALPARAMLISTOPT2:
                     //<Formal Param List Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return new List<FormalParam>();
 
                 case (int)RuleConstants.RULE_FORMALPARAMLIST:
                     //<Formal Param List> ::= <Formal Param>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    FormalParam fparam = (FormalParam)CreateObject(token.Tokens[0]);
+                    var fparamlst = new List<FormalParam>();
+                    fparamlst.Add(fparam);
+                    return fparamlst;
 
                 case (int)RuleConstants.RULE_FORMALPARAMLIST_COMMA:
                     //<Formal Param List> ::= <Formal Param List> ',' <Formal Param>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    List<FormalParam> fparamsublist = (List<FormalParam>)CreateObject(token.Tokens[0]);
+                    FormalParam fparamsub = (FormalParam)CreateObject(token.Tokens[2]);
+                    fparamsublist.Add(fparamsub);
+                    return fparamsublist;
 
                 case (int)RuleConstants.RULE_FORMALPARAM_IDENTIFIER:
                     //<Formal Param> ::= <Qualified ID> Identifier
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    string fparamtype = (string)CreateObject(token.Tokens[0]);
+                    string fparamid = (string)CreateObject(token.Tokens[1]);
+                    return new FormalParam(fparamid, fparamtype);
 
                 case (int)RuleConstants.RULE_CLASSDECL_CLASS_IDENTIFIER_LPAREN_RPAREN_LBRACE_RBRACE:
                     //<Class Decl> ::= class Identifier '(' <Formal Param List Opt> ')' '{' <Class Item Decs Opt> '}'

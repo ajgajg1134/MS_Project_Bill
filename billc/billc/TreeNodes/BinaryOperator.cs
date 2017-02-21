@@ -40,6 +40,11 @@ namespace billc.TreeNodes
             return left.ToString() + " " + binopToString(op) + " " + right.ToString();
         }
 
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
+
         public static string binopToString(binops binop)
         {
             switch (binop)

@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    class Expression : Node
+    abstract class Expression : Node
     {
-
-        public override void accept(Visitor v)
-        {
-            v.visit(this);
-        }
     }
 }

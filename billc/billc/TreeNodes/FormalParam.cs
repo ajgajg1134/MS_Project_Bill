@@ -21,5 +21,10 @@ namespace billc.TreeNodes
         {
             v.visit(this);
         }
+
+        public override string ToString()
+        {
+            return type + " " + id;
+        }
     }
 }
