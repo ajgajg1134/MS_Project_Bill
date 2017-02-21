@@ -1615,7 +1615,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENTEXP:
                     //<Statement Exp> ::= <Qualified ID> <Assign Tail>
-                    //todo: Create a new object using the stored tokens.
                     string id = (string)CreateObject(token.Tokens[0]);
                     Expression rhs = (Expression)CreateObject(token.Tokens[1]);
                     return new Assignment(id, rhs);
@@ -1691,30 +1690,23 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PROGRAMITEMS:
                     //<Program Items> ::= <Program Items> <Program Item>
-                    //todo: Create a new object using the stored tokens.
-                    ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
-                    foreach (Token t in token.Tokens)
+                    ProgramNode prgrm = (ProgramNode)CreateObject(token.Tokens[0]);
+                    object o = CreateObject(token.Tokens[1]);
+                    if (o.GetType() == typeof(FunctionDecl))
                     {
-                        object o = CreateObject(t);
-                        if (o != null)
-                        {
-                            if (o.GetType() == typeof(FunctionDecl))
-                            {
-                                var func = (FunctionDecl)o;
-                                prgrm.addFunc(func);
-                            }
-                            else
-                            {
-                                //TODO
-                                Console.WriteLine("Not impld");
-                            }
-                        }
+                        prgrm.Add((FunctionDecl)o);
+                    } else if (o.GetType() == typeof(ClassDecl))
+                    {
+                        prgrm.Add((ClassDecl)o);
+                    } else
+                    {
+                        Console.Error.WriteLine("ERROR! Unexpected program item type in parser!");
                     }
                     return prgrm;
 
                 case (int)RuleConstants.RULE_PROGRAMITEMS2:
                     //<Program Items> ::= 
-                    return null;
+                    return new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>()); ;
 
                 case (int)RuleConstants.RULE_PROGRAMITEM:
                     //<Program Item> ::= <Method Dec>

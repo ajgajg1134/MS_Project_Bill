@@ -17,11 +17,12 @@ namespace billc.TreeNodes
             classes = cs;
         }
 
-        public void addFunc(FunctionDecl f)
+        public void Add(FunctionDecl f)
         {
             functions.Add(f);
         }
-        public void addClass(ClassDecl c)
+
+        public void Add(ClassDecl c)
         {
             classes.Add(c);
         }
