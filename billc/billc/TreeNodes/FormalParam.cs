@@ -16,5 +16,10 @@ namespace billc.TreeNodes
             id = i;
             type = t;
         }
+
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

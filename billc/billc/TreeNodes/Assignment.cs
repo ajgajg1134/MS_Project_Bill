@@ -23,5 +23,10 @@ namespace billc.TreeNodes
         {
             return id + " = " + rhs.ToString() + "\n";
         }
+
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

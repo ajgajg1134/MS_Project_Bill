@@ -8,5 +8,10 @@ namespace billc.TreeNodes
 {
     class Expression : Node
     {
+
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

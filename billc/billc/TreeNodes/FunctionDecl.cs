@@ -26,5 +26,10 @@ namespace billc.TreeNodes
             return retType + " " + id + " (" + fParams.Select(f => f.ToString()).Aggregate("", (a, b) => a +  ", " + b) + ") {\n" +
                 block.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + ";\n") + "}\n";
         }
+
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }

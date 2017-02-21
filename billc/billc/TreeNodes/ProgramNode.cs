@@ -31,5 +31,10 @@ namespace billc.TreeNodes
             return classes.Select(s => s.ToString()).Aggregate("", (a, b) => a + "\n" + b) +
                 functions.Select(f => f.ToString()).Aggregate("", (a, b) => a + "\n" + b);
         }
+
+        public override void accept(Visitor v)
+        {
+            v.visit(this);
+        }
     }
 }
