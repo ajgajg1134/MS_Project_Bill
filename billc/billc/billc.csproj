@@ -66,7 +66,9 @@
     <Compile Include="TreeNodes\Statement.cs" />
     <Compile Include="TreeNodes\UnaryOperator.cs" />
     <Compile Include="TreeNodes\Visitable.cs" />
-    <Compile Include="Visitors\Visitor.cs" />
+    <Compile Include="Visitors\SymbolTableVisitor.cs" />
+    <Compile Include="TreeNodes\Visitor.cs" />
+    <Compile Include="Visitors\TypeValidatorVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

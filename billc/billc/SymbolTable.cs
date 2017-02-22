@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using billc.TreeNodes;
 
-namespace billc.TreeNodes
+namespace billc
 {
-    abstract class Expression : Node
+    class SymbolTable
     {
-        public abstract string getResultType();
+        //Dictionary<string, ClassDecl> 
     }
 }

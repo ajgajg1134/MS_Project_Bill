@@ -8,10 +8,10 @@ namespace billc.TreeNodes
 {
     class FunctionDecl : Node
     {
-        List<FormalParam> fParams;
-        string id;
-        string retType;
-        List<Statement> block;
+        public List<FormalParam> fParams;
+        public string id;
+        public string retType;
+        public List<Statement> block;
 
         public FunctionDecl(List<FormalParam> fps, string i, string rt, List<Statement> b)
         {

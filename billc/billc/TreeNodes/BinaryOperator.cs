@@ -45,6 +45,45 @@ namespace billc.TreeNodes
             v.visit(this);
         }
 
+        public override string getResultType()
+        {
+            string l = left.getResultType();
+            string r = right.getResultType();
+
+
+        }
+
+        public static bool isValidTypeWithOp(binops binop, string type)
+        {
+            if (PrimitiveTypes.isNumberType(type))
+            {
+                switch (binop)
+                {
+                    case binops.add:
+                    case binops.div:
+                    case binops.eq:
+                    case binops.gt:
+                    case binops.gte:
+                    case binops.lt:
+                    case binops.lte:
+                    case binops.mul:
+                    case binops.neq:
+                    case binops.sub:
+                        return true;
+                    case binops.and:
+                    case binops.or:
+                        return false;
+                    case binops.mod:
+                        return type == "int";
+                }
+            }
+            else if (type == "String")
+            {
+
+            }
+        }
+
+
         public static string binopToString(binops binop)
         {
             switch (binop)

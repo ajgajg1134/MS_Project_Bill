@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using com.calitha.goldparser;
 using billc.TreeNodes;
+using billc.Visitors;
 
 namespace billc
 {
@@ -17,6 +18,10 @@ namespace billc
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
             ProgramNode program = (ProgramNode)parser.Parse(test);
+
+            TypeValidatorVisitor tvv = new TypeValidatorVisitor();
+
+            program.accept(tvv);
 
             Console.WriteLine(program.ToString());
 

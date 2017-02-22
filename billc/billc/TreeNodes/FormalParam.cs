@@ -26,5 +26,31 @@ namespace billc.TreeNodes
         {
             return type + " " + id;
         }
+
+        public bool typeEqual(FormalParam other)
+        {
+            return type == other.type;
+        }
+        /// <summary>
+        /// Determines if two parameter lists are type equivalent
+        /// </summary>
+        /// <param name="fparam"></param>
+        /// <param name="other"></param>
+        /// <returns>true if they are in order type equal, false otherwise (two empty lists are equal)</returns>
+        public static bool typeEqual(List<FormalParam> fparam, List<FormalParam> other)
+        {
+            if (fparam.Count != other.Count)
+            {
+                return false;
+            }
+            for(int i = 0; i < fparam.Count; i++)
+            {
+                if (!fparam[i].typeEqual(other[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

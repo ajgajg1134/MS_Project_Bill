@@ -8,8 +8,8 @@ namespace billc.TreeNodes
 {
     class ProgramNode : Node
     {
-        List<FunctionDecl> functions;
-        List<ClassDecl> classes;
+        public List<FunctionDecl> functions;
+        public List<ClassDecl> classes;
 
         public ProgramNode(List<FunctionDecl> fs, List<ClassDecl> cs)
         {
