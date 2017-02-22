@@ -57,7 +57,17 @@ namespace billc.Visitors
 
         public void visit(Assignment astmt)
         {
-            
+            if (!table.isLocalVar(astmt.id))
+            {
+                Console.Error.WriteLine("Error: " + astmt.id + " has not been declared.");
+                return;
+            }
+            string rhsType = astmt.rhs.getResultTypeWithCheck(table);
+
+            if (table.getLocalVar(astmt.id) != rhsType)
+            {
+                Console.Error.WriteLine("Error: " + astmt.id + " is of type " + table.getLocalVar(astmt.id) + " but RHS of expression is of type " + rhsType + ".");
+            }
         }
 
         public void visit(FunctionDecl fdecl)

@@ -9,8 +9,8 @@ namespace billc.TreeNodes
 {
     class Assignment : Statement
     {
-        string id;
-        Expression rhs;
+        public string id;
+        public Expression rhs;
 
         //todo: add other kinds of assignment
 
