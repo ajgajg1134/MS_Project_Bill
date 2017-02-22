@@ -87,5 +87,33 @@ namespace billc.TreeNodes
                     return "ERROR";
             }
         }
+
+        public override string getResultType()
+        {
+            switch (type)
+            {
+                case lit_type.boolean:
+                    return "bool";
+                case lit_type.character:
+                    return "char";
+                case lit_type.floating:
+                    return "double";
+                case lit_type.integer:
+                    return "int";
+                case lit_type.null_l:
+                    return "null";
+                case lit_type.string_l:
+                    return "String";
+                default:
+                    Console.Error.WriteLine("Error in Literal node type when getting result type");
+                    return "ERROR";
+            }
+        }
+
+        public override string getResultTypeWithCheck(SymbolTable table)
+        {
+            //A literal can not have a type error.
+            return getResultType();
+        }
     }
 }

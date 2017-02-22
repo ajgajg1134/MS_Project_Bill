@@ -2,7 +2,7 @@
 {
     class PrimitiveTypes
     {
-        public static string[] primitiveTypes = { "int", "double", "char", "bool" };
+        public static string[] primitiveTypes = { "int", "double", "char", "bool", "null" };
         
         public static bool isNumberType(string type)
         {

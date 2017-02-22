@@ -9,10 +9,10 @@ namespace billc.Visitors
 {
     class TypeValidatorVisitor : Visitor
     {
-
+        SymbolTable table;
         public TypeValidatorVisitor()
         {
-            //todo: need symbol table?
+            table = new SymbolTable();
         }
 
         public void visit(ClassDecl cdecl)
@@ -57,12 +57,20 @@ namespace billc.Visitors
 
         public void visit(Assignment astmt)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void visit(FunctionDecl fdecl)
         {
+            //todo: Add formal params to symbol table (check if they're accurate too)
+            //Keep a copy to replace the "bad" symbol table that has local vars
             
+            //go through each statement to verify
+            foreach(Statement s in fdecl.block)
+            {
+                s.accept(this);
+            }
+            //todo: figure out how to check return type (maybe do a seperate special thing?)
         }
 
         public void visit(ProgramNode node)
