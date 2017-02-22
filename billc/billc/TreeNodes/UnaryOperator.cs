@@ -27,6 +27,35 @@ namespace billc.TreeNodes
             return unopToString(unop) + inner.ToString();
         }
 
+        public override string getResultType()
+        {
+            switch (unop)
+            {
+                case unops.not:
+                    return "bool";
+                case unops.negate:
+                    return inner.getResultType();
+                default:
+                    Console.Error.WriteLine("Error in UnaryOperator node, unexpected type");
+                    return "ERROR";
+            }
+        }
+
+        public override string getResultTypeWithCheck(SymbolTable table)
+        {
+            switch (unop)
+            {
+                case unops.not:
+
+                    return "bool";
+                case unops.negate:
+                    return inner.getResultType();
+                default:
+                    Console.Error.WriteLine("Error in UnaryOperator node, unexpected type");
+                    return "ERROR";
+            }
+        }
+
         public static string unopToString(unops unop)
         {
             switch (unop)

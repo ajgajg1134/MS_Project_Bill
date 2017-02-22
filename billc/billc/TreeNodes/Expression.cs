@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace billc.TreeNodes
 {
-    abstract class Expression : Node
+    //Okay so actually expressions aren't valid statements always.
+    //But certain things kinda are, like function calls and assignment
+    //Rule <StatementExp> in the grammar defines these.
+    //Because these are limited at the grammar level it's _okay_ that we extend Statement here
+    //Even though not all expressions are truly valid statements.  
+    abstract class Expression : Statement
     {
         public abstract string getResultType();
 
