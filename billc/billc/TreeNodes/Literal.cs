@@ -61,6 +61,36 @@ namespace billc.TreeNodes
             type = lit_type.null_l;
         }
 
+        public Literal(object o)
+        {
+            if (o.GetType() == typeof(int))
+            {
+                i = (int)o;
+                type = lit_type.integer;
+            } else if (o.GetType() == typeof(bool))
+            {
+                b = (bool)o;
+                type = lit_type.boolean;
+            } else if (o.GetType() == typeof(double))
+            {
+                d = (double)o;
+                type = lit_type.floating;
+            } else if (o.GetType() == typeof(char))
+            {
+                c = (char)o;
+                type = lit_type.character;
+            }
+            else if (o.GetType() == typeof(string))
+            {
+                s = (string)o;
+                type = lit_type.string_l;
+            }
+            else
+            {
+                type = lit_type.null_l;
+            }
+        }
+
         public override void accept(Visitor v)
         {
             v.visit(this);

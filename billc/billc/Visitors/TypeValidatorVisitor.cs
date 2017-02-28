@@ -35,6 +35,11 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(Return ret)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(UnaryOperator unop)
         {
             throw new NotImplementedException();

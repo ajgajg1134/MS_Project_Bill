@@ -50,8 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bill_Grammar.cs" />
+    <Compile Include="ErrorReporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SymbolTable.cs" />
     <Compile Include="TreeNodes\Assignment.cs" />
     <Compile Include="TreeNodes\BinaryOperator.cs" />
     <Compile Include="TreeNodes\ClassDecl.cs" />
@@ -59,10 +61,13 @@
     <Compile Include="TreeNodes\Expression.cs" />
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />
+    <Compile Include="TreeNodes\Identifier.cs" />
     <Compile Include="TreeNodes\Literal.cs" />
     <Compile Include="TreeNodes\LocalVarDecl.cs" />
     <Compile Include="TreeNodes\Node.cs" />
+    <Compile Include="TreeNodes\PrimitiveTypes.cs" />
     <Compile Include="TreeNodes\ProgramNode.cs" />
+    <Compile Include="TreeNodes\Return.cs" />
     <Compile Include="TreeNodes\Statement.cs" />
     <Compile Include="TreeNodes\UnaryOperator.cs" />
     <Compile Include="TreeNodes\Visitable.cs" />

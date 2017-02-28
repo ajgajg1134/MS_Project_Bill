@@ -20,5 +20,6 @@ namespace billc.TreeNodes
         void visit(LocalVarDecl ldecl);
         void visit(Conditional cond);
         void visit(UnaryOperator unop);
+        void visit(Return ret);
     }
 }
