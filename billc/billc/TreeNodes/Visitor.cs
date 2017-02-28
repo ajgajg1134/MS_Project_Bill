@@ -22,5 +22,7 @@ namespace billc.TreeNodes
         void visit(UnaryOperator unop);
         void visit(Return ret);
         void visit(WhileLoop wloop);
+        void visit(Break br);
+        void visit(Continue ct);
     }
 }

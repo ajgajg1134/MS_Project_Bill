@@ -56,6 +56,7 @@
     <Compile Include="SymbolTable.cs" />
     <Compile Include="TreeNodes\Assignment.cs" />
     <Compile Include="TreeNodes\BinaryOperator.cs" />
+    <Compile Include="TreeNodes\Break.cs" />
     <Compile Include="TreeNodes\ClassDecl.cs" />
     <Compile Include="TreeNodes\Conditional.cs" />
     <Compile Include="TreeNodes\Expression.cs" />

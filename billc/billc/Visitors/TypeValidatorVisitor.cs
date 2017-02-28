@@ -40,6 +40,16 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(Continue ct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void visit(Break br)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(Return ret)
         {
             throw new NotImplementedException();

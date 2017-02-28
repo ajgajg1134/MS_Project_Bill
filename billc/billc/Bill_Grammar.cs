@@ -1442,8 +1442,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_THENSTM_WHILE_LPAREN_RPAREN:
                     //<Then Stm> ::= while '(' <Expression> ')' <Then Stm>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression condwhilet = CreateExpression(token.Tokens[2]);
+                    List<Statement> bodywhilet = (List<Statement>)CreateObject(token.Tokens[4]); //todo: determine if this is okay to do
+                    return new WhileLoop(bodywhilet, condwhilet);
 
                 case (int)RuleConstants.RULE_THENSTM:
                     //<Then Stm> ::= <Normal Stm>
@@ -1452,13 +1453,11 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_NORMALSTM_BREAK_SEMI:
                     //<Normal Stm> ::= break ';'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return new Break();
 
                 case (int)RuleConstants.RULE_NORMALSTM_CONTINUE_SEMI:
                     //<Normal Stm> ::= continue ';'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return new Continue();
 
                 case (int)RuleConstants.RULE_NORMALSTM_RETURN_SEMI:
                     //<Normal Stm> ::= return <Expression Opt> ';'
