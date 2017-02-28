@@ -9,20 +9,18 @@ namespace billc.TreeNodes
 {
     class Assignment : Statement
     {
-        public string id;
+        public Expression lhs;
         public Expression rhs;
 
-        //todo: add other kinds of assignment
-
-        public Assignment(string i, Expression r)
+        public Assignment(Expression l, Expression r)
         {
-            id = i;
+            lhs = l;
             rhs = r;
         }
 
         public override string ToString()
         {
-            return id + " = " + rhs.ToString() + ";";
+            return lhs.ToString() + " = " + rhs.ToString() + ";";
         }
 
         public override void accept(Visitor v)

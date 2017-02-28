@@ -1104,8 +1104,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_TYPE_LIST_LT_GT:
                     //<Type> ::= List '<' <Qualified ID> '>'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return "List<" + (string)CreateObject(token.Tokens[2]) + ">";
 
                 case (int)RuleConstants.RULE_EXPRESSIONOPT:
                     //<Expression Opt> ::= <Expression>
@@ -1113,7 +1112,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSIONOPT2:
                     //<Expression Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_EXPRESSIONLIST:
@@ -1598,7 +1596,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENTEXP:
                     //<Statement Exp> ::= <Qualified ID> <Assign Tail>
-                    string id = (string)CreateObject(token.Tokens[0]);
+                    Expression id = CreateExpression(token.Tokens[0]);
                     Expression rhs = CreateExpression(token.Tokens[1]);
                     return new Assignment(id, rhs);
 

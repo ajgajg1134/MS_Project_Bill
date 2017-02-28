@@ -18,10 +18,11 @@ namespace billc
             string fxn_test = "void main() {\n int a = 5;\n return a;\n}";
             string if_test = "void main() {\n int a = 5;\n if (a == 5) { return 1;} return 2;\n}";
             string while_test = "void main() {\n while(b){ return 2; }\n}";
+            string assign_test = "void main() {\n a = 7;\n}";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(while_test);
+            ProgramNode program = (ProgramNode)parser.Parse(assign_test);
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 
