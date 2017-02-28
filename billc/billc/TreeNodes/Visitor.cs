@@ -21,5 +21,6 @@ namespace billc.TreeNodes
         void visit(Conditional cond);
         void visit(UnaryOperator unop);
         void visit(Return ret);
+        void visit(WhileLoop wloop);
     }
 }

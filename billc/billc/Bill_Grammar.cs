@@ -1393,7 +1393,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENT_IF_LPAREN_RPAREN:
                     //<Statement> ::= if '(' <Expression> ')' <Statement>
-                    Expression cond = (Expression) CreateObject(token.Tokens[2]);
+                    Expression cond = CreateExpression(token.Tokens[2]);
                     var tblock = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
                     return new Conditional(tblock, new List<Statement>(), cond);
 
@@ -1416,8 +1416,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENT_WHILE_LPAREN_RPAREN:
                     //<Statement> ::= while '(' <Expression> ')' <Statement>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression condwhile = CreateExpression(token.Tokens[2]);
+                    List<Statement> bodywhile = (List<Statement>)CreateObject(token.Tokens[4]); //todo: determine if this is okay to do
+                    return new WhileLoop(bodywhile, condwhile);
 
                 case (int)RuleConstants.RULE_STATEMENT:
                     //<Statement> ::= <Normal Stm>
