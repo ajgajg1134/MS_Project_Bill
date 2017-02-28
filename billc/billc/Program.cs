@@ -20,7 +20,7 @@ namespace billc
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(binop_test);
+            ProgramNode program = (ProgramNode)parser.Parse(fxn_test);
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 

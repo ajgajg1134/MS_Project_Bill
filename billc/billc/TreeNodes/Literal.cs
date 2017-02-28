@@ -63,24 +63,24 @@ namespace billc.TreeNodes
 
         public Literal(object o)
         {
-            if (o.GetType() == typeof(int))
+            if (o is int)
             {
                 i = (int)o;
                 type = lit_type.integer;
-            } else if (o.GetType() == typeof(bool))
+            } else if (o is bool)
             {
                 b = (bool)o;
                 type = lit_type.boolean;
-            } else if (o.GetType() == typeof(double))
+            } else if (o is double)
             {
                 d = (double)o;
                 type = lit_type.floating;
-            } else if (o.GetType() == typeof(char))
+            } else if (o is char)
             {
                 c = (char)o;
                 type = lit_type.character;
             }
-            else if (o.GetType() == typeof(string))
+            else if (o is string)
             {
                 s = (string)o;
                 type = lit_type.string_l;
