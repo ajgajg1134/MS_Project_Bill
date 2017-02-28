@@ -15,6 +15,11 @@ namespace billc.TreeNodes
             this.id = id;
         }
 
+        public override string ToString()
+        {
+            return id;
+        }
+
         public override void accept(Visitor v)
         {
             throw new NotImplementedException();

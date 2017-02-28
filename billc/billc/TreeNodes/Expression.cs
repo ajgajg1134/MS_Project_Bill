@@ -24,5 +24,10 @@ namespace billc.TreeNodes
         /// <param name="table">The symbol table to lookup valid types in</param>
         /// <returns>the result type of this expression, or "ERROR"</returns>
         public abstract string getResultTypeWithCheck(SymbolTable table);
+
+        public static string toString(List<Expression> stmts)
+        {
+            return stmts.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + "\n");
+        }
     }
 }

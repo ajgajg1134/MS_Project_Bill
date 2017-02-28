@@ -1328,22 +1328,23 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ARGLISTOPT:
                     //<Arg List Opt> ::= <Arg List>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_ARGLISTOPT2:
                     //<Arg List Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return new List<Expression>();
 
                 case (int)RuleConstants.RULE_ARGLIST_COMMA:
                     //<Arg List> ::= <Arg List> ',' <Argument>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    List<Expression> arglist = (List<Expression>)CreateObject(token.Tokens[0]);
+                    arglist.Add(CreateExpression(token.Tokens[2]));
+                    return arglist;
 
                 case (int)RuleConstants.RULE_ARGLIST:
                     //<Arg List> ::= <Argument>
-                    return CreateObject(token.Tokens[0]);
+                    List<Expression> argexp = new List<Expression>();
+                    argexp.Add(CreateExpression(token.Tokens[0]));
+                    return argexp;
 
                 case (int)RuleConstants.RULE_ARGUMENT:
                     //<Argument> ::= <Expression>
@@ -1571,8 +1572,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier fxnid = (Identifier)CreateExpression(token.Tokens[0]);
+                    List<Expression> concParams = (List<Expression>)CreateObject(token.Tokens[2]);
+                    return new FunctionInvocation(fxnid, concParams);
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN2:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')' <Methods Opt> <Assign Tail>

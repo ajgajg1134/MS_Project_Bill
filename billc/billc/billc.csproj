@@ -63,6 +63,7 @@
     <Compile Include="TreeNodes\Expression.cs" />
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />
+    <Compile Include="TreeNodes\FunctionInvocation.cs" />
     <Compile Include="TreeNodes\Identifier.cs" />
     <Compile Include="TreeNodes\Literal.cs" />
     <Compile Include="TreeNodes\LocalVarDecl.cs" />
