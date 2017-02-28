@@ -1021,22 +1021,18 @@ namespace com.calitha.goldparser
             {
                 case (int)RuleConstants.RULE_VALIDID_IDENTIFIER:
                     //<Valid ID> ::= Identifier
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_VALIDID_THIS:
                     //<Valid ID> ::= this
-                    //todo: Create a new object using the stored tokens.
                     return "this";
 
                 case (int)RuleConstants.RULE_VALIDID:
                     //<Valid ID> ::= <Type>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_QUALIFIEDID:
                     //<Qualified ID> ::= <Valid ID> <Member List>
-                    //todo: Create a new object using the stored tokens.
                     string s = (string)CreateObject(token.Tokens[0]) + (string)CreateObject(token.Tokens[1]);
                     return s;
 
@@ -1052,7 +1048,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LITERAL_TRUE:
                     //<Literal> ::= true
-                    //todo: Create a new object using the stored tokens.
                     return new Literal(true);
 
                 case (int)RuleConstants.RULE_LITERAL_FALSE:
@@ -1081,7 +1076,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LITERAL_NULL:
                     //<Literal> ::= null
-                    return null;
+                    return new Literal();
 
                 case (int)RuleConstants.RULE_TYPE_INT:
                     //<Type> ::= int
@@ -1114,7 +1109,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSIONOPT:
                     //<Expression Opt> ::= <Expression>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_EXPRESSIONOPT2:
@@ -1158,7 +1152,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSION:
                     //<Expression> ::= <Conditional Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_CONDITIONALEXP_QUESTION_COLON:
@@ -1188,7 +1181,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ANDEXP:
                     //<And Exp> ::= <Equality Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_EQUALITYEXP_EQEQ:
@@ -1205,7 +1197,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EQUALITYEXP:
                     //<Equality Exp> ::= <Compare Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_COMPAREEXP_LT:
@@ -1260,21 +1251,18 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_MULTEXP_DIV:
                     //<Mult Exp> ::= <Mult Exp> '/' <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
                     Expression lhs_div = CreateExpression(token.Tokens[0]);
                     Expression rhs_div = CreateExpression(token.Tokens[2]);
                     return new BinaryOperator(lhs_div, rhs_div, binops.div);
 
                 case (int)RuleConstants.RULE_MULTEXP_PERCENT:
                     //<Mult Exp> ::= <Mult Exp> '%' <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
                     Expression lhs_mod = CreateExpression(token.Tokens[0]);
                     Expression rhs_mod = CreateExpression(token.Tokens[2]);
                     return new BinaryOperator(lhs_mod, rhs_mod, binops.mod);
 
                 case (int)RuleConstants.RULE_MULTEXP:
                     //<Mult Exp> ::= <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_UNARYEXP_EXCLAM:
@@ -1284,7 +1272,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_UNARYEXP_MINUS:
                     //<Unary Exp> ::= '-' <Unary Exp>
-                    //todo: Create a new object using the stored tokens.
                     Expression inner_minus = CreateExpression(token.Tokens[1]);
                     return new UnaryOperator(inner_minus, unops.negate);
 
@@ -1300,12 +1287,10 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_UNARYEXP:
                     //<Unary Exp> ::= <Object Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_OBJECTEXP:
                     //<Object Exp> ::= <Method Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_METHODEXP:
@@ -1315,7 +1300,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHODEXP2:
                     //<Method Exp> ::= <Primary Exp>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_PRIMARYEXP_NEW_LPAREN_RPAREN:
@@ -1325,17 +1309,14 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PRIMARYEXP:
                     //<Primary Exp> ::= <Primary>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_PRIMARYEXP_LPAREN_RPAREN:
                     //<Primary Exp> ::= '(' <Expression> ')'
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_PRIMARY:
                     //<Primary> ::= <Valid ID>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_PRIMARY_LPAREN_RPAREN:
@@ -1364,17 +1345,14 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ARGLIST:
                     //<Arg List> ::= <Argument>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_ARGUMENT:
                     //<Argument> ::= <Expression>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_STMLIST:
                     //<Stm List> ::= <Stm List> <Statement>
-                    //todo: Create a new object using the stored tokens.
                     var more_stmts = (List<Statement>)CreateObject(token.Tokens[0]);
                     var stm = (Statement)CreateObject(token.Tokens[1]);
                     more_stmts.Add(stm);
@@ -1388,7 +1366,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENT_SEMI:
                     //<Statement> ::= <Local Var Decl> ';'
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_STATEMENT_IF_LPAREN_RPAREN:
@@ -1422,7 +1399,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENT:
                     //<Statement> ::= <Normal Stm>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_THENSTM_IF_LPAREN_RPAREN_ELSE:
@@ -1448,7 +1424,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_THENSTM:
                     //<Then Stm> ::= <Normal Stm>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_NORMALSTM_BREAK_SEMI:
@@ -1466,7 +1441,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_NORMALSTM_SEMI:
                     //<Normal Stm> ::= <Statement Exp> ';'
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_NORMALSTM_SEMI2:
@@ -1476,12 +1450,10 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_NORMALSTM:
                     //<Normal Stm> ::= <Block>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_BLOCK_LBRACE_RBRACE:
                     //<Block> ::= '{' <Stm List> '}'
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_BLOCK_LBRACE_RBRACE2:
@@ -1491,7 +1463,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_VARIABLEDECS:
                     //<Variable Decs> ::= <Variable Declarator>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_VARIABLEDECS_COMMA:
@@ -1501,13 +1472,11 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER:
                     //<Variable Declarator> ::= Identifier
-                    //todo: Create a new object using the stored tokens.
                     string ideclnu = (string)CreateObject(token.Tokens[0]);
                     return new LocalVarDecl(ideclnu, new Literal());
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER_EQ:
                     //<Variable Declarator> ::= Identifier '=' <Variable Initializer>
-                    //todo: Create a new object using the stored tokens.
                     string idecl = (string)CreateObject(token.Tokens[0]);
                     Expression rdecl = CreateExpression(token.Tokens[2]);
                     return new LocalVarDecl(idecl, rdecl);
@@ -1597,7 +1566,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LOCALVARDECL:
                     //<Local Var Decl> ::= <Qualified ID> <Variable Decs>
-                    //todo: Create a new object using the stored tokens.
                     string typeDecl = (string)CreateObject(token.Tokens[0]);
                     LocalVarDecl declNoType = (LocalVarDecl)CreateObject(token.Tokens[1]);
                     declNoType.addType(typeDecl);
@@ -1646,7 +1614,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_EQ:
                     //<Assign Tail> ::= '=' <Expression>
-                    //todo: Create a new object using the stored tokens.
                     return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_PLUSEQ:
