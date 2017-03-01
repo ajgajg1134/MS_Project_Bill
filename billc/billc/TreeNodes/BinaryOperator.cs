@@ -20,7 +20,8 @@ namespace billc.TreeNodes
         sub,
         mul,
         div,
-        mod
+        mod,
+        dot
     }
     class BinaryOperator : Expression
     {
@@ -106,6 +107,8 @@ namespace billc.TreeNodes
                     return type == "bool";
                 case binops.mod:
                     return type == "int";
+                case binops.dot:
+                    return false; //TODO: implement symbol table check
                 default:
                     Console.Error.WriteLine("Error in BinaryOperator node, unexpected type with operator");
                     return false;
@@ -143,6 +146,8 @@ namespace billc.TreeNodes
                         return "double";
                 case binops.mod:
                     return "int";
+                case binops.dot:
+                    return null; //todo: implement symbol table lookup of member type
                 default:
                     Console.Error.WriteLine("Error in BinaryOperator node, unexpected type with operator");
                     return "ERROR";
@@ -180,6 +185,8 @@ namespace billc.TreeNodes
                     return "||";
                 case binops.sub:
                     return "-";
+                case binops.dot:
+                    return ".";
                 default:
                     Console.Error.WriteLine("Error in BinaryOperator node, unexpected literal type");
                     return "ERROR";

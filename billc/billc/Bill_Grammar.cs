@@ -396,8 +396,10 @@ namespace com.calitha.goldparser
             } else if (o is string)
             {
                 return new Identifier((string)o);
-            }
-            else
+            } else if (o == null)
+            {
+                return null;
+            } else
             {
                 Console.Error.WriteLine("Unexpected expressoin type in create expression: " + o.GetType());
                 return null;
@@ -695,7 +697,7 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_MEMBERNAME:
                     //MemberName
                     //todo: Create a new object that corresponds to the symbol
-                    return null;
+                    return token.Text.Substring(1);
 
                 case (int)SymbolConstants.SYMBOL_NEW:
                     //new
@@ -1032,18 +1034,25 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_QUALIFIEDID:
                     //<Qualified ID> ::= <Valid ID> <Member List>
-                    string s = (string)CreateObject(token.Tokens[0]) + (string)CreateObject(token.Tokens[1]);
-                    return s;
+                    Expression memb = CreateExpression(token.Tokens[1]);
+                    if (memb == null)
+                    {
+                        return CreateObject(token.Tokens[0]);
+                    } else
+                    {
+                        Expression vid = CreateExpression(token.Tokens[0]);
+                        return new BinaryOperator(vid, memb, binops.dot);
+                    }
 
                 case (int)RuleConstants.RULE_MEMBERLIST_MEMBERNAME:
                     //<Member List> ::= <Member List> MemberName
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression memblst = CreateExpression(token.Tokens[0]);
+                    Expression rhsmem = CreateExpression(token.Tokens[1]);
+                    return memblst == null ? rhsmem : new BinaryOperator(memblst, rhsmem, binops.dot);
 
                 case (int)RuleConstants.RULE_MEMBERLIST:
                     //<Member List> ::= 
-                    //todo: Create a new object using the stored tokens.
-                    return "";
+                    return null;
 
                 case (int)RuleConstants.RULE_LITERAL_TRUE:
                     //<Literal> ::= true
