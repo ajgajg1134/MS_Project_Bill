@@ -1658,8 +1658,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME:
                     //<Method> ::= MemberName
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME_LPAREN_RPAREN:
                     //<Method> ::= MemberName '(' <Arg List Opt> ')'
@@ -1706,8 +1705,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PROGRAMITEM2:
                     //<Program Item> ::= <Class Decl>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_METHODDEC_IDENTIFIER_LPAREN_RPAREN:
                     //<Method Dec> ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
@@ -1747,8 +1745,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_CLASSDECL_CLASS_IDENTIFIER_LPAREN_RPAREN_LBRACE_RBRACE:
                     //<Class Decl> ::= class Identifier '(' <Formal Param List Opt> ')' '{' <Class Item Decs Opt> '}'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier idclass = CreateExpression(token.Tokens[1]) as Identifier;
+                    List<FormalParam> classparams = (List<FormalParam>)CreateObject(token.Tokens[3]);
+                    return new ClassDecl(idclass, classparams);
 
                 case (int)RuleConstants.RULE_CLASSITEMDECSOPT:
                     //<Class Item Decs Opt> ::= <Class Item Decs Opt> <Class Item>

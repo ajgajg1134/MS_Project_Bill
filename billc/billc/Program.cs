@@ -22,10 +22,11 @@ namespace billc
             string invoke_test = "void main() { foo(5);\n}";
             string invoke_test2 = "void main() { foo(5, true, 2.5); \n}";
             string member_test = "void main() { a.thing = 10; }";
+            string class_test = "class foo(int a, string s){ }";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(member_test);
+            ProgramNode program = (ProgramNode)parser.Parse(class_test);
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 

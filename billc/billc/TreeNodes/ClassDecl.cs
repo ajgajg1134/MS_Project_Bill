@@ -8,11 +8,13 @@ namespace billc.TreeNodes
 {
     class ClassDecl : Node
     {
+        Identifier id;
         List<FormalParam> fields;
         //List<FunctionDecl> methods; //To be implemented as possible future work
 
-        public ClassDecl(List<FormalParam> f)
+        public ClassDecl(Identifier id, List<FormalParam> f)
         {
+            this.id = id;
             fields = f;
         }
 
