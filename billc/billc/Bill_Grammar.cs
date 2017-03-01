@@ -641,7 +641,7 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_DOUBLE:
                     //double
                     //todo: Create a new object that corresponds to the symbol
-                    return new Literal(double.Parse(token.Text));
+                    return "double";
 
                 case (int)SymbolConstants.SYMBOL_ELSE:
                     //else
@@ -710,7 +710,7 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_REALLITERAL:
                     //RealLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    return null;
+                    return new Literal(double.Parse(token.Text));
 
                 case (int)SymbolConstants.SYMBOL_RETURN:
                     //return
@@ -734,8 +734,7 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_TRUE:
                     //true
-                    //todo: Create a new object that corresponds to the symbol
-                    return null;
+                    return new Literal(true);
 
                 case (int)SymbolConstants.SYMBOL_VOID:
                     //void
@@ -1578,7 +1577,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN2:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')' <Methods Opt> <Assign Tail>
-                    //todo: Create a new object using the stored tokens.
+                    Identifier fxnid2 = (Identifier)CreateExpression(token.Tokens[0]);
+                    List<Expression> concParams2 = (List<Expression>)CreateObject(token.Tokens[2]);
+                    object o = CreateObject(token.Tokens[4]);
                     return null;
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LBRACKET_RBRACKET:

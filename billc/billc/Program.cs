@@ -13,17 +13,18 @@ namespace billc
     {
         static void Main(string[] args)
         { 
-
+            //These tests create semantically invalid programs, but are sufficient to test construction of the AST
             string binop_test = "void main() {\n int a = a + 2;\n}";
             string fxn_test = "void main() {\n int a = 5;\n return a;\n}";
             string if_test = "void main() {\n int a = 5;\n if (a == 5) { return 1;} return 2;\n}";
             string while_test = "void main() {\n while(b){ return 2; }\n}";
             string assign_test = "void main() {\n a = 7;\n}";
             string invoke_test = "void main() { foo(5);\n}";
+            string invoke_test2 = "void main() { foo(5, true, 2.5); \n}";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(invoke_test);
+            ProgramNode program = (ProgramNode)parser.Parse(invoke_test2);
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 
