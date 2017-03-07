@@ -12,7 +12,19 @@ namespace billc
         /// <summary>
         /// A dictionary mapping local var ids to their type
         /// </summary>
-        Dictionary<string, string> localVars = new Dictionary<string, string>(); 
+        Dictionary<string, string> localVars = new Dictionary<string, string>();
+
+        /// <summary>
+        /// A dictionary mapping function names to their function decl object
+        /// (Static as functions exist at global scope)
+        /// </summary>
+        static Dictionary<string, FunctionDecl> functions = new Dictionary<string, FunctionDecl>();
+
+        /// <summary>
+        /// A dictionary mapping class names to their class decl object
+        /// (Static as class decls exist at global scope)
+        /// </summary>
+        static Dictionary<string, ClassDecl> classes = new Dictionary<string, ClassDecl>();
 
         public SymbolTable()
         {
@@ -21,7 +33,7 @@ namespace billc
 
         public SymbolTable(SymbolTable table)
         {
-
+            localVars = new Dictionary<string, string>(table.localVars);
         }
 
         /// <summary>
@@ -34,6 +46,11 @@ namespace billc
             return localVars.ContainsKey(id);
         }
 
+        public static bool isFunction(string id)
+        {
+            return functions.ContainsKey(id);
+        }
+
         /// <summary>
         /// Gets the type of a local var by its id, assumes the id is valid and exists
         /// </summary>
@@ -44,19 +61,36 @@ namespace billc
             return localVars[id];
         }
 
+        public static FunctionDecl getFunction(string id)
+        {
+            return functions[id];
+        }
+
         public void addLocalVar(string id, string type)
         {
             localVars.Add(id, type);
         }
 
-        /// <summary>
-        /// Checks if a given type exists (ie a class)
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public bool isTypeValid(string type)
+        public static void addFunction(string id, FunctionDecl f)
         {
-            throw new NotImplementedException();
+            functions.Add(id, f);
+        }
+
+        /// <summary>
+        /// Checks if a given type exists (ie a class, or primitive type)
+        /// </summary>
+        /// <param name="type">string to check</param>
+        /// <returns>true if the type exists</returns>
+        public static bool isTypeValid(string type)
+        {
+            if (PrimitiveTypes.isPrimitiveType(type))
+            {
+                return true;
+            }
+            else
+            {
+                return classes.ContainsKey(type);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace billc
             //These tests create semantically invalid programs, but are sufficient to test construction of the AST
             string binop_test = "void main() {\n int a = a + 2;\n}";
             string fxn_test = "void main() {\n int a = 5;\n return a;\n}";
-            string if_test = "void main() {\n int a = 5;\n if (a == 5) { return 1;} return 2;\n}";
+            string if_test = "void main() {\n int a = 5;\n if (a == 5) { return 1 + ;} return 2;\n}";
             string while_test = "void main() {\n while(b){ return 2; }\n}";
             string assign_test = "void main() {\n a = 7;\n}";
             string invoke_test = "void main() { foo(5);\n}";
@@ -26,7 +26,7 @@ namespace billc
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(class_test);
+            ProgramNode program = (ProgramNode)parser.Parse(if_test);
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 

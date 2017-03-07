@@ -1683,10 +1683,10 @@ namespace com.calitha.goldparser
                     //<Program Items> ::= <Program Items> <Program Item>
                     ProgramNode prgrm = (ProgramNode)CreateObject(token.Tokens[0]);
                     object oitem = CreateObject(token.Tokens[1]);
-                    if (oitem.GetType() == typeof(FunctionDecl))
+                    if (oitem is FunctionDecl)
                     {
                         prgrm.Add((FunctionDecl)oitem);
-                    } else if (oitem.GetType() == typeof(ClassDecl))
+                    } else if (oitem is ClassDecl)
                     {
                         prgrm.Add((ClassDecl)oitem);
                     } else
