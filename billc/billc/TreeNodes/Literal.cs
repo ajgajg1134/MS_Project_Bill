@@ -17,12 +17,12 @@ namespace billc.TreeNodes
     }
     class Literal : Expression
     {
-        lit_type type;
-        bool b;
-        int i;
-        double d;
-        char c;
-        string s;
+        public lit_type type;
+        public bool b;
+        public int i;
+        public double d;
+        public char c;
+        public string s;
 
         public Literal(bool b)
         {

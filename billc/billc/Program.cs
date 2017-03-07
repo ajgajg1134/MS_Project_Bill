@@ -23,10 +23,19 @@ namespace billc
             string invoke_test2 = "void main() { foo(5, true, 2.5); \n}";
             string member_test = "void main() { a.thing = 10; }";
             string class_test = "class foo(int a, string s){ }";
+            string interpret_test = "void main() { println(\"hello world\"); }";
+            string interpret2_test = "void main() { println(toStr(2)); }";
+            string interpret3_test = "void main() { println(toStr(1 + 2)); }";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(if_test);
+            ProgramNode program = (ProgramNode)parser.Parse(interpret3_test);
+
+            InterpreterVisitor iv = new InterpreterVisitor();
+
+            Console.WriteLine("Execute interpreter");
+            program.accept(iv);
+            Console.WriteLine("Execution complete");
 
             //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
 

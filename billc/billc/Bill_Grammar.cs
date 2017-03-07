@@ -727,7 +727,7 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_STRINGLITERAL:
                     //StringLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    return null;
+                    return new Literal(token.Text);
 
                 case (int)SymbolConstants.SYMBOL_THIS:
                     //this
@@ -1328,7 +1328,9 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_PRIMARY_LPAREN_RPAREN:
                     //<Primary> ::= <Valid ID> '(' <Arg List Opt> ')'
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier fxnidf = (Identifier)CreateExpression(token.Tokens[0]);
+                    List<Expression> concParamsf = (List<Expression>)CreateObject(token.Tokens[2]);
+                    return new FunctionInvocation(fxnidf, concParamsf);
 
                 case (int)RuleConstants.RULE_PRIMARY2:
                     //<Primary> ::= <Literal>

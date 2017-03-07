@@ -16,7 +16,10 @@ namespace billc.Visitors
         Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
 
         Literal result = null;
+        public InterpreterVisitor()
+        {
 
+        }
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
@@ -63,7 +66,21 @@ namespace billc.Visitors
             else if (SymbolTable.isBuiltinFunction(fi.fxnId.id))
             {
                 //Built-in
-
+                switch (fi.fxnId.id)
+                {
+                    case "println":
+                        InterpreterVisitor paramiv = new InterpreterVisitor(this);
+                        fi.paramsIn[0].accept(paramiv);
+                        Console.Out.WriteLine(paramiv.result.s);
+                        return;
+                    case "toStr":
+                        InterpreterVisitor paramivstr = new InterpreterVisitor(this);
+                        fi.paramsIn[0].accept(paramivstr);
+                        result = new Literal(paramivstr.result.ToString());
+                        return;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
             else
             {
@@ -104,7 +121,7 @@ namespace billc.Visitors
 
         public void visit(Literal literal)
         {
-            throw new NotImplementedException();
+            result = literal;
         }
 
         public void visit(Assignment astmt)
