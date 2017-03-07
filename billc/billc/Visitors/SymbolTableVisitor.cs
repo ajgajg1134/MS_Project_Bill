@@ -47,6 +47,11 @@ namespace billc.Visitors
             //do nothing
         }
 
+        public void visit(FunctionInvocation fi)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(WhileLoop wloop)
         {
             throw new NotImplementedException();

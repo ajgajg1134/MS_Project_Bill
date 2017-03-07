@@ -97,5 +97,11 @@ namespace billc
                 return classes.ContainsKey(type);
             }
         }
+
+        public static bool isBuiltinFunction(string fid)
+        {
+            var builtins = new List<string>{ "toInt", "println", "print", "toStr" };
+            return builtins.Contains(fid);
+        }
     }
 }

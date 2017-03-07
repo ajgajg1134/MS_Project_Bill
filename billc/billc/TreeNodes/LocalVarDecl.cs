@@ -10,7 +10,7 @@ namespace billc.TreeNodes
     {
         public string id;
         public string type;
-        Expression val;
+        public Expression val;
 
         public LocalVarDecl(string t, string i, Expression v)
         {

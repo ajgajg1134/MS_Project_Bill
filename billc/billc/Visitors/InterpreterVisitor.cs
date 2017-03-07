@@ -43,12 +43,33 @@ namespace billc.Visitors
 
         public void visit(LocalVarDecl ldecl)
         {
-            throw new NotImplementedException();
+            InterpreterVisitor sub_exp = new InterpreterVisitor(this);
+            ldecl.val.accept(sub_exp);
+            primitive_vars.Add(ldecl.id, sub_exp.result);
         }
 
         public void visit(UnaryOperator unop)
         {
             throw new NotImplementedException();
+        }
+
+        public void visit(FunctionInvocation fi)
+        {
+            if (SymbolTable.isFunction(fi.fxnId.id))
+            {
+                //User defined function
+
+            }
+            else if (SymbolTable.isBuiltinFunction(fi.fxnId.id))
+            {
+                //Built-in
+
+            }
+            else
+            {
+                //Error!
+                Console.Error.WriteLine("Unknown function call: " + fi.fxnId);
+            }
         }
 
         public void visit(WhileLoop wloop)

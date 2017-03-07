@@ -8,8 +8,8 @@ namespace billc.TreeNodes
 {
     class FunctionInvocation : Expression
     {
-        Identifier fxnId;
-        List<Expression> paramsIn;
+        public Identifier fxnId;
+        public List<Expression> paramsIn;
 
         public FunctionInvocation(Identifier id, List<Expression> paramsIn)
         {
