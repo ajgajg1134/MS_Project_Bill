@@ -76,6 +76,11 @@ namespace billc
             functions.Add(id, f);
         }
 
+        public static void addClass(string id, ClassDecl cd)
+        {
+            classes.Add(id, cd);
+        }
+
         /// <summary>
         /// Checks if a given type exists (ie a class, or primitive type)
         /// </summary>

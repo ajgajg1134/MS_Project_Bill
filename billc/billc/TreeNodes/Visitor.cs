@@ -16,7 +16,7 @@ namespace billc.TreeNodes
         void visit(BinaryOperator bop);
         void visit(Literal literal);
         void visit(FormalParam fparam);
-        void visit(Expression exp);
+        //void visit(Expression exp);
         void visit(LocalVarDecl ldecl);
         void visit(Conditional cond);
         void visit(UnaryOperator unop);
@@ -24,5 +24,6 @@ namespace billc.TreeNodes
         void visit(WhileLoop wloop);
         void visit(Break br);
         void visit(Continue ct);
+        void visit(FunctionInvocation fi);
     }
 }

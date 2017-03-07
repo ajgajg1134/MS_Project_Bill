@@ -8,7 +8,7 @@ namespace billc.TreeNodes
 {
     class Identifier : Expression
     {
-        string id;
+        public string id;
 
         public Identifier(string id)
         {

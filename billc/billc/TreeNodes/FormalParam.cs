@@ -8,8 +8,8 @@ namespace billc.TreeNodes
 {
     class FormalParam : Node
     {
-        string id;
-        string type;
+        public string id;
+        public string type;
 
         public FormalParam(string i, string t)
         {

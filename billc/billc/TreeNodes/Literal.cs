@@ -91,6 +91,16 @@ namespace billc.TreeNodes
             }
         }
 
+        public Literal(Literal l)
+        {
+            b = l.b;
+            i = l.i;
+            d = l.d;
+            c = l.c;
+            s = l.s;
+            type = l.type;
+        }
+
         public override void accept(Visitor v)
         {
             v.visit(this);
@@ -144,6 +154,75 @@ namespace billc.TreeNodes
         {
             //A literal can not have a type error.
             return getResultType();
+        }
+
+        /// <summary>
+        /// Performs a binary operation on two literals, types are assumed correct
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="r"></param>
+        /// <returns>a literal holding the result of the operation</returns>
+        public static Literal performBinOp(Literal l, Literal r, binops bop)
+        {
+            switch (l.type)
+            {
+                case lit_type.boolean:
+                    switch (bop)
+                    {
+                        case binops.eq:
+                            return new Literal(l.b == r.b);
+                        case binops.neq:
+                            return new Literal(l.b != r.b);
+                        case binops.and:
+                            return new Literal(l.b && r.b);
+                        case binops.or:
+                            return new Literal(l.b || r.b);
+                        default:
+                            Console.Error.WriteLine("Error! unexpected binop type in literal");
+                            return null;
+                    }
+                case lit_type.character:
+                    throw new NotImplementedException();
+                case lit_type.floating:
+                    throw new NotImplementedException();
+                case lit_type.integer:
+                    switch (bop)
+                    {
+                        case binops.eq:
+                            return new Literal(l.i == r.i);
+                        case binops.gt:
+                            return new Literal(l.i > r.i);
+                        case binops.gte:
+                            return new Literal(l.i >= r.i);
+                        case binops.lt:
+                            return new Literal(l.i < r.i);
+                        case binops.lte:
+                            return new Literal(l.i <= r.i);
+                        case binops.neq:
+                            return new Literal(l.i != r.i);
+                        case binops.add:
+                            return new Literal(l.i + r.i);
+                        case binops.div:
+                            return new Literal(l.i / r.i); //TODO: div by zero check?
+                        case binops.mul:
+                            return new Literal(l.i * r.i);
+                        case binops.sub:
+                            return new Literal(l.i - r.i);
+                        case binops.mod:
+                            return new Literal(l.i % r.i);
+                        default:
+                            Console.Error.WriteLine("Error! unexpected binop type in literal");
+                            return null;
+                    }
+                case lit_type.null_l:
+                    Console.Error.WriteLine("Error! unexpected null value in literal binop");
+                    return null;
+                case lit_type.string_l:
+                    throw new NotImplementedException();
+                default:
+                    Console.Error.WriteLine("Error in Literal node, unexpected literal type");
+                    return null;
+            }
         }
     }
 }

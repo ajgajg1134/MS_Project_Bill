@@ -8,8 +8,8 @@ namespace billc.TreeNodes
 {
     class LocalVarDecl : Statement
     {
-        string id;
-        string type;
+        public string id;
+        public string type;
         Expression val;
 
         public LocalVarDecl(string t, string i, Expression v)

@@ -25,9 +25,9 @@ namespace billc.TreeNodes
     }
     class BinaryOperator : Expression
     {
-        Expression left;
-        Expression right;
-        binops op;
+        public Expression left;
+        public Expression right;
+        public binops op;
 
         public BinaryOperator(Expression l, Expression r, binops o)
         {

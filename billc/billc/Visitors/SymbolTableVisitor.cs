@@ -9,29 +9,42 @@ namespace billc.Visitors
 {
     class SymbolTableVisitor : Visitor
     {
+
+        SymbolTable symTable = new SymbolTable();
+
+        public SymbolTableVisitor()
+        {
+            
+        }
+
+        public SymbolTableVisitor(SymbolTableVisitor stv)
+        {
+            symTable = new SymbolTable(stv.symTable);
+        }
+
         public void visit(ClassDecl cdecl)
         {
-            throw new NotImplementedException();
+            SymbolTable.addClass(cdecl.id.id, cdecl);
         }
 
         public void visit(BinaryOperator bop)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(FormalParam fparam)
         {
-            throw new NotImplementedException();
+            symTable.addLocalVar(fparam.id, fparam.type);
         }
 
         public void visit(LocalVarDecl ldecl)
         {
-            throw new NotImplementedException();
+            symTable.addLocalVar(ldecl.id, ldecl.type);
         }
 
         public void visit(UnaryOperator unop)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(WhileLoop wloop)
@@ -41,22 +54,23 @@ namespace billc.Visitors
 
         public void visit(Continue ct)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(Break br)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(Return ret)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(Conditional cond)
         {
-            throw new NotImplementedException();
+            SymbolTableVisitor stv_then = new SymbolTableVisitor(this);
+            cond.thenBlock.ForEach(stmt => stmt.accept(stv_then));
         }
 
         public void visit(Expression exp)
@@ -66,22 +80,26 @@ namespace billc.Visitors
 
         public void visit(Literal literal)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(Assignment astmt)
         {
-            throw new NotImplementedException();
+            //do nothing
         }
 
         public void visit(FunctionDecl fdecl)
         {
-            throw new NotImplementedException();
+            SymbolTable.addFunction(fdecl.id, fdecl);
+            SymbolTableVisitor stv = new SymbolTableVisitor(this);
+            fdecl.fParams.ForEach(fparam => fparam.accept(stv));
+            fdecl.block.ForEach(stmt => stmt.accept(stv));
         }
 
         public void visit(ProgramNode node)
         {
-            throw new NotImplementedException();
+            node.classes.ForEach(c => c.accept(this));
+            node.functions.ForEach(f => f.accept(this));
         }
     }
 }

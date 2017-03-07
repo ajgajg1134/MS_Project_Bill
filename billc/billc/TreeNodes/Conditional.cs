@@ -8,8 +8,8 @@ namespace billc.TreeNodes
 {
     class Conditional : Statement
     {
-        List<Statement> thenBlock;
-        List<Statement> elseBlock;
+        public List<Statement> thenBlock;
+        public List<Statement> elseBlock;
         Expression condition;
 
         public Conditional(List<Statement> tBlock, List<Statement> eBlock, Expression cond)
