@@ -7,9 +7,12 @@ using billc.TreeNodes;
 
 namespace billc.Visitors
 {
+    /// <summary>
+    /// A visitor that will interpret the code of the part of the tree it visits
+    /// Currently much of this visitor assumes that the AST is completely type-checked and valid
+    /// </summary>
     class InterpreterVisitor : Visitor
     {
-
         /// <summary>
         /// name of variable to the value it currently holds
         /// </summary>
@@ -54,6 +57,11 @@ namespace billc.Visitors
         public void visit(UnaryOperator unop)
         {
             throw new NotImplementedException();
+        }
+
+        public void visit(Identifier id)
+        {
+            result = primitive_vars[id.id];
         }
 
         public void visit(FunctionInvocation fi)

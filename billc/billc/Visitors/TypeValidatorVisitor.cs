@@ -45,6 +45,11 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(Identifier id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(FunctionInvocation fi)
         {
             throw new NotImplementedException();

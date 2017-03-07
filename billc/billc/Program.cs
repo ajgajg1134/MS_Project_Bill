@@ -26,10 +26,11 @@ namespace billc
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
             string interpret3_test = "void main() { println(toStr(1 + 2)); }";
+            string interpret4_test = "void main() { int a = 2 + 5; \n println(toStr(a)); }";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(interpret3_test);
+            ProgramNode program = (ProgramNode)parser.Parse(interpret4_test);
 
             InterpreterVisitor iv = new InterpreterVisitor();
 

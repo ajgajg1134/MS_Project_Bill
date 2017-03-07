@@ -22,7 +22,7 @@ namespace billc.TreeNodes
 
         public override void accept(Visitor v)
         {
-            throw new NotImplementedException();
+            v.visit(this);
         }
 
         public override string getResultType()

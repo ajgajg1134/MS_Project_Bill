@@ -25,5 +25,6 @@ namespace billc.TreeNodes
         void visit(Break br);
         void visit(Continue ct);
         void visit(FunctionInvocation fi);
+        void visit(Identifier id);
     }
 }

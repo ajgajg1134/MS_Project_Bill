@@ -52,6 +52,11 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(Identifier id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(WhileLoop wloop)
         {
             throw new NotImplementedException();
