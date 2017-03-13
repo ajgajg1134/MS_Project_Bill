@@ -25,13 +25,50 @@ namespace billc.Tests
             }
         }
 
+        /// <summary>
+        /// Takes source and verifies if that parses to a valid program
+        /// Verifies a program node object is returned and there is at least 1 function
+        /// in it
+        /// </summary>
+        /// <param name="src">source string to parse</param>
+        /// <returns>the parsed program node</returns>
+        public ProgramNode testParse(string src)
+        {
+            object parseRet = parser.Parse(src);
+            Assert.IsNotNull(parseRet);
+            Assert.IsInstanceOf<ProgramNode>(parseRet);
+            ProgramNode pgm = parseRet as ProgramNode;
+            Assert.NotZero(pgm.functions.Count);
+            return pgm;
+        }
+
         [Test]
         public void EmptyMain()
         {
-            string prgrm = "void main() {}";
-            object parseRet = parser.Parse(prgrm);
-            Assert.IsNotNull(parseRet);
-            Assert.IsInstanceOf<ProgramNode>(parseRet);
+            string src = "void main() {}";
+            testParse(src);
+        }
+
+        [Test]
+        public void VarDecl()
+        {
+            string src = "void main() {int a = 5;}";
+            var prgrm = testParse(src);
+            Assert.NotZero(prgrm.functions[0].block.Count);
+            Assert.IsInstanceOf<LocalVarDecl>(prgrm.functions[0].block[0]);
+            LocalVarDecl lvDecl = prgrm.functions[0].block[0] as LocalVarDecl;
+            Expression val = lvDecl.val;
+            Assert.IsInstanceOf<Literal>(val);
+            Literal val_l = val as Literal;
+            Assert.AreEqual(val_l.i, 5);
+            Assert.AreEqual(lvDecl.id.id, "a");
+            Assert.AreEqual(lvDecl.type, "int");
+        }
+
+        [Test]
+        public void ExpressionParsing()
+        {
+            //testParse(prgrm);
         }
     }
 }
