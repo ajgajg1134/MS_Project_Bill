@@ -28,33 +28,40 @@ namespace billc
             string interpret3_test = "void main() { println(toStr(1 + 2)); }";
             string interpret4_test = "void main() { int a = 2 + 5; \n println(toStr(a)); }";
 
-            //Tests to see quality of error messages
+            //Tests to see quality of parsing error messages
             string missingBrace = "void main() { ";
             string extraBrace = "void main() { }}";
-            string emptyProgram = ""; //Parse is valid, typechecker should fail this
             string badExpression = "void main() {\n int a = 5 + ;\n}";
+
+            //Type checker errors
+            string emptyProgram = "";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(badExpression);
+            ProgramNode program = (ProgramNode)parser.Parse(emptyProgram);
 
             if (program == null)
             {
                 ErrorReporter.Error("Parsing failed, Exiting.");
                 return;
+            } 
+
+            TypeValidatorVisitor tvv = new TypeValidatorVisitor();
+            
+            program.accept(tvv);
+
+            if (!tvv.isValidProgram)
+            {
+                ErrorReporter.Error("Type check failed, Exiting.");
+                return;
             }
-
-            InterpreterVisitor iv = new InterpreterVisitor();
-
-            Console.WriteLine("Execute interpreter");
-            program.accept(iv);
-            Console.WriteLine("Execution complete");
-
-            //TypeValidatorVisitor tvv = new TypeValidatorVisitor();
-
-            //program.accept(tvv);
-
             Console.WriteLine(program.ToString());
+
+            //InterpreterVisitor iv = new InterpreterVisitor();
+
+            //Console.WriteLine("Execute interpreter");
+            //program.accept(iv);
+            //Console.WriteLine("Execution complete");
 
             Console.ReadLine();
         }

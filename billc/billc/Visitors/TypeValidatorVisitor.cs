@@ -10,6 +10,7 @@ namespace billc.Visitors
     class TypeValidatorVisitor : Visitor
     {
         SymbolTable table;
+        public bool isValidProgram = true;
         public TypeValidatorVisitor()
         {
             table = new SymbolTable();
@@ -126,7 +127,8 @@ namespace billc.Visitors
             //Todo: check params list and return type
             if (main == null)
             {
-                Console.Error.WriteLine("Error no main function identified");
+                isValidProgram = false;
+                ErrorReporter.Error("No main function found");
             }
         }
     }
