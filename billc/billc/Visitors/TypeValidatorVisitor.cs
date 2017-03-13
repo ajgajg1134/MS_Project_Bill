@@ -10,6 +10,7 @@ namespace billc.Visitors
     class TypeValidatorVisitor : Visitor
     {
         SymbolTable table;
+        IErrorReporter errorReporter = new ErrorReporter();
         public bool isValidProgram = true;
         public string resultType = "";
 
@@ -39,7 +40,7 @@ namespace billc.Visitors
             if (string.IsNullOrEmpty(leftType))
             {
                 isValidProgram = false;
-                ErrorReporter.Error("Unable to determine result type of Binary LHS", bop.left);
+                errorReporter.Error("Unable to determine result type of Binary LHS", bop.left);
                 return;
             }
 
@@ -52,20 +53,20 @@ namespace billc.Visitors
             if (string.IsNullOrEmpty(rightType))
             {
                 isValidProgram = false;
-                ErrorReporter.Error("Unable to determine result type of Binary RHS", bop.right);
+                errorReporter.Error("Unable to determine result type of Binary RHS", bop.right);
                 return;
             }
 
             if (!BinaryOperator.isValidTypeWithOp(bop.op, leftType))
             {
                 isValidProgram = false;
-                ErrorReporter.Error(leftType + " on left hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
+                errorReporter.Error(leftType + " on left hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
                 return;
             }
             if (!BinaryOperator.isValidTypeWithOp(bop.op, rightType))
             {
                 isValidProgram = false;
-                ErrorReporter.Error(rightType + " on right hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
+                errorReporter.Error(rightType + " on right hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
                 return;
             }
             resultType = bop.getResultType();
@@ -87,7 +88,7 @@ namespace billc.Visitors
 
             if (ldecl.type != valType)
             {
-                ErrorReporter.Error("Declared type of " + ldecl.type + " does not match expression type of " + valType, ldecl);
+                errorReporter.Error("Declared type of " + ldecl.type + " does not match expression type of " + valType, ldecl);
             }
 
             table.addLocalVar(ldecl.id.id, valType);
@@ -109,7 +110,7 @@ namespace billc.Visitors
             if (!table.isLocalVar(id.id))
             {
                 isValidProgram = false;
-                ErrorReporter.Error(id + " does not exist in current scope.", id);
+                errorReporter.Error(id + " does not exist in current scope.", id);
             }
             else
             {
@@ -148,7 +149,7 @@ namespace billc.Visitors
             if (condType != "bool")
             {
                 isValidProgram = false;
-                ErrorReporter.Error("Condition in if statement must be of type boolean, detected type as " + condType + ".", cond);
+                errorReporter.Error("Condition in if statement must be of type boolean, detected type as " + condType + ".", cond);
             }
             TypeValidatorVisitor tvvThen = new TypeValidatorVisitor(this);
             foreach (Statement stmt in cond.thenBlock)
@@ -223,7 +224,7 @@ namespace billc.Visitors
             if (main == null)
             {
                 isValidProgram = false;
-                ErrorReporter.Error("No main function found");
+                errorReporter.Error("No main function found");
             }
         }
     }

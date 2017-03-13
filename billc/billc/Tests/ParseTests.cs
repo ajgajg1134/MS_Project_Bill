@@ -68,7 +68,9 @@ namespace billc.Tests
         [Test]
         public void ExpressionParsing()
         {
-            //testParse(prgrm);
+            string src = "void main() {int a = 2 + 3 - 1 * 7;}";
+            var prgrm = testParse(src);
+            Assert.NotZero(prgrm.functions[0].block.Count);
         }
     }
 }

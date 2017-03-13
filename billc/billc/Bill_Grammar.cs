@@ -331,6 +331,7 @@ namespace com.calitha.goldparser
     public class MyParser
     {
         private LALRParser parser;
+        IErrorReporter errorReporter = new ErrorReporter();
 
         public MyParser(string filename)
         {
@@ -1794,7 +1795,7 @@ namespace com.calitha.goldparser
         {
             string message = "Token error with input: '" + args.Token.ToString() + "'";
             //todo: Report message to UI?
-            Console.Error.WriteLine(message);
+            errorReporter.Error(message);
         }
 
         private void ParseErrorEvent(LALRParser parser, ParseErrorEventArgs args)
@@ -1804,7 +1805,7 @@ namespace com.calitha.goldparser
             {
                 message += "\n\t at " + args.UnexpectedToken.Location.ToString();
             }
-            ErrorReporter.Error(message);
+            errorReporter.Error(message);
         }
 
     }

@@ -7,25 +7,25 @@ using billc.TreeNodes;
 
 namespace billc
 {
-    class ErrorReporter
+    class ErrorReporter : IErrorReporter
     {
 
-        public static void Warning(string msg)
+        public void Warning(string msg)
         {
             Console.Error.WriteLine("Warning: " + msg);
         }
 
-        public static void Warning(string msg, Node n)
+        public void Warning(string msg, Node n)
         {
             Console.Error.WriteLine("Warning: " + msg + "\n\t at line " + n.lineNum);
         }
 
-        public static void Error(string msg)
+        public void Error(string msg)
         {
             Console.Error.WriteLine("ERROR: " + msg);
         }
 
-        public static void Error(string msg, Node n)
+        public void Error(string msg, Node n)
         {
             Console.Error.WriteLine("ERROR: " + msg + "\n\t at line " + n.lineNum);
         }

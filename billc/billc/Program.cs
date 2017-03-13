@@ -40,11 +40,13 @@ namespace billc
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
+            IErrorReporter errorReporter = new ErrorReporter();
+
             ProgramNode program = (ProgramNode)parser.Parse(badCond);
 
             if (program == null)
             {
-                ErrorReporter.Error("Parsing failed, Exiting.");
+                errorReporter.Error("Parsing failed, Exiting.");
                 return;
             } 
 
@@ -54,7 +56,7 @@ namespace billc
 
             if (!tvv.isValidProgram)
             {
-                ErrorReporter.Error("Type check failed, Exiting.");
+                errorReporter.Error("Type check failed, Exiting.");
                 return;
             }
             Console.WriteLine(program.ToString());
