@@ -11,9 +11,16 @@ namespace billc.Visitors
     {
         SymbolTable table;
         public bool isValidProgram = true;
+        public string resultType;
+
         public TypeValidatorVisitor()
         {
             table = new SymbolTable();
+        }
+
+        public TypeValidatorVisitor(TypeValidatorVisitor tvv)
+        {
+            table = new SymbolTable(tvv.table);
         }
 
         public void visit(ClassDecl cdecl)
@@ -48,7 +55,11 @@ namespace billc.Visitors
 
         public void visit(Identifier id)
         {
-            throw new NotImplementedException();
+            if (!table.isLocalVar(id.id))
+            {
+                isValidProgram = false;
+                ErrorReporter.Error(id + " does not exist in current scope.", id);
+            }
         }
 
         public void visit(FunctionInvocation fi)
@@ -106,21 +117,27 @@ namespace billc.Visitors
 
         public void visit(FunctionDecl fdecl)
         {
-            //todo: Add formal params to symbol table (check if they're accurate too)
-            //Keep a copy to replace the "bad" symbol table that has local vars
-            
+            TypeValidatorVisitor fxnVisitor = new TypeValidatorVisitor(this);
+            //Add params as available local vars
+            fdecl.fParams.ForEach(fp => fxnVisitor.table.addLocalVar(fp.id, fp.type));
+
             //go through each statement to verify
             foreach(Statement s in fdecl.block)
             {
-                s.accept(this);
+                s.accept(fxnVisitor);
+            }
+
+            if (!fxnVisitor.isValidProgram)
+            {
+                isValidProgram = false;
             }
             //todo: figure out how to check return type (maybe do a seperate special thing?)
         }
 
         public void visit(ProgramNode node)
         {
-            node.functions.ForEach(f => f.accept(this));
             //node.classes.ForEach(c => c.accept(this));
+            node.functions.ForEach(f => f.accept(this));
 
             //Check for a main function
             FunctionDecl main = node.functions.FirstOrDefault(f => f.id == "main");
