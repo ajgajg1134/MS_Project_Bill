@@ -11,7 +11,7 @@ namespace billc.Visitors
     {
         SymbolTable table;
         public bool isValidProgram = true;
-        public string resultType;
+        public string resultType = "";
 
         public TypeValidatorVisitor()
         {
@@ -30,7 +30,42 @@ namespace billc.Visitors
 
         public void visit(BinaryOperator bop)
         {
-            throw new NotImplementedException();
+            bop.left.accept(this);
+            string leftType = resultType;
+            if (string.IsNullOrEmpty(leftType))
+            {
+                isValidProgram = false;
+                ErrorReporter.Error("Unable to determine result type of Binary LHS", bop.left);
+                return;
+            }
+            bop.right.accept(this);
+            string rightType = resultType;
+            if (string.IsNullOrEmpty(rightType))
+            {
+                isValidProgram = false;
+                ErrorReporter.Error("Unable to determine result type of Binary RHS", bop.right);
+                return;
+            }
+
+            //If any issues arose in LHS or RHS they have already been reported.
+            if (!isValidProgram)
+            {
+                return;
+            }
+
+            if (!BinaryOperator.isValidTypeWithOp(bop.op, leftType))
+            {
+                isValidProgram = false;
+                ErrorReporter.Error(leftType + " on left hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
+                return;
+            }
+            if (!BinaryOperator.isValidTypeWithOp(bop.op, rightType))
+            {
+                isValidProgram = false;
+                ErrorReporter.Error(rightType + " on right hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
+                return;
+            }
+            resultType = bop.getResultType();
         }
 
         public void visit(FormalParam fparam)
@@ -59,6 +94,10 @@ namespace billc.Visitors
             {
                 isValidProgram = false;
                 ErrorReporter.Error(id + " does not exist in current scope.", id);
+            }
+            else
+            {
+                resultType = table.getLocalVar(id.id);
             }
         }
 
@@ -94,7 +133,7 @@ namespace billc.Visitors
 
         public void visit(Literal literal)
         {
-            throw new NotImplementedException();
+            resultType = literal.getResultType();
         }
 
         public void visit(Assignment astmt)
