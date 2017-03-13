@@ -13,16 +13,45 @@ namespace billc.Tests
     [TestFixture]
     class ParseTests
     {
-        MyParser parser;
+        internal class TestErrorReporter : IErrorReporter
+        {
+            internal string buffer;
+            internal Node inObj;
+            public void Error(string msg)
+            {
+                buffer = msg;
+            }
 
+            public void Error(string msg, Node n)
+            {
+                buffer = msg;
+                inObj = n;
+            }
+
+            public void Warning(string msg)
+            {
+                buffer = msg;
+            }
+
+            public void Warning(string msg, Node n)
+            {
+                buffer = msg;
+                inObj = n;
+            }
+        }
+
+        MyParser parser;
+        TestErrorReporter errReporter;
         [SetUp]
         protected void SetUp()
         {
+            errReporter = new TestErrorReporter();
             var assembly = Assembly.GetExecutingAssembly();
             using (var stream = assembly.GetManifestResourceStream("billc.Bill_Grammar.cgt"))
             {
                 parser = new MyParser(stream);
             }
+            parser.errorReporter = errReporter;
         }
 
         /// <summary>
@@ -71,6 +100,15 @@ namespace billc.Tests
             string src = "void main() {int a = 2 + 3 - 1 * 7;}";
             var prgrm = testParse(src);
             Assert.NotZero(prgrm.functions[0].block.Count);
+        }
+
+        [Test]
+        public void MissingBrace()
+        {
+            string src = "void main() { ";
+            object parseRet = parser.Parse(src);
+            Assert.IsNull(parseRet);
+            Assert.IsNotEmpty(errReporter.buffer);
         }
     }
 }

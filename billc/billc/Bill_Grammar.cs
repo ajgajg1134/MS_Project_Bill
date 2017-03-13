@@ -331,7 +331,7 @@ namespace com.calitha.goldparser
     public class MyParser
     {
         private LALRParser parser;
-        IErrorReporter errorReporter = new ErrorReporter();
+        internal IErrorReporter errorReporter = new ErrorReporter();
 
         public MyParser(string filename)
         {
