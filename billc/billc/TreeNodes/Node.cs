@@ -8,6 +8,7 @@ namespace billc.TreeNodes
 {
     abstract class Node : Visitable
     {
+        public int lineNum;
         public abstract void accept(Visitor v);
     }
 }
