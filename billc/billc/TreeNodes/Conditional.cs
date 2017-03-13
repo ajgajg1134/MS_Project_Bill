@@ -10,7 +10,7 @@ namespace billc.TreeNodes
     {
         public List<Statement> thenBlock;
         public List<Statement> elseBlock;
-        Expression condition;
+        public Expression condition;
 
         public Conditional(List<Statement> tBlock, List<Statement> eBlock, Expression cond)
         {

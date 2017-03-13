@@ -37,7 +37,7 @@ namespace billc.TreeNodes
 
         public override string ToString()
         {
-            return id + " = " + val.ToString() + ";";
+            return type + " " + id + " = " + val.ToString() + ";";
         }
 
         public override void accept(Visitor v)

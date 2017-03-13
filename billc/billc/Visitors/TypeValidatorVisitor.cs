@@ -139,12 +139,35 @@ namespace billc.Visitors
 
         public void visit(Conditional cond)
         {
-            throw new NotImplementedException();
-        }
-
-        public void visit(Expression exp)
-        {
-            throw new NotImplementedException();
+            cond.condition.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            string condType = resultType;
+            if (condType != "bool")
+            {
+                isValidProgram = false;
+                ErrorReporter.Error("Condition in if statement must be of type boolean, detected type as " + condType + ".", cond);
+            }
+            TypeValidatorVisitor tvvThen = new TypeValidatorVisitor(this);
+            foreach (Statement stmt in cond.thenBlock)
+            {
+                stmt.accept(tvvThen);
+                if (!tvvThen.isValidProgram)
+                {
+                    return;
+                }
+            }
+            TypeValidatorVisitor tvvElse = new TypeValidatorVisitor(this);
+            foreach (Statement stmt in cond.elseBlock)
+            {
+                stmt.accept(tvvElse);
+                if (!tvvElse.isValidProgram)
+                {
+                    return;
+                }
+            }
         }
 
         public void visit(Literal literal)

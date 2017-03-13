@@ -1396,14 +1396,19 @@ namespace com.calitha.goldparser
                     //<Statement> ::= if '(' <Expression> ')' <Statement>
                     Expression cond = CreateExpression(token.Tokens[2]);
                     var tblock = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
-                    return new Conditional(tblock, new List<Statement>(), cond);
+                    int condline = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    var condt = new Conditional(tblock, new List<Statement>(), cond);
+                    condt.lineNum = condline;
+                    return condt;
 
                 case (int)RuleConstants.RULE_STATEMENT_IF_LPAREN_RPAREN_ELSE:
                     //<Statement> ::= if '(' <Expression> ')' <Then Stm> else <Statement>
                     Expression condelse = CreateExpression(token.Tokens[2]);
                     var teblock = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
                     var eblock = (List<Statement>)CreateObject(token.Tokens[6]) ?? new List<Statement>();
-                    return new Conditional(teblock, eblock, condelse);
+                    var tecond = new Conditional(teblock, eblock, condelse);
+                    tecond.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return tecond;
 
                 case (int)RuleConstants.RULE_STATEMENT_FOR_LPAREN_SEMI_SEMI_RPAREN:
                     //<Statement> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
