@@ -36,10 +36,11 @@ namespace billc
             //Type checker errors
             string emptyProgram = "";
             string no_identifier = "void main() {\n\n\n int a = b + 2;\n}";
+            string badCond = "void main() {\n if (5) { }\n }";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(if_test);
+            ProgramNode program = (ProgramNode)parser.Parse(badCond);
 
             if (program == null)
             {
