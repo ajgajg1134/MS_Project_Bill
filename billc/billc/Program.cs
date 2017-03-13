@@ -28,9 +28,21 @@ namespace billc
             string interpret3_test = "void main() { println(toStr(1 + 2)); }";
             string interpret4_test = "void main() { int a = 2 + 5; \n println(toStr(a)); }";
 
+            //Tests to see quality of error messages
+            string missingBrace = "void main() { ";
+            string extraBrace = "void main() { }}";
+            string emptyProgram = ""; //Parse is valid, typechecker should fail this
+            string badExpression = "void main() {\n int a = 5 + ;\n}";
+
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
-            ProgramNode program = (ProgramNode)parser.Parse(interpret4_test);
+            ProgramNode program = (ProgramNode)parser.Parse(badExpression);
+
+            if (program == null)
+            {
+                ErrorReporter.Error("Parsing failed, Exiting.");
+                return;
+            }
 
             InterpreterVisitor iv = new InterpreterVisitor();
 

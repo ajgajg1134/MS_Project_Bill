@@ -6,6 +6,7 @@ using com.calitha.goldparser.lalr;
 using com.calitha.commons;
 using System.Collections.Generic;
 using billc.TreeNodes;
+using billc;
 
 namespace com.calitha.goldparser
 {
@@ -696,7 +697,7 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_MEMBERNAME:
                     //MemberName
-                    //todo: Create a new object that corresponds to the symbol
+                    //removes the dot at the beginning
                     return token.Text.Substring(1);
 
                 case (int)SymbolConstants.SYMBOL_NEW:
@@ -712,7 +713,9 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_REALLITERAL:
                     //RealLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    return new Literal(double.Parse(token.Text));
+                    var lit = new Literal(double.Parse(token.Text));
+                    lit.lineNum = token.Location.LineNr;
+                    return lit;
 
                 case (int)SymbolConstants.SYMBOL_RETURN:
                     //return
@@ -727,7 +730,9 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_STRINGLITERAL:
                     //StringLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    return new Literal(token.Text);
+                    var lit2 = new Literal(token.Text);
+                    lit2.lineNum = token.Location.LineNr;
+                    return lit2;
 
                 case (int)SymbolConstants.SYMBOL_THIS:
                     //this
@@ -736,7 +741,9 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_TRUE:
                     //true
-                    return new Literal(true);
+                    var lit3 = new Literal(true);
+                    lit3.lineNum = token.Location.LineNr;
+                    return lit3;
 
                 case (int)SymbolConstants.SYMBOL_VOID:
                     //void
@@ -1779,9 +1786,12 @@ namespace com.calitha.goldparser
 
         private void ParseErrorEvent(LALRParser parser, ParseErrorEventArgs args)
         {
-            string message = "Parse error caused by token: '" + args.UnexpectedToken.ToString() + "'";
-            //todo: Report message to UI?
-            Console.Error.WriteLine(message);
+            string message = "Parse error caused by unexpected symbol: '" + args.UnexpectedToken.ToString() + "'";
+            if(args.UnexpectedToken != null)
+            {
+                message += "\n\t at " + args.UnexpectedToken.Location.ToString();
+            }
+            ErrorReporter.Error(message);
         }
 
     }

@@ -8,7 +8,11 @@ namespace billc.TreeNodes
 {
     abstract class Node : Visitable
     {
-        public int lineNum;
+        /// <summary>
+        /// The line number where this node begins in the original source code
+        /// -1 by default
+        /// </summary>
+        public int lineNum = -1;
         public abstract void accept(Visitor v);
     }
 }
