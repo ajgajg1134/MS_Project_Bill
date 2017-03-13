@@ -31,6 +31,10 @@ namespace billc.Visitors
         public void visit(BinaryOperator bop)
         {
             bop.left.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
             string leftType = resultType;
             if (string.IsNullOrEmpty(leftType))
             {
@@ -38,18 +42,17 @@ namespace billc.Visitors
                 ErrorReporter.Error("Unable to determine result type of Binary LHS", bop.left);
                 return;
             }
+
             bop.right.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
             string rightType = resultType;
             if (string.IsNullOrEmpty(rightType))
             {
                 isValidProgram = false;
                 ErrorReporter.Error("Unable to determine result type of Binary RHS", bop.right);
-                return;
-            }
-
-            //If any issues arose in LHS or RHS they have already been reported.
-            if (!isValidProgram)
-            {
                 return;
             }
 
@@ -75,7 +78,20 @@ namespace billc.Visitors
 
         public void visit(LocalVarDecl ldecl)
         {
-            throw new NotImplementedException();
+            ldecl.val.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            string valType = resultType;
+
+            if (ldecl.type != valType)
+            {
+                ErrorReporter.Error("Declared type of " + ldecl.type + " does not match expression type of " + valType, ldecl);
+            }
+
+            table.addLocalVar(ldecl.id.id, valType);
+            resultType = "";
         }
 
         public void visit(WhileLoop wloop)
@@ -179,7 +195,7 @@ namespace billc.Visitors
             node.functions.ForEach(f => f.accept(this));
 
             //Check for a main function
-            FunctionDecl main = node.functions.FirstOrDefault(f => f.id == "main");
+            FunctionDecl main = node.functions.FirstOrDefault(f => f.id.id == "main");
             //Todo: check params list and return type
             if (main == null)
             {

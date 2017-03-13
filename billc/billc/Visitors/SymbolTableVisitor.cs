@@ -39,7 +39,7 @@ namespace billc.Visitors
 
         public void visit(LocalVarDecl ldecl)
         {
-            symTable.addLocalVar(ldecl.id, ldecl.type);
+            symTable.addLocalVar(ldecl.id.id, ldecl.type);
         }
 
         public void visit(UnaryOperator unop)
@@ -100,7 +100,7 @@ namespace billc.Visitors
 
         public void visit(FunctionDecl fdecl)
         {
-            SymbolTable.addFunction(fdecl.id, fdecl);
+            SymbolTable.addFunction(fdecl.id.id, fdecl);
             SymbolTableVisitor stv = new SymbolTableVisitor(this);
             fdecl.fParams.ForEach(fparam => fparam.accept(stv));
             fdecl.block.ForEach(stmt => stmt.accept(stv));

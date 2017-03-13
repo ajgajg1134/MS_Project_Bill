@@ -9,11 +9,11 @@ namespace billc.TreeNodes
     class FunctionDecl : Node
     {
         public List<FormalParam> fParams;
-        public string id;
+        public Identifier id;
         public string retType;
         public List<Statement> block;
 
-        public FunctionDecl(List<FormalParam> fps, string i, string rt, List<Statement> b)
+        public FunctionDecl(List<FormalParam> fps, Identifier i, string rt, List<Statement> b)
         {
             fParams = fps;
             id = i;

@@ -35,7 +35,7 @@ namespace billc
 
             //Type checker errors
             string emptyProgram = "";
-            string no_identifier = "void main() {\n int a = b + 2;\n}";
+            string no_identifier = "void main() {\n\n\n int a = b + 2;\n}";
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 

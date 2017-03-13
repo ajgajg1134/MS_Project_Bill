@@ -51,7 +51,7 @@ namespace billc.Visitors
         {
             InterpreterVisitor sub_exp = new InterpreterVisitor(this);
             ldecl.val.accept(sub_exp);
-            primitive_vars.Add(ldecl.id, sub_exp.result);
+            primitive_vars.Add(ldecl.id.id, sub_exp.result);
         }
 
         public void visit(UnaryOperator unop)
@@ -144,7 +144,7 @@ namespace billc.Visitors
 
         public void visit(ProgramNode node)
         {
-            FunctionDecl main = node.functions.FirstOrDefault(f => f.id == "main");
+            FunctionDecl main = node.functions.FirstOrDefault(f => f.id.id == "main");
 
             if (main == null)
             {

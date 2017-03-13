@@ -402,7 +402,7 @@ namespace com.calitha.goldparser
                 return null;
             } else
             {
-                Console.Error.WriteLine("Unexpected expressoin type in create expression: " + o.GetType());
+                Console.Error.WriteLine("Unexpected expression type in create expression: " + o.GetType());
                 return null;
             }
         }
@@ -673,7 +673,9 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_IDENTIFIER:
                     //Identifier
-                    return token.Text;
+                    var id = new Identifier(token.Text);
+                    id.lineNum = token.Location.LineNr;
+                    return id;
 
                 case (int)SymbolConstants.SYMBOL_IF:
                     //if
@@ -1243,14 +1245,20 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_ADDEXP_PLUS:
                     //<Add Exp> ::= <Add Exp> '+' <Mult Exp>
                     Expression lhs_add = CreateExpression(token.Tokens[0]);
+                    int lineNumadd = (token.Tokens[1] as TerminalToken).Location.LineNr;
                     Expression rhs_add = CreateExpression(token.Tokens[2]);
-                    return new BinaryOperator(lhs_add, rhs_add, binops.add);
+                    var bop = new BinaryOperator(lhs_add, rhs_add, binops.add);
+                    bop.lineNum = lineNumadd;
+                    return bop;
 
                 case (int)RuleConstants.RULE_ADDEXP_MINUS:
                     //<Add Exp> ::= <Add Exp> '-' <Mult Exp>
                     Expression lhs_sub = CreateExpression(token.Tokens[0]);
+                    int lineNumsub = (token.Tokens[1] as TerminalToken).Location.LineNr;
                     Expression rhs_sub = CreateExpression(token.Tokens[2]);
-                    return new BinaryOperator(lhs_sub, rhs_sub, binops.sub);
+                    var bopsub = new BinaryOperator(lhs_sub, rhs_sub, binops.sub);
+                    bopsub.lineNum = lineNumsub;
+                    return bopsub;
 
                 case (int)RuleConstants.RULE_ADDEXP:
                     //<Add Exp> ::= <Mult Exp>
@@ -1488,12 +1496,12 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER:
                     //<Variable Declarator> ::= Identifier
-                    string ideclnu = (string)CreateObject(token.Tokens[0]);
+                    Identifier ideclnu = (Identifier)CreateObject(token.Tokens[0]);
                     return new LocalVarDecl(ideclnu, new Literal());
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER_EQ:
                     //<Variable Declarator> ::= Identifier '=' <Variable Initializer>
-                    string idecl = (string)CreateObject(token.Tokens[0]);
+                    Identifier idecl = (Identifier)CreateObject(token.Tokens[0]);
                     Expression rdecl = CreateExpression(token.Tokens[2]);
                     return new LocalVarDecl(idecl, rdecl);
 
@@ -1719,7 +1727,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_METHODDEC_IDENTIFIER_LPAREN_RPAREN:
                     //<Method Dec> ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
                     string retType = (string)CreateObject(token.Tokens[0]);
-                    string func_id = (string)CreateObject(token.Tokens[1]);
+                    Identifier func_id = (Identifier)CreateObject(token.Tokens[1]);
                     var fParams = (List<FormalParam>)CreateObject(token.Tokens[3]) ?? new List<FormalParam>();
                     var block = (List<Statement>)CreateObject(token.Tokens[5]) ?? new List<Statement>();
                     return new FunctionDecl(fParams, func_id, retType, block);
