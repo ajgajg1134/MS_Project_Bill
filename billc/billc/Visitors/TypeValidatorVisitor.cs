@@ -83,8 +83,7 @@ namespace billc.Visitors
 
         public void visit(FormalParam fparam)
         {
-            //TODO
-
+            table.addLocalVar(fparam.id, fparam.type);
         }
 
         public void visit(LocalVarDecl ldecl)
@@ -267,7 +266,7 @@ namespace billc.Visitors
         {
             TypeValidatorVisitor fxnVisitor = new TypeValidatorVisitor(this);
             //Add params as available local vars
-            fdecl.fParams.ForEach(fp => fxnVisitor.table.addLocalVar(fp.id, fp.type));
+            fdecl.fParams.ForEach(fp => fp.accept(fxnVisitor));
 
             //go through each statement to verify
             foreach(Statement s in fdecl.block)
@@ -284,6 +283,7 @@ namespace billc.Visitors
             {
                 isValidProgram = false;
             }
+            //TODO: check for return statement in non-void functions
         }
 
         public void visit(ProgramNode node)
