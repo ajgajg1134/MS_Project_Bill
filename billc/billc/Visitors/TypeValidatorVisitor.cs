@@ -194,14 +194,13 @@ namespace billc.Visitors
                 return;
             }
             string innerType = resultType;
-            if (UnaryOperator.isValidTypeWithOp(innerType, unop.unop))
+            if (!UnaryOperator.isValidTypeWithOp(innerType, unop.unop))
             {
-
+                isValidProgram = false;
+                errorReporter.Error(innerType + " not valid with operator '" + UnaryOperator.unopToString(unop.unop) + "'", unop);
+                return;
             }
-            else
-            {
-
-            }
+            resultType = UnaryOperator.getResultTypeFromOp(unop.unop, innerType);
         }
 
         public void visit(Conditional cond)

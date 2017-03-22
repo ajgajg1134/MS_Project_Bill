@@ -1291,12 +1291,16 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_UNARYEXP_EXCLAM:
                     //<Unary Exp> ::= '!' <Unary Exp>
                     Expression inner_not = CreateExpression(token.Tokens[1]);
-                    return new UnaryOperator(inner_not, unops.not);
+                    var unop = new UnaryOperator(inner_not, unops.not);
+                    unop.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return unop;
 
                 case (int)RuleConstants.RULE_UNARYEXP_MINUS:
                     //<Unary Exp> ::= '-' <Unary Exp>
                     Expression inner_minus = CreateExpression(token.Tokens[1]);
-                    return new UnaryOperator(inner_minus, unops.negate);
+                    var unop2 = new UnaryOperator(inner_minus, unops.negate);
+                    unop2.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return unop2;
 
                 case (int)RuleConstants.RULE_UNARYEXP_PLUSPLUS:
                     //<Unary Exp> ::= '++' <Unary Exp>
