@@ -175,6 +175,10 @@ namespace billc.Visitors
                 }
             }
             ret.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
             if (returnType != resultType)
             {
                 isValidProgram = false;
@@ -184,7 +188,20 @@ namespace billc.Visitors
 
         public void visit(UnaryOperator unop)
         {
-            throw new NotImplementedException();
+            unop.inner.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            string innerType = resultType;
+            if (UnaryOperator.isValidTypeWithOp(innerType, unop.unop))
+            {
+
+            }
+            else
+            {
+
+            }
         }
 
         public void visit(Conditional cond)
