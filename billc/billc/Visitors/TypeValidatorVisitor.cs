@@ -264,6 +264,7 @@ namespace billc.Visitors
 
         public void visit(FunctionDecl fdecl)
         {
+            //Create a copy so we don't pollute the program level TypeValidatorVisitor
             TypeValidatorVisitor fxnVisitor = new TypeValidatorVisitor(this);
             //Add params as available local vars
             fdecl.fParams.ForEach(fp => fp.accept(fxnVisitor));
@@ -289,6 +290,9 @@ namespace billc.Visitors
         public void visit(ProgramNode node)
         {
             //node.classes.ForEach(c => c.accept(this));
+
+            //Don't worry about this visitor getting polluted by other functions, 
+            //Visiting a function decl will create a copy and use that to check the function 
             node.functions.ForEach(f => f.accept(this));
 
             //Check for a main function
