@@ -88,6 +88,7 @@ namespace billc.Visitors
 
             if (ldecl.type != valType)
             {
+                isValidProgram = false;
                 errorReporter.Error("Declared type of " + ldecl.type + " does not match expression type of " + valType, ldecl);
             }
 

@@ -35,6 +35,7 @@ namespace billc
 
             //Type checker errors
             string emptyProgram = "";
+            string bad_types = "void main() {\n\n\n int a =\"hello\";\n}";
             string no_identifier = "void main() {\n\n\n int a = b + 2;\n}";
             string badCond = "void main() {\n if (5) { }\n }";
 
@@ -42,11 +43,11 @@ namespace billc
 
             IErrorReporter errorReporter = new ErrorReporter();
 
-            ProgramNode program = (ProgramNode)parser.Parse(badCond);
+            ProgramNode program = (ProgramNode)parser.Parse(bad_types);
 
             if (program == null)
             {
-                errorReporter.Error("Parsing failed, Exiting.");
+                errorReporter.Error("Parsing failed, Exiting."); // Syntax error?
                 return;
             } 
 

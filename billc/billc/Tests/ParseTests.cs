@@ -1,12 +1,7 @@
 ﻿using billc.TreeNodes;
 using com.calitha.goldparser;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace billc.Tests
 {
@@ -42,6 +37,7 @@ namespace billc.Tests
 
         MyParser parser;
         TestErrorReporter errReporter;
+        
         [SetUp]
         protected void SetUp()
         {
