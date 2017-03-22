@@ -160,7 +160,11 @@ namespace billc.Visitors
 
         public void visit(Break br)
         {
-            throw new NotImplementedException();
+            if (!inLoop)
+            {
+                isValidProgram = false;
+                errorReporter.Error("Break can only be used inside a loop.", br);
+            }
         }
 
         public void visit(Return ret)
@@ -243,20 +247,20 @@ namespace billc.Visitors
 
         public void visit(Assignment astmt)
         {
-            throw new NotImplementedException();
-            /* TODO Fix me
-            if (!table.isLocalVar(astmt.id))
+            astmt.id.accept(this);
+            if (!isValidProgram)
             {
-                Console.Error.WriteLine("Error: " + astmt.id + " has not been declared.");
                 return;
             }
-            string rhsType = astmt.rhs.getResultTypeWithCheck(table);
-
-            if (table.getLocalVar(astmt.id) != rhsType)
+            astmt.rhs.accept(this);
+            if (!isValidProgram)
             {
-                Console.Error.WriteLine("Error: " + astmt.id + " is of type " + table.getLocalVar(astmt.id) + " but RHS of expression is of type " + rhsType + ".");
+                return;
             }
-            */
+            if(table.getLocalVar(astmt.id.id) != resultType){
+                isValidProgram = false;
+                errorReporter.Error("Variable '" + astmt.id + "' is of type " + table.getLocalVar(astmt.id.id) + ", but expression is of type " + resultType, astmt);
+            }
         }
 
         public void visit(FunctionDecl fdecl)
@@ -269,13 +273,16 @@ namespace billc.Visitors
             foreach(Statement s in fdecl.block)
             {
                 s.accept(fxnVisitor);
+                if (!fxnVisitor.isValidProgram)
+                {
+                    return;
+                }
             }
 
             if (!fxnVisitor.isValidProgram)
             {
                 isValidProgram = false;
             }
-            //todo: figure out how to check return type (maybe do a seperate special thing?)
         }
 
         public void visit(ProgramNode node)

@@ -1648,7 +1648,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENTEXP:
                     //<Statement Exp> ::= <Qualified ID> <Assign Tail>
-                    Expression id = CreateExpression(token.Tokens[0]);
+                    Identifier id = (Identifier)CreateExpression(token.Tokens[0]);
                     Expression rhs = CreateExpression(token.Tokens[1]);
                     return new Assignment(id, rhs);
 

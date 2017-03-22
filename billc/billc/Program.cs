@@ -43,7 +43,7 @@ namespace billc
             string contTest = "void main() {\n continue;\n }";
             string retTest = "void main() {\n return 2;\n }";
             string unopTest = "void main() {\n bool b = !2;\n }";
-
+            string assignTest = "void main() {\n a = 3;\n }";
 
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
@@ -55,7 +55,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(unopTest);
+                program = (ProgramNode)parser.Parse(assignTest);
             } else
             {
                 //TODO: open a file and make it into a program
