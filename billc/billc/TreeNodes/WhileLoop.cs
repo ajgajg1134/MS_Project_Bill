@@ -8,13 +8,13 @@ namespace billc.TreeNodes
 {
     class WhileLoop : Statement
     {
-        List<Statement> loopBody;
-        Expression conditional;
+        public List<Statement> loopBody;
+        public Expression conditional;
 
         public WhileLoop(List<Statement> body, Expression cond)
         {
             conditional = cond;
-            loopBody = body;
+            loopBody = body ?? new List<Statement>();
         }
 
         public override void accept(Visitor v)

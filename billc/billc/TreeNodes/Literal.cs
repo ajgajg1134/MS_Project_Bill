@@ -111,7 +111,7 @@ namespace billc.TreeNodes
             switch (type)
             {
                 case lit_type.boolean:
-                    return b.ToString();
+                    return b.ToString().ToLower();
                 case lit_type.character:
                     return c.ToString();
                 case lit_type.floating:

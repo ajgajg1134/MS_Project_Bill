@@ -38,12 +38,28 @@ namespace billc
             string bad_types = "void main() {\n\n\n int a =\"hello\";\n}";
             string no_identifier = "void main() {\n\n\n int a = b + 2;\n}";
             string badCond = "void main() {\n if (5) { }\n }";
+            string badLoop = "void main() {\n while(5) { }\n}";
+            string goodLoop = "void main() {\n while(true) { }\n}";
+            string contTest = "void main() {\n continue;\n }";
+
+
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
 
             IErrorReporter errorReporter = new ErrorReporter();
 
-            ProgramNode program = (ProgramNode)parser.Parse(bad_types);
+            ProgramNode program;
+
+            if(args.Length == 0)
+            {
+                //running in debug mode for now (TODO replace with a usage message)
+                program = (ProgramNode)parser.Parse(contTest);
+            } else
+            {
+                //TODO: open a file and make it into a program
+                program = null;
+            }
+            
 
             if (program == null)
             {

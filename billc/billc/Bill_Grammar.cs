@@ -397,6 +397,7 @@ namespace com.calitha.goldparser
                 return (Expression) o;
             } else if (o is string)
             {
+                errorReporter.Warning("Used the identifier constructor without line num");
                 return new Identifier((string)o);
             } else if (o == null)
             {
@@ -1425,7 +1426,9 @@ namespace com.calitha.goldparser
                     //<Statement> ::= while '(' <Expression> ')' <Statement>
                     Expression condwhile = CreateExpression(token.Tokens[2]);
                     List<Statement> bodywhile = (List<Statement>)CreateObject(token.Tokens[4]); //todo: determine if this is okay to do
-                    return new WhileLoop(bodywhile, condwhile);
+                    var wloop = new WhileLoop(bodywhile, condwhile);
+                    wloop.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return wloop;
 
                 case (int)RuleConstants.RULE_STATEMENT:
                     //<Statement> ::= <Normal Stm>
@@ -1450,7 +1453,9 @@ namespace com.calitha.goldparser
                     //<Then Stm> ::= while '(' <Expression> ')' <Then Stm>
                     Expression condwhilet = CreateExpression(token.Tokens[2]);
                     List<Statement> bodywhilet = (List<Statement>)CreateObject(token.Tokens[4]); //todo: determine if this is okay to do
-                    return new WhileLoop(bodywhilet, condwhilet);
+                    var wloop2 = new WhileLoop(bodywhilet, condwhilet);
+                    wloop2.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return wloop2;
 
                 case (int)RuleConstants.RULE_THENSTM:
                     //<Then Stm> ::= <Normal Stm>
@@ -1462,12 +1467,16 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_NORMALSTM_CONTINUE_SEMI:
                     //<Normal Stm> ::= continue ';'
-                    return new Continue();
+                    var ct = new Continue();
+                    ct.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return ct;
 
                 case (int)RuleConstants.RULE_NORMALSTM_RETURN_SEMI:
                     //<Normal Stm> ::= return <Expression Opt> ';'
                     Expression exp = CreateExpression(token.Tokens[1]);
-                    return new Return(exp);
+                    var ret = new Return(exp);
+                    ret.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return ret;
 
                 case (int)RuleConstants.RULE_NORMALSTM_SEMI:
                     //<Normal Stm> ::= <Statement Exp> ';'
@@ -1503,13 +1512,17 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER:
                     //<Variable Declarator> ::= Identifier
                     Identifier ideclnu = (Identifier)CreateObject(token.Tokens[0]);
-                    return new LocalVarDecl(ideclnu, new Literal());
+                    var newdecl = new LocalVarDecl(ideclnu, new Literal());
+                    newdecl.lineNum = ideclnu.lineNum;
+                    return newdecl;
 
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER_EQ:
                     //<Variable Declarator> ::= Identifier '=' <Variable Initializer>
                     Identifier idecl = (Identifier)CreateObject(token.Tokens[0]);
                     Expression rdecl = CreateExpression(token.Tokens[2]);
-                    return new LocalVarDecl(idecl, rdecl);
+                    var bigdecl = new LocalVarDecl(idecl, rdecl);
+                    bigdecl.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
+                    return bigdecl;
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZER:
                     //<Variable Initializer> ::= <Expression>

@@ -13,6 +13,7 @@ namespace billc.Visitors
         IErrorReporter errorReporter = new ErrorReporter();
         public bool isValidProgram = true;
         public string resultType = "";
+        bool inLoop = false;
 
         public TypeValidatorVisitor()
         {
@@ -74,7 +75,8 @@ namespace billc.Visitors
 
         public void visit(FormalParam fparam)
         {
-            throw new NotImplementedException();
+            //TODO
+
         }
 
         public void visit(LocalVarDecl ldecl)
@@ -98,12 +100,36 @@ namespace billc.Visitors
 
         public void visit(WhileLoop wloop)
         {
-            throw new NotImplementedException();
+            wloop.conditional.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            string condType = resultType;
+            if (condType != "bool")
+            {
+                isValidProgram = false;
+                errorReporter.Error("Condition in while loop must be of type boolean, detected type as " + condType + ".", wloop);
+            }
+            TypeValidatorVisitor tvvLoop = new TypeValidatorVisitor(this);
+            tvvLoop.inLoop = true;
+            foreach (Statement stmt in wloop.loopBody)
+            {
+                stmt.accept(tvvLoop);
+                if (!tvvLoop.isValidProgram)
+                {
+                    return;
+                }
+            }
         }
 
         public void visit(Continue ct)
         {
-            throw new NotImplementedException();
+            if (!inLoop)
+            {
+                isValidProgram = false;
+                errorReporter.Error("Continue can only be used inside a loop.", ct);
+            }
         }
 
         public void visit(Identifier id)
