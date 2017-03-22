@@ -12,8 +12,16 @@ namespace billc.Visitors
         SymbolTable table;
         IErrorReporter errorReporter = new ErrorReporter();
         public bool isValidProgram = true;
+        /// <summary>
+        /// Is set by this visitor to indicate what the result type of a visited node is.
+        /// </summary>
         public string resultType = "";
+        /// <summary>
+        /// Holds the context of if at this point a return type exists where this visitor is.
+        /// </summary>
+        public string returnType = "";
         bool inLoop = false;
+        
 
         public TypeValidatorVisitor()
         {
@@ -157,7 +165,21 @@ namespace billc.Visitors
 
         public void visit(Return ret)
         {
-            throw new NotImplementedException();
+            if (returnType == "")
+            {
+                if (ret.toRet != null)
+                {
+                    isValidProgram = false;
+                    errorReporter.Error("Can not return value in void function.", ret);
+                    return;
+                }
+            }
+            ret.accept(this);
+            if (returnType != resultType)
+            {
+                isValidProgram = false;
+                errorReporter.Error("Return type " + resultType + " does not match return type of function: " + returnType + ".", ret);
+            }
         }
 
         public void visit(UnaryOperator unop)

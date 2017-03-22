@@ -8,7 +8,7 @@ namespace billc.TreeNodes
 {
     class Return : Statement
     {
-        Expression toRet;
+        public Expression toRet;
 
         public Return(Expression ret)
         {
