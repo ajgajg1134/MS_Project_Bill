@@ -1467,7 +1467,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_NORMALSTM_BREAK_SEMI:
                     //<Normal Stm> ::= break ';'
-                    return new Break();
+                    var br = new Break();
+                    br.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return br;
 
                 case (int)RuleConstants.RULE_NORMALSTM_CONTINUE_SEMI:
                     //<Normal Stm> ::= continue ';'

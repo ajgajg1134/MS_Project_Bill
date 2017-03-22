@@ -17,7 +17,7 @@ namespace billc.TreeNodes
 
         public override string ToString()
         {
-            return "break;\n";
+            return "break;";
         }
     }
 }

@@ -41,6 +41,7 @@ namespace billc
             string badLoop = "void main() {\n while(5) { }\n}";
             string goodLoop = "void main() {\n while(true) { }\n}";
             string contTest = "void main() {\n continue;\n }";
+            string breakTest = "void main() {\n break;\n }";
             string retTest = "void main() {\n return 2;\n }";
             string unopTest = "void main() {\n bool b = !2;\n }";
             string assignTest = "void main() {\n a = 3;\n }";
@@ -55,7 +56,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(assignTest);
+                program = (ProgramNode)parser.Parse(breakTest);
             } else
             {
                 //TODO: open a file and make it into a program

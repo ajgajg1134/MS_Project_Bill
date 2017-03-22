@@ -275,6 +275,7 @@ namespace billc.Visitors
                 s.accept(fxnVisitor);
                 if (!fxnVisitor.isValidProgram)
                 {
+                    isValidProgram = false;
                     return;
                 }
             }
