@@ -50,7 +50,7 @@ namespace billc
             string retTest = "void main() {\n return 2;\n }";
             string unopTest = "void main() {\n bool b = !2;\n }";
             string assignTest = "void main() {\n a = 3;\n }";
-            string funcInvokeTest = "void main() { addTwo(4); }\n int addTwo(int a){ return a + 2; }";
+            string funcInvokeTest = "void main() { println(toStr(addTwo(4))); }\n int addTwo(int a){ return a + 2; }";
             string funcInvokeTest2 = "void main() { addTwo(); }\n int addTwo(int a){ return a + 2; }";
 
 
@@ -64,7 +64,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(interpret7_test);
+                program = (ProgramNode)parser.Parse(funcInvokeTest);
             } else
             {
                 //TODO: open a file and make it into a program

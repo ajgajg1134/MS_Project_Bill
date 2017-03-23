@@ -10,6 +10,11 @@ namespace billc.TreeNodes
     {
         public Identifier fxnId;
         public List<Expression> paramsIn;
+        /// <summary>
+        /// This is a reference to the function to call
+        /// Set by the typechecker
+        /// </summary>
+        public FunctionDecl actualFunction;
 
         public FunctionInvocation(Identifier id, List<Expression> paramsIn)
         {

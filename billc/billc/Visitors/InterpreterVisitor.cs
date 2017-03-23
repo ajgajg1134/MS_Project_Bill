@@ -84,6 +84,30 @@ namespace billc.Visitors
             if (SymbolTable.isLocalFunction(fi.fxnId.id))
             {
                 //User defined function
+                InterpreterVisitor param_iv = new InterpreterVisitor(this);
+                for(int i = 0; i < fi.paramsIn.Count; i++)
+                {
+                    param_iv.result = null;
+                    fi.paramsIn[i].accept(param_iv);
+                    if (param_iv.result == null)
+                    {
+                        errorReporter.Fatal("Interpreter encountered null literal in function invocation.");
+                        throw new BillRuntimeException();
+                    }
+                    param_iv.primitive_vars[fi.actualFunction.fParams[i].id.id] = param_iv.result;
+                }
+                param_iv.result = null;
+                foreach (Statement s in fi.actualFunction.block)
+                {
+                    s.accept(param_iv);
+                    if (param_iv.leaveFxn)
+                    {
+                        leaveFxn = true;
+                        result = param_iv.result;
+                        return;
+                    }
+                }
+                result = param_iv.result;
 
             }
             else if (SymbolTable.isBuiltinFunction(fi.fxnId.id))

@@ -181,7 +181,9 @@ namespace billc.Visitors
                 isValidProgram = false;
                 return;
             }
-            resultType = SymbolTable.getFunction(invokeDecl).retType;
+            FunctionDecl fdecl = SymbolTable.getFunction(invokeDecl);
+            fi.actualFunction = fdecl;
+            resultType = fdecl.retType;
         }
 
         public void visit(Break br)
