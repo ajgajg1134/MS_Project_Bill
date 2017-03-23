@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using com.calitha.goldparser;
 using billc.TreeNodes;
 using billc.Visitors;
+using System.IO;
 
 namespace billc
 {
@@ -64,7 +65,19 @@ namespace billc
             } else
             {
                 //TODO: open a file and make it into a program
-                program = null;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(args[0]))
+                    {
+                        string full_src = sr.ReadToEnd();
+                        program = (ProgramNode)parser.Parse(full_src);
+                    }
+                } catch (FileNotFoundException)
+                {
+                    program = null;
+                    errorReporter.Error("File not found: '" + args[0] + "'.");
+                    return;
+                }
             }
             
 
