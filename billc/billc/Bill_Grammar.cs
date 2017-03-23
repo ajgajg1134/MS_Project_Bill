@@ -643,7 +643,9 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_DECLITERAL:
                     //DecLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    return new Literal(int.Parse(token.Text));
+                    var decLit = new Literal(int.Parse(token.Text));
+                    decLit.lineNum = token.Location.LineNr;
+                    return decLit;
 
                 case (int)SymbolConstants.SYMBOL_DOUBLE:
                     //double
@@ -657,8 +659,9 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_FALSE:
                     //false
-                    //todo: Create a new object that corresponds to the symbol
-                    return null;
+                    var falseLit = new Literal(false);
+                    falseLit.lineNum = token.Location.LineNr;
+                    return falseLit;
 
                 case (int)SymbolConstants.SYMBOL_FOR:
                     //for
@@ -1069,11 +1072,11 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LITERAL_TRUE:
                     //<Literal> ::= true
-                    return new Literal(true);
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_FALSE:
                     //<Literal> ::= false
-                    return new Literal(false);
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_LITERAL_DECLITERAL:
                     //<Literal> ::= DecLiteral
@@ -1097,7 +1100,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LITERAL_NULL:
                     //<Literal> ::= null
-                    return new Literal();
+                    var nullLit = new Literal();
+                    nullLit.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return nullLit;
 
                 case (int)RuleConstants.RULE_TYPE_INT:
                     //<Type> ::= int
@@ -1531,7 +1536,9 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_VARIABLEDECLARATOR_IDENTIFIER:
                     //<Variable Declarator> ::= Identifier
                     Identifier ideclnu = (Identifier)CreateObject(token.Tokens[0]);
-                    var newdecl = new LocalVarDecl(ideclnu, new Literal());
+                    var inNull = new Literal();
+                    inNull.lineNum = ideclnu.lineNum;
+                    var newdecl = new LocalVarDecl(ideclnu, inNull);
                     newdecl.lineNum = ideclnu.lineNum;
                     return newdecl;
 

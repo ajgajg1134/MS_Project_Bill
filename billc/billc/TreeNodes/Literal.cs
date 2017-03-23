@@ -24,6 +24,8 @@ namespace billc.TreeNodes
         public char c;
         public string s;
 
+        internal static IErrorReporter errorReporter = new ErrorReporter();
+
         public Literal(bool b)
         {
             this.b = b;
@@ -221,6 +223,46 @@ namespace billc.TreeNodes
                     throw new NotImplementedException();
                 default:
                     Console.Error.WriteLine("Error in Literal node, unexpected literal type");
+                    return null;
+            }
+        }
+
+        public Literal performUnop(unops unop)
+        {
+            switch (type)
+            {
+                case lit_type.boolean:
+                    switch (unop)
+                    {
+                        case unops.not:
+                            return new Literal(!b);
+                        default:
+                            errorReporter.Fatal("Attempted to perform not on non-boolean type in performUnop! Should have been caught by typechecker");
+                            return null;
+                    }
+                case lit_type.integer:
+                    switch (unop)
+                    {
+                        case unops.negate:
+                            return new Literal(-i);
+                        default:
+                            errorReporter.Fatal("Attempted to perform not on int type in performUnop! Should have been caught by typechecker");
+                            return null;
+                    }
+                case lit_type.floating:
+                    switch (unop)
+                    {
+                        case unops.negate:
+                            return new Literal(-d);
+                        default:
+                            errorReporter.Fatal("Attempted to perform not on double type in performUnop! Should have been caught by typechecker");
+                            return null;
+                    }
+                case lit_type.null_l:
+                    errorReporter.Error("Null Reference! Can not perform '" + UnaryOperator.unopToString(unop) + "' on a null variable.", this);
+                    return null;
+                default:
+                    errorReporter.Fatal("Perform unop encountered an unexepected liter an operator.");
                     return null;
             }
         }

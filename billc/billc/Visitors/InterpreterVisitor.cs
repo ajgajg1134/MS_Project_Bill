@@ -7,6 +7,11 @@ using billc.TreeNodes;
 
 namespace billc.Visitors
 {
+    class BillRuntimeException : Exception
+    {
+
+    } 
+
     /// <summary>
     /// A visitor that will interpret the code of the part of the tree it visits
     /// Currently much of this visitor assumes that the AST is completely type-checked and valid
@@ -60,7 +65,13 @@ namespace billc.Visitors
 
         public void visit(UnaryOperator unop)
         {
-            throw new NotImplementedException();
+            InterpreterVisitor iv_inner = new InterpreterVisitor(this);
+            unop.inner.accept(iv_inner);
+            result = iv_inner.result.performUnop(unop.unop);
+            if (result == null)
+            {
+                throw new BillRuntimeException();
+            }
         }
 
         public void visit(Identifier id)
@@ -142,7 +153,6 @@ namespace billc.Visitors
                         return;
                     }
                 }
-                
             }
             else
             {
@@ -174,6 +184,7 @@ namespace billc.Visitors
 
         public void visit(FunctionDecl fdecl)
         {
+            errorReporter.Fatal("Interpreter attempted to interpret a function decl.");
             throw new NotImplementedException();
         }
 
@@ -187,7 +198,20 @@ namespace billc.Visitors
                 return;
             }
             //TODO: add params
-            main.block.ForEach(stmt => stmt.accept(this));
+            try
+            {
+                foreach (Statement s in main.block)
+                {
+                    s.accept(this);
+                    if (leaveFxn)
+                    {
+                        return;
+                    }
+                }
+            } catch (BillRuntimeException)
+            {
+                errorReporter.Error("Runtime exception occurred. Exiting.");
+            }
         }
     }
 }
