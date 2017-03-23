@@ -46,9 +46,19 @@ namespace billc
             return localVars.ContainsKey(id);
         }
 
-        public static bool isFunction(string id)
+        /// <summary>
+        /// Determines if a function exists with a given id
+        /// </summary>
+        /// <param name="id">the id to look for</param>
+        /// <returns>true if at least one function with that id exists, false otherwise</returns>
+        public static bool isLocalFunction(string id)
         {
             return functions.Any(f => f.id.id == id);
+        }
+
+        public static bool isLocalFunction(FunctionDecl fd)
+        {
+            return functions.Contains(fd);
         }
 
         /// <summary>
@@ -61,9 +71,19 @@ namespace billc
             return localVars[id];
         }
 
-        public static FunctionDecl getFunction(string id)
+        /// <summary>
+        /// Returns all functions that match a given id
+        /// </summary>
+        /// <param name="id">id to look for</param>
+        /// <returns>all functions with given identifier</returns>
+        public static List<FunctionDecl> getFunctions(string id)
+        { 
+            return functions.Where(f => f.id.id == id).ToList();
+        }
+
+        public static FunctionDecl getFunction(FunctionDecl fd)
         {
-            return functions[id];
+            return functions.First(f => f.Equals(fd));
         }
 
         public void addLocalVar(string id, string type)
@@ -71,9 +91,9 @@ namespace billc
             localVars.Add(id, type);
         }
 
-        public static void addFunction(string id, FunctionDecl f)
+        public static void addFunction(FunctionDecl f)
         {
-            functions.Add(id, f);
+            functions.Add(f);
         }
 
         public static void addClass(string id, ClassDecl cd)

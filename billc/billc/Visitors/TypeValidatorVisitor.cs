@@ -78,12 +78,12 @@ namespace billc.Visitors
                 errorReporter.Error(rightType + " on right hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
                 return;
             }
-            resultType = bop.getResultType();
+            resultType = BinaryOperator.getResultTypeFromOp(bop.op, leftType, rightType);
         }
 
         public void visit(FormalParam fparam)
         {
-            table.addLocalVar(fparam.id, fparam.type);
+            table.addLocalVar(fparam.id.id, fparam.type);
         }
 
         public void visit(LocalVarDecl ldecl)
@@ -154,10 +154,34 @@ namespace billc.Visitors
 
         public void visit(FunctionInvocation fi)
         {
+            if (!SymbolTable.isLocalFunction(fi.fxnId.id) && !SymbolTable.isBuiltinFunction(fi.fxnId.id))
+            {
+                isValidProgram = false;
+                errorReporter.Error("Could not find function '" + fi.fxnId + "'.", fi);
+                return;
+            }
+            List<FormalParam> fakeParams = new List<FormalParam>();
             foreach(Expression actualParam in fi.paramsIn)
             {
-
+                var tvv = new TypeValidatorVisitor(this);
+                actualParam.accept(tvv);
+                if(!tvv.isValidProgram)
+                {
+                    isValidProgram = false;
+                    return;
+                }
+                FormalParam fp = new FormalParam(new Identifier(""), tvv.resultType);
+                fakeParams.Add(fp);
             }
+            var invokeDecl = new FunctionDecl(fakeParams, fi.fxnId, "", new List<Statement>());
+            if (!SymbolTable.isLocalFunction(invokeDecl))
+            {
+                errorReporter.Error("Function '" + fi.fxnId + "' does not match provided parameter list types: '"
+                    + fakeParams.Select(f => f.ToString()).Aggregate("", (a, b) => a + b + ", ") + "'.", fi);
+                isValidProgram = false;
+                return;
+            }
+            resultType = SymbolTable.getFunction(invokeDecl).retType;
         }
 
         public void visit(Break br)
@@ -180,7 +204,7 @@ namespace billc.Visitors
                     return;
                 }
             }
-            ret.accept(this);
+            ret.toRet.accept(this);
             if (!isValidProgram)
             {
                 return;
@@ -272,6 +296,8 @@ namespace billc.Visitors
             //Add params as available local vars
             fdecl.fParams.ForEach(fp => fp.accept(fxnVisitor));
 
+            fxnVisitor.returnType = fdecl.retType;
+
             //go through each statement to verify
             foreach(Statement s in fdecl.block)
             {
@@ -293,6 +319,7 @@ namespace billc.Visitors
         public void visit(ProgramNode node)
         {
             //Copy function decls to local visitor
+            node.functions.ForEach(f => SymbolTable.addFunction(f));
 
             //node.classes.ForEach(c => c.accept(this));
 

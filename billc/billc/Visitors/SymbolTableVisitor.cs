@@ -34,7 +34,7 @@ namespace billc.Visitors
 
         public void visit(FormalParam fparam)
         {
-            symTable.addLocalVar(fparam.id, fparam.type);
+            symTable.addLocalVar(fparam.id.id, fparam.type);
         }
 
         public void visit(LocalVarDecl ldecl)
@@ -100,7 +100,7 @@ namespace billc.Visitors
 
         public void visit(FunctionDecl fdecl)
         {
-            SymbolTable.addFunction(fdecl.id.id, fdecl);
+            SymbolTable.addFunction(fdecl);
             SymbolTableVisitor stv = new SymbolTableVisitor(this);
             fdecl.fParams.ForEach(fparam => fparam.accept(stv));
             fdecl.block.ForEach(stmt => stmt.accept(stv));

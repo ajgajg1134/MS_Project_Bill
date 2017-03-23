@@ -34,5 +34,12 @@ namespace billc.TreeNodes
         {
             throw new NotImplementedException();
         }
+        public override bool Equals(object obj)
+        {
+            Identifier other = obj as Identifier;
+            if (other == null)
+                return false;
+            return other.id == id;
+        }
     }
 }

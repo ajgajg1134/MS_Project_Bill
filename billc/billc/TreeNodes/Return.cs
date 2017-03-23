@@ -21,7 +21,7 @@ namespace billc.TreeNodes
 
         public override string ToString()
         {
-            return "return " + toRet.ToString() + ";\n";
+            return "return " + toRet.ToString() + ";";
         }
     }
 }

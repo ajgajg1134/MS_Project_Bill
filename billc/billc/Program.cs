@@ -23,6 +23,7 @@ namespace billc
             string invoke_test2 = "void main() { foo(5, true, 2.5); \n}";
             string member_test = "void main() { a.thing = 10; }";
             string class_test = "class foo(int a, string s){ }";
+            string assignparamTest = "void main() { toString(a = 3); }";
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
             string interpret3_test = "void main() { println(toStr(1 + 2)); }";
@@ -45,6 +46,8 @@ namespace billc
             string retTest = "void main() {\n return 2;\n }";
             string unopTest = "void main() {\n bool b = !2;\n }";
             string assignTest = "void main() {\n a = 3;\n }";
+            string funcInvokeTest = "void main() { addTwo(4); }\n int addTwo(int a){ return a + 2; }";
+
 
 
             MyParser parser = new MyParser("Bill_Grammar.cgt");
@@ -56,7 +59,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(breakTest);
+                program = (ProgramNode)parser.Parse(funcInvokeTest);
             } else
             {
                 //TODO: open a file and make it into a program
@@ -64,7 +67,7 @@ namespace billc
             }
             
 
-            if (program == null)
+            if (program == null || parser.badParse)
             {
                 errorReporter.Error("Parsing failed, Exiting."); // Syntax error?
                 return;

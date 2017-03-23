@@ -34,7 +34,7 @@ namespace billc.TreeNodes
 
         /// <summary>
         /// Compares two function declarations for equality
-        /// Two functions with identical signatures (ignoring body) are considered equal
+        /// Two functions with identical signatures (ignoring body & return type) are considered equal
         /// </summary>
         /// <param name="obj">object to compare to</param>
         /// <returns>true if the signatures are the same, false otherwise</returns>
@@ -45,7 +45,7 @@ namespace billc.TreeNodes
             {
                 return false;
             }
-            if (id == other.id && retType == other.retType && fParams.Count == other.fParams.Count)
+            if (id.Equals(other.id) && fParams.Count == other.fParams.Count)
             {
                 for(int i = 0; i < fParams.Count; i++)
                 {

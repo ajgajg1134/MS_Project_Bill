@@ -332,6 +332,7 @@ namespace com.calitha.goldparser
     {
         private LALRParser parser;
         internal IErrorReporter errorReporter = new ErrorReporter();
+        public bool badParse = false;
 
         public MyParser(string filename)
         {
@@ -404,7 +405,8 @@ namespace com.calitha.goldparser
                 return null;
             } else
             {
-                Console.Error.WriteLine("Unexpected expression type in create expression: " + o.GetType());
+                errorReporter.Error("Unexpected expression type in create expression: " + o.GetType());
+                badParse = true;
                 return null;
             }
         }
@@ -1135,17 +1137,26 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSIONLIST:
                     //<Expression List> ::= <Expression>
-                    return CreateObject(token.Tokens[0]);
+                    Expression e_elem = (Expression)CreateObject(token.Tokens[0]);
+                    var elist = new List<Expression>();
+                    elist.Add(e_elem);
+                    return elist;
 
                 case (int)RuleConstants.RULE_EXPRESSIONLIST_COMMA:
                     //<Expression List> ::= <Expression> ',' <Expression List>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression e_elem2 = (Expression)CreateObject(token.Tokens[0]);
+                    var elist2 = (List<Expression>)CreateObject(token.Tokens[2]);
+                    elist2.Add(e_elem2);
+                    return elist2;
 
                 case (int)RuleConstants.RULE_EXPRESSION_EQ:
                     //<Expression> ::= <Conditional Exp> '=' <Expression>
                     //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier ida = (Identifier)CreateExpression(token.Tokens[0]);
+                    Expression rhsa = CreateExpression(token.Tokens[2]);
+                    var asin = new Assignment(ida, rhsa);
+                    asin.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
+                    return asin;
 
                 case (int)RuleConstants.RULE_EXPRESSION_PLUSEQ:
                     //<Expression> ::= <Conditional Exp> '+=' <Expression>
@@ -1782,7 +1793,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_FORMALPARAM_IDENTIFIER:
                     //<Formal Param> ::= <Qualified ID> Identifier
                     string fparamtype = (string)CreateObject(token.Tokens[0]);
-                    string fparamid = (string)CreateObject(token.Tokens[1]);
+                    Identifier fparamid = (Identifier)CreateObject(token.Tokens[1]);
                     return new FormalParam(fparamid, fparamtype);
 
                 case (int)RuleConstants.RULE_CLASSDECL_CLASS_IDENTIFIER_LPAREN_RPAREN_LBRACE_RBRACE:

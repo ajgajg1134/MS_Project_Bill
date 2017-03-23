@@ -66,7 +66,7 @@ namespace billc.Visitors
 
         public void visit(FunctionInvocation fi)
         {
-            if (SymbolTable.isFunction(fi.fxnId.id))
+            if (SymbolTable.isLocalFunction(fi.fxnId.id))
             {
                 //User defined function
 
