@@ -1362,7 +1362,9 @@ namespace com.calitha.goldparser
                     //todo: Create a new object using the stored tokens.
                     Identifier fxnidf = (Identifier)CreateExpression(token.Tokens[0]);
                     List<Expression> concParamsf = (List<Expression>)CreateObject(token.Tokens[2]);
-                    return new FunctionInvocation(fxnidf, concParamsf);
+                    var inv = new FunctionInvocation(fxnidf, concParamsf);
+                    inv.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
+                    return inv;
 
                 case (int)RuleConstants.RULE_PRIMARY2:
                     //<Primary> ::= <Literal>
@@ -1635,7 +1637,9 @@ namespace com.calitha.goldparser
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')'
                     Identifier fxnid = (Identifier)CreateExpression(token.Tokens[0]);
                     List<Expression> concParams = (List<Expression>)CreateObject(token.Tokens[2]);
-                    return new FunctionInvocation(fxnid, concParams);
+                    var inv2 = new FunctionInvocation(fxnid, concParams);
+                    inv2.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
+                    return inv2;
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN2:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')' <Methods Opt> <Assign Tail>
