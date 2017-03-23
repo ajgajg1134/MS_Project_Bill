@@ -32,6 +32,7 @@ namespace billc
             string interpret5_test = "void main() { int a = 2 + 5;\n a = 99;\n println(toStr(a)); }";
             string interpret6_test = "void main() { bool b = false; if (b) { println(\"was true\"); } else { println(\"was false\"); }}";
             string interpret7_test = "void main() { println(toStr(-4)); }";
+            string interpret8_test = "void main() { int a = 0; while(a < 5){ println(toStr(a));\n a = a + 1; }}";
 
             //Tests to see quality of parsing error messages
             string missingBrace = "void main() { ";
@@ -64,7 +65,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(funcInvokeTest);
+                program = (ProgramNode)parser.Parse(interpret8_test);
             } else
             {
                 //TODO: open a file and make it into a program

@@ -27,6 +27,8 @@ namespace billc.Visitors
 
         Literal result = null;
         bool leaveFxn = false;
+        bool shouldContinue = false;
+        bool leaveLoop = false;
 
         public InterpreterVisitor()
         {
@@ -39,6 +41,7 @@ namespace billc.Visitors
 
         public void visit(ClassDecl cdecl)
         {
+            //TODO
             throw new NotImplementedException();
         }
 
@@ -139,17 +142,42 @@ namespace billc.Visitors
 
         public void visit(WhileLoop wloop)
         {
-            throw new NotImplementedException();
+            InterpreterVisitor iv = new InterpreterVisitor(this);
+            wloop.conditional.accept(iv);
+            if (iv.result.type != lit_type.boolean)
+            {
+                errorReporter.Fatal("Interpreter found non boolean type in while loop. This should have failed in type check.");
+            }
+            while (iv.result.b)
+            {
+                
+                foreach(Statement s in wloop.loopBody)
+                {
+                    s.accept(iv);
+                    if (iv.shouldContinue || iv.leaveLoop || iv.leaveFxn)
+                    {
+                        break;
+                    }
+                }
+                if (iv.leaveLoop || iv.leaveFxn)
+                {
+                    break;
+                }
+                //Re-check conditional
+                wloop.conditional.accept(iv);
+            }
         }
 
         public void visit(Continue ct)
         {
-            throw new NotImplementedException();
+            shouldContinue = true;
+            result = null;
         }
 
         public void visit(Break br)
         {
-            throw new NotImplementedException();
+            leaveLoop = true;
+            result = null;
         }
 
         public void visit(Return ret)
