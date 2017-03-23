@@ -18,6 +18,8 @@ namespace billc.Visitors
         /// </summary>
         Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
 
+        internal IErrorReporter errorReporter = new ErrorReporter();
+
         Literal result = null;
         public InterpreterVisitor()
         {
@@ -119,7 +121,22 @@ namespace billc.Visitors
 
         public void visit(Conditional cond)
         {
-            throw new NotImplementedException();
+            cond.condition.accept(this);
+            if (result.type != lit_type.boolean)
+            {
+                errorReporter.Fatal("Interpreter found non boolean type in conditional. This should have failed in type check.");
+            }
+            if (result.b)
+            {
+                InterpreterVisitor iv = new InterpreterVisitor(this);
+                cond.thenBlock.ForEach(stmt => stmt.accept(iv));
+            }
+            else
+            {
+                InterpreterVisitor iv = new InterpreterVisitor(this);
+                cond.elseBlock.ForEach(stmt => stmt.accept(iv));
+            }
+            result = null;
         }
 
         public void visit(Literal literal)

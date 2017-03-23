@@ -256,6 +256,7 @@ namespace billc.Visitors
                 stmt.accept(tvvThen);
                 if (!tvvThen.isValidProgram)
                 {
+                    isValidProgram = false;
                     return;
                 }
             }
@@ -265,6 +266,7 @@ namespace billc.Visitors
                 stmt.accept(tvvElse);
                 if (!tvvElse.isValidProgram)
                 {
+                    isValidProgram = false;
                     return;
                 }
             }

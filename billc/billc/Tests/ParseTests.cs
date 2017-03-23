@@ -33,6 +33,10 @@ namespace billc.Tests
                 buffer = msg;
                 inObj = n;
             }
+            public void Fatal(string msg)
+            {
+                buffer = msg;
+            }
         }
 
         MyParser parser;

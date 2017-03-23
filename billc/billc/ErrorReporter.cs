@@ -29,5 +29,10 @@ namespace billc
         {
             Console.Error.WriteLine("ERROR: " + msg + "\n\t at line " + n.lineNum + ": \"" + n.ToString() + "\"");
         }
+
+        public void Fatal(string msg)
+        {
+            Console.Error.WriteLine("FATAL: " + msg + "\n This error indicates you have found a bug in the BILL Interpreter. Contact your Instructor or file an issue \'https://github.com/ajgajg1134/MS_Project_Bill'");
+        }
     }
 }

@@ -143,7 +143,7 @@ namespace billc.TreeNodes
                 case lit_type.null_l:
                     return "null";
                 case lit_type.string_l:
-                    return "String";
+                    return "string";
                 default:
                     Console.Error.WriteLine("Error in Literal node type when getting result type");
                     return "ERROR";
