@@ -153,6 +153,10 @@ namespace billc
             printlnParams.Add(new FormalParam(new Identifier(""), "string"));
             var println = new FunctionDecl(printlnParams, new Identifier("println"), "void", new List<Statement>());
             builtin_functions.Add(println);
+
+            var inputParams = new List<FormalParam>();
+            var input = new FunctionDecl(inputParams, new Identifier("input"), "string", new List<Statement>());
+            builtin_functions.Add(input);
         }
     }
 }

@@ -739,7 +739,7 @@ namespace com.calitha.goldparser
                 case (int)SymbolConstants.SYMBOL_STRINGLITERAL:
                     //StringLiteral
                     //todo: Create a new object that corresponds to the symbol
-                    var lit2 = new Literal(token.Text);
+                    var lit2 = new Literal(token.Text.Substring(1, token.Text.Length - 2));
                     lit2.lineNum = token.Location.LineNr;
                     return lit2;
 

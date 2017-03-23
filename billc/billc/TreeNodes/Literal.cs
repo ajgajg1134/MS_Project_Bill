@@ -220,9 +220,20 @@ namespace billc.TreeNodes
                     Console.Error.WriteLine("Error! unexpected null value in literal binop");
                     return null;
                 case lit_type.string_l:
-                    throw new NotImplementedException();
+                    switch (bop)
+                    {
+                        case binops.eq:
+                            return new Literal(l.s == r.s);
+                        case binops.neq:
+                            return new Literal(l.s != r.s);
+                        case binops.add:
+                            return new Literal(l.s + r.s);
+                        default:
+                            errorReporter.Fatal("Error in Literal node, unexpected literal type");
+                            return null;
+                    }
                 default:
-                    Console.Error.WriteLine("Error in Literal node, unexpected literal type");
+                    errorReporter.Fatal("Error in Literal node, unexpected literal type");
                     return null;
             }
         }

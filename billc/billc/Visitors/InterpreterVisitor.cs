@@ -128,7 +128,11 @@ namespace billc.Visitors
                         fi.paramsIn[0].accept(paramivstr);
                         result = new Literal(paramivstr.result.ToString());
                         return;
+                    case "input":
+                        result = new Literal(Console.ReadLine());
+                        return;
                     default:
+                        errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
                         throw new NotImplementedException();
                 }
             }
@@ -150,7 +154,6 @@ namespace billc.Visitors
             }
             while (iv.result.b)
             {
-                
                 foreach(Statement s in wloop.loopBody)
                 {
                     s.accept(iv);
@@ -250,7 +253,7 @@ namespace billc.Visitors
                 Console.Error.WriteLine("Error! main function not found");
                 return;
             }
-            //TODO: add params
+            //TODO: add command line args
             try
             {
                 foreach (Statement s in main.block)
