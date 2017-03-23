@@ -108,7 +108,8 @@ namespace billc.Visitors
             else
             {
                 //Error!
-                Console.Error.WriteLine("Unknown function call: " + fi.fxnId);
+                errorReporter.Fatal("Unknown function call: " + fi.fxnId + " should have been caught by typechecker");
+                throw new BillRuntimeException();
             }
         }
 
