@@ -31,5 +31,32 @@ namespace billc.TreeNodes
         {
             v.visit(this);
         }
+
+        /// <summary>
+        /// Compares two function declarations for equality
+        /// Two functions with identical signatures (ignoring body) are considered equal
+        /// </summary>
+        /// <param name="obj">object to compare to</param>
+        /// <returns>true if the signatures are the same, false otherwise</returns>
+        public override bool Equals(object obj)
+        {
+            FunctionDecl other = obj as FunctionDecl;
+            if (other == null)
+            {
+                return false;
+            }
+            if (id == other.id && retType == other.retType && fParams.Count == other.fParams.Count)
+            {
+                for(int i = 0; i < fParams.Count; i++)
+                {
+                    if (fParams[i].type != other.fParams[i].type)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
     }
 }

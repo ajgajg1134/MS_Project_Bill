@@ -154,7 +154,10 @@ namespace billc.Visitors
 
         public void visit(FunctionInvocation fi)
         {
-            throw new NotImplementedException();
+            foreach(Expression actualParam in fi.paramsIn)
+            {
+
+            }
         }
 
         public void visit(Break br)
@@ -289,6 +292,8 @@ namespace billc.Visitors
 
         public void visit(ProgramNode node)
         {
+            //Copy function decls to local visitor
+
             //node.classes.ForEach(c => c.accept(this));
 
             //Don't worry about this visitor getting polluted by other functions, 

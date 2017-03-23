@@ -15,10 +15,10 @@ namespace billc
         Dictionary<string, string> localVars = new Dictionary<string, string>();
 
         /// <summary>
-        /// A dictionary mapping function names to their function decl object
+        /// A list of all functions
         /// (Static as functions exist at global scope)
         /// </summary>
-        static Dictionary<string, FunctionDecl> functions = new Dictionary<string, FunctionDecl>();
+        static List<FunctionDecl> functions = new List<FunctionDecl>();
 
         /// <summary>
         /// A dictionary mapping class names to their class decl object
@@ -48,7 +48,7 @@ namespace billc
 
         public static bool isFunction(string id)
         {
-            return functions.ContainsKey(id);
+            return functions.Any(f => f.id.id == id);
         }
 
         /// <summary>
