@@ -122,11 +122,6 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
-        public void visit(Expression exp)
-        {
-            throw new NotImplementedException();
-        }
-
         public void visit(Literal literal)
         {
             result = literal;
@@ -134,7 +129,8 @@ namespace billc.Visitors
 
         public void visit(Assignment astmt)
         {
-            throw new NotImplementedException();
+            astmt.rhs.accept(this);
+            primitive_vars[astmt.id.id] = result;
         }
 
         public void visit(FunctionDecl fdecl)

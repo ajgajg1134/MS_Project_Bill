@@ -174,7 +174,7 @@ namespace billc.Visitors
                 fakeParams.Add(fp);
             }
             var invokeDecl = new FunctionDecl(fakeParams, fi.fxnId, "", new List<Statement>());
-            if (!SymbolTable.isLocalFunction(invokeDecl))
+            if (!SymbolTable.isFunction(invokeDecl))
             {
                 errorReporter.Error("Function '" + fi.fxnId + "' does not match provided parameter list types: '"
                     + fakeParams.Select(f => f.ToString()).Aggregate("", (a, b) => a + b + ", ") + "'.", fi);
@@ -195,12 +195,16 @@ namespace billc.Visitors
 
         public void visit(Return ret)
         {
-            if (returnType == "")
+            if (returnType == "" || returnType == "void")
             {
                 if (ret.toRet != null)
                 {
                     isValidProgram = false;
                     errorReporter.Error("Can not return value in void function.", ret);
+                    return;
+                }
+                else
+                {
                     return;
                 }
             }

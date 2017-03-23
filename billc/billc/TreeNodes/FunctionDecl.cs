@@ -23,7 +23,7 @@ namespace billc.TreeNodes
 
         public override string ToString()
         {
-            return retType + " " + id + " (" + fParams.Select(f => f.ToString()).Aggregate("", (a, b) => a + b + ", ") + ") {\n" +
+            return retType + " " + id + " (" + string.Join(",", fParams.Select(f => f.ToString()).Aggregate("", (a, b) => a + b )) + ") {\n" +
                 Statement.toString(block) + "}\n";
         }
 

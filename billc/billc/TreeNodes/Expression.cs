@@ -27,7 +27,7 @@ namespace billc.TreeNodes
 
         public static string toString(List<Expression> stmts)
         {
-            return stmts.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + "\n");
+            return stmts.Select(s => s.ToString()).Aggregate("", (a, b) => a + b + ",");
         }
     }
 }

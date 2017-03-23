@@ -34,7 +34,7 @@ namespace billc.TreeNodes
 
         public override string ToString()
         {
-            return fxnId.ToString() + "(" + toString(paramsIn) + ")";
+            return fxnId.ToString() + "(" + string.Join(",", paramsIn.Select(f => f.ToString()).Aggregate("", (a, b) => a + b)) + ")";
         }
     }
 }

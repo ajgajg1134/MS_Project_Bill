@@ -26,10 +26,10 @@ namespace billc
         /// </summary>
         static Dictionary<string, ClassDecl> classes = new Dictionary<string, ClassDecl>();
 
-        public SymbolTable()
-        {
+        static List<FunctionDecl> builtin_functions = new List<FunctionDecl>();
 
-        }
+        public SymbolTable()
+        { }
 
         public SymbolTable(SymbolTable table)
         {
@@ -55,6 +55,12 @@ namespace billc
         {
             return functions.Any(f => f.id.id == id);
         }
+
+        public static bool isFunction(FunctionDecl fd)
+        {
+            return functions.Contains(fd) || builtin_functions.Contains(fd);
+        }
+
 
         public static bool isLocalFunction(FunctionDecl fd)
         {
@@ -83,7 +89,12 @@ namespace billc
 
         public static FunctionDecl getFunction(FunctionDecl fd)
         {
-            return functions.First(f => f.Equals(fd));
+            return builtin_functions.FirstOrDefault(f => f.Equals(fd)) ?? functions.FirstOrDefault(f => f.Equals(fd));
+        }
+
+        public static FunctionDecl getBuiltinFunction(FunctionDecl fd)
+        {
+            return builtin_functions.First(f => f.Equals(fd));
         }
 
         public void addLocalVar(string id, string type)
@@ -120,8 +131,28 @@ namespace billc
 
         public static bool isBuiltinFunction(string fid)
         {
-            var builtins = new List<string>{ "toInt", "println", "print", "toStr" };
-            return builtins.Contains(fid);
+            //var builtins = new List<string>{ "toInt", "println", "print", "toStr" };
+            if (builtin_functions.Count == 0)
+            {
+                populateBuiltins();
+            }
+            return builtin_functions.Any(f => f.id.id == fid);
+        }
+
+        /// <summary>
+        /// Call to populate static builtin functions
+        /// </summary>
+        public static void populateBuiltins()
+        {
+            var toStrIntParams = new List<FormalParam>();
+            toStrIntParams.Add(new FormalParam(new Identifier(""), "int"));
+            var toStrInt = new FunctionDecl(toStrIntParams, new Identifier("toStr"), "string", new List<Statement>());
+            builtin_functions.Add(toStrInt);
+
+            var printlnParams = new List<FormalParam>();
+            printlnParams.Add(new FormalParam(new Identifier(""), "string"));
+            var println = new FunctionDecl(printlnParams, new Identifier("println"), "void", new List<Statement>());
+            builtin_functions.Add(println);
         }
     }
 }
