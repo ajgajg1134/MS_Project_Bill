@@ -21,6 +21,8 @@ namespace billc.Visitors
         internal IErrorReporter errorReporter = new ErrorReporter();
 
         Literal result = null;
+        bool leaveFxn = false;
+
         public InterpreterVisitor()
         {
 
@@ -116,7 +118,8 @@ namespace billc.Visitors
 
         public void visit(Return ret)
         {
-            throw new NotImplementedException();
+            ret.toRet.accept(this);
+            leaveFxn = true;
         }
 
         public void visit(Conditional cond)
@@ -129,12 +132,31 @@ namespace billc.Visitors
             if (result.b)
             {
                 InterpreterVisitor iv = new InterpreterVisitor(this);
-                cond.thenBlock.ForEach(stmt => stmt.accept(iv));
+                foreach(Statement s in cond.thenBlock)
+                {
+                    s.accept(iv);
+                    if (iv.leaveFxn)
+                    {
+                        leaveFxn = true;
+                        result = iv.result;
+                        return;
+                    }
+                }
+                
             }
             else
             {
                 InterpreterVisitor iv = new InterpreterVisitor(this);
-                cond.elseBlock.ForEach(stmt => stmt.accept(iv));
+                foreach (Statement s in cond.elseBlock)
+                {
+                    s.accept(iv);
+                    if (iv.leaveFxn)
+                    {
+                        leaveFxn = true;
+                        result = iv.result;
+                        return;
+                    }
+                }
             }
             result = null;
         }
