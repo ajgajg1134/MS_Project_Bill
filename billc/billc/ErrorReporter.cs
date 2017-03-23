@@ -17,7 +17,7 @@ namespace billc
 
         public void Warning(string msg, Node n)
         {
-            Console.Error.WriteLine("Warning: " + msg + "\n\t at line " + n.lineNum + ": \"" + n.ToString() + "\"");
+            Console.Error.WriteLine("Warning: " + msg + "\n\t at line " + (n.lineNum + 1) + ": \"" + n.ToString() + "\"");
         }
 
         public void Error(string msg)
@@ -27,7 +27,7 @@ namespace billc
 
         public void Error(string msg, Node n)
         {
-            Console.Error.WriteLine("ERROR: " + msg + "\n\t at line " + n.lineNum + ": \"" + n.ToString() + "\"");
+            Console.Error.WriteLine("ERROR: " + msg + "\n\t at line " + (n.lineNum + 1) + ": \"" + n.ToString() + "\"");
         }
 
         public void Fatal(string msg)

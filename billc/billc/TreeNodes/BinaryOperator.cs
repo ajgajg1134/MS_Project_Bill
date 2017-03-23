@@ -91,7 +91,7 @@ namespace billc.TreeNodes
             switch (binop)
             {
                 case binops.add:
-                    return PrimitiveTypes.isNumberType(type) || type == "string";
+                    return PrimitiveTypes.isNumberType(type) || type == "String";
                 case binops.div:
                 case binops.eq:
                 case binops.gt:
@@ -142,10 +142,10 @@ namespace billc.TreeNodes
                 case binops.sub:
                     if (startTypeL == "int" && startTypeR == "int")
                         return "int";
-                    else if (startTypeL != "string")
+                    else if (startTypeL != "String")
                         return "double";
                     else
-                        return "string";
+                        return "String";
                 case binops.mod:
                     return "int";
                 case binops.dot:

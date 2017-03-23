@@ -1,11 +1,11 @@
 ﻿void main(){
 	println("Enter a temperature in Celsius: ");
-	int tempC = toInt(input());
-	int tempF = celsiusToF(tempC);
-	println(tempC + " Celsius is " + tempF + " in Fahrenheit.");
+	double tempC = toDouble(input());
+	double tempF = celsiusToF(tempC);
+	println(toStr(tempC) + " Celsius is " + toStr(tempF) + " in Fahrenheit.");
 }
 
-int celsiusToF(int tempC)
+double celsiusToF(double tempC)
 {
-	return tempC * 1.8 + 32;
+	return tempC * 1.8 + 32.0;
 }

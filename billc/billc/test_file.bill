@@ -1,3 +1,18 @@
 ﻿void main(){
-	println("hello " + "world!");
+	println(toStr(fibNumber(4)));
+	//0, 1, 1, 2, 3, 5
+}
+
+int fibNumber(int n)
+{
+	return fibNumber(n, 0, 1);
+}
+
+int fibNumber(int n, int a, int b)
+{
+	if (n == 0)
+	{
+		return b;
+	}
+	return fibNumber(n - 1, b, a + b);
 }

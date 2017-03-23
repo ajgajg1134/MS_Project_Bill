@@ -31,6 +31,8 @@ namespace billc.Visitors
         public TypeValidatorVisitor(TypeValidatorVisitor tvv)
         {
             table = new SymbolTable(tvv.table);
+            returnType = tvv.returnType;
+            inLoop = tvv.inLoop;
         }
 
         public void visit(ClassDecl cdecl)
@@ -177,7 +179,7 @@ namespace billc.Visitors
             if (!SymbolTable.isFunction(invokeDecl))
             {
                 errorReporter.Error("Function '" + fi.fxnId + "' does not match provided parameter list types: '"
-                    + fakeParams.Select(f => f.ToString()).Aggregate("", (a, b) => a + b + ", ") + "'.", fi);
+                    + string.Join(",", fakeParams.Select(f => f.ToString())) + "'.", fi);
                 isValidProgram = false;
                 return;
             }

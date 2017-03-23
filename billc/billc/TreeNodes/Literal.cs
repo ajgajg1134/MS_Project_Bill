@@ -145,7 +145,7 @@ namespace billc.TreeNodes
                 case lit_type.null_l:
                     return "null";
                 case lit_type.string_l:
-                    return "string";
+                    return "String";
                 default:
                     Console.Error.WriteLine("Error in Literal node type when getting result type");
                     return "ERROR";
@@ -186,7 +186,34 @@ namespace billc.TreeNodes
                 case lit_type.character:
                     throw new NotImplementedException();
                 case lit_type.floating:
-                    throw new NotImplementedException();
+                    switch (bop)
+                    {
+                        case binops.eq:
+                            return new Literal(l.d == r.d);
+                        case binops.gt:
+                            return new Literal(l.d > r.d);
+                        case binops.gte:
+                            return new Literal(l.d >= r.d);
+                        case binops.lt:
+                            return new Literal(l.d < r.d);
+                        case binops.lte:
+                            return new Literal(l.d <= r.d);
+                        case binops.neq:
+                            return new Literal(l.d != r.d);
+                        case binops.add:
+                            return new Literal(l.d + r.d);
+                        case binops.div:
+                            return new Literal(l.d / r.d); //TODO: div by zero check?
+                        case binops.mul:
+                            return new Literal(l.d * r.d);
+                        case binops.sub:
+                            return new Literal(l.d - r.d);
+                        case binops.mod:
+                            return new Literal(l.d % r.d);
+                        default:
+                            Console.Error.WriteLine("Error! unexpected binop type in literal");
+                            return null;
+                    }
                 case lit_type.integer:
                     switch (bop)
                     {

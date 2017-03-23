@@ -16,6 +16,7 @@ namespace billc
         { 
             //These tests create semantically invalid programs, but are sufficient to test construction of the AST
             string binop_test = "void main() {\n int a = a + 2;\n}";
+            string list_test = "void main() {\n List<int> a = new List<int>();\n }";
             string fxn_test = "void main() {\n int a = 5;\n return a;\n}";
             string if_test = "void main() {\n int a = 5;\n if (a == 5) { return 1 + 2;} return 2;\n}";
             string while_test = "void main() {\n while(b){ return 2; }\n}";
@@ -66,7 +67,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(interpret9_test);
+                program = (ProgramNode)parser.Parse(list_test);
             } else
             {
                 //TODO: open a file and make it into a program
@@ -84,7 +85,6 @@ namespace billc
                     return;
                 }
             }
-            
 
             if (program == null || parser.badParse)
             {

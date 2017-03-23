@@ -90,14 +90,14 @@ namespace billc.Visitors
                 InterpreterVisitor param_iv = new InterpreterVisitor(this);
                 for(int i = 0; i < fi.paramsIn.Count; i++)
                 {
-                    param_iv.result = null;
-                    fi.paramsIn[i].accept(param_iv);
-                    if (param_iv.result == null)
+                    result = null;
+                    fi.paramsIn[i].accept(this);
+                    if (result == null)
                     {
                         errorReporter.Fatal("Interpreter encountered null literal in function invocation.");
                         throw new BillRuntimeException();
                     }
-                    param_iv.primitive_vars[fi.actualFunction.fParams[i].id.id] = param_iv.result;
+                    param_iv.primitive_vars[fi.actualFunction.fParams[i].id.id] = result;
                 }
                 param_iv.result = null;
                 foreach (Statement s in fi.actualFunction.block)
@@ -130,6 +130,16 @@ namespace billc.Visitors
                         return;
                     case "input":
                         result = new Literal(Console.ReadLine());
+                        return;
+                    case "toInt":
+                        InterpreterVisitor paramivint = new InterpreterVisitor(this);
+                        fi.paramsIn[0].accept(paramivint);
+                        result = new Literal(int.Parse(paramivint.result.s));
+                        return;
+                    case "toDouble":
+                        InterpreterVisitor paramivdbl = new InterpreterVisitor(this);
+                        fi.paramsIn[0].accept(paramivdbl);
+                        result = new Literal(double.Parse(paramivdbl.result.s));
                         return;
                     default:
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");

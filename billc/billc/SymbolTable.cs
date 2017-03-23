@@ -146,17 +146,32 @@ namespace billc
         {
             var toStrIntParams = new List<FormalParam>();
             toStrIntParams.Add(new FormalParam(new Identifier(""), "int"));
-            var toStrInt = new FunctionDecl(toStrIntParams, new Identifier("toStr"), "string", new List<Statement>());
+            var toStrInt = new FunctionDecl(toStrIntParams, new Identifier("toStr"), "String", new List<Statement>());
             builtin_functions.Add(toStrInt);
 
+            var toStrDblParams = new List<FormalParam>();
+            toStrDblParams.Add(new FormalParam(new Identifier(""), "double"));
+            var toStrDbl = new FunctionDecl(toStrDblParams, new Identifier("toStr"), "String", new List<Statement>());
+            builtin_functions.Add(toStrDbl);
+
             var printlnParams = new List<FormalParam>();
-            printlnParams.Add(new FormalParam(new Identifier(""), "string"));
+            printlnParams.Add(new FormalParam(new Identifier(""), "String"));
             var println = new FunctionDecl(printlnParams, new Identifier("println"), "void", new List<Statement>());
             builtin_functions.Add(println);
 
             var inputParams = new List<FormalParam>();
-            var input = new FunctionDecl(inputParams, new Identifier("input"), "string", new List<Statement>());
+            var input = new FunctionDecl(inputParams, new Identifier("input"), "String", new List<Statement>());
             builtin_functions.Add(input);
+
+            var toIntParams = new List<FormalParam>();
+            toIntParams.Add(new FormalParam(new Identifier(""), "String"));
+            var toInt = new FunctionDecl(toIntParams, new Identifier("toInt"), "int", new List<Statement>());
+            builtin_functions.Add(toInt);
+
+            var toDblParams = new List<FormalParam>();
+            toDblParams.Add(new FormalParam(new Identifier(""), "String"));
+            var toDbl = new FunctionDecl(toDblParams, new Identifier("toDouble"), "double", new List<Statement>());
+            builtin_functions.Add(toDbl);
         }
     }
 }

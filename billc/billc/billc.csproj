@@ -91,7 +91,9 @@
     <EmbeddedResource Include="Bill_Grammar.cgt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="C_To_F.bill" />
+    <None Include="C_To_F.bill">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="test_file.bill">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
