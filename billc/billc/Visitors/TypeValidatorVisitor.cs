@@ -329,7 +329,6 @@ namespace billc.Visitors
 
             //Check for a main function
             FunctionDecl main = node.functions.FirstOrDefault(f => f.id.id == "main");
-            //Todo: check params list and return type
             if (main == null)
             {
                 isValidProgram = false;
