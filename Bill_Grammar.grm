@@ -107,7 +107,7 @@ Comment End = '*/'
 
 <And Exp>
        ::= <And Exp> '&&' <Equality Exp>
-        |  <Equality Exp>c
+        |  <Equality Exp>
 
 <Equality Exp>  
        ::= <Equality Exp> '==' <Compare Exp>
@@ -309,6 +309,7 @@ Comment End = '*/'
 <Method>
         ::= MemberName
          |  MemberName '(' <Arg List Opt> ')'    !Invocation
+         |  '[' <Expression List> ']' 
          |  '++'
          |  '--'
 

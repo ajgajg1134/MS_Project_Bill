@@ -47,7 +47,7 @@ namespace billc.Tests
         {
             errReporter = new TestErrorReporter();
             var assembly = Assembly.GetExecutingAssembly();
-            using (var stream = assembly.GetManifestResourceStream("billc.Bill_Grammar.cgt"))
+            using (var stream = assembly.GetManifestResourceStream("billc.Bill_Grammar_v2.cgt"))
             {
                 parser = new MyParser(stream);
             }

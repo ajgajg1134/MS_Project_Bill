@@ -28,6 +28,7 @@ namespace billc
             string assignparamTest = "void main() { toString(a = 3); }";
             string forTest = "void main() { for(int i = 0; i < 10; i += 1){ println(toStr(i)); } }";
             string forTestbad = "void main() { for(int i = 2.5; i < 10; i += 1){ } }";
+            string strSubTest = "void main() { String s = \"hello\";\n char c = s[0]; }";
 
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
@@ -61,7 +62,7 @@ namespace billc
 
 
 
-            MyParser parser = new MyParser("Bill_Grammar.cgt");
+            MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
 
             IErrorReporter errorReporter = new ErrorReporter();
 
@@ -70,7 +71,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(forTest);
+                program = (ProgramNode)parser.Parse(if_test);
             } else
             {
                 try

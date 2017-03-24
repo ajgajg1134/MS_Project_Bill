@@ -4,13 +4,13 @@ using System.IO;
 using System.Runtime.Serialization;
 using com.calitha.goldparser.lalr;
 using com.calitha.commons;
-using System.Collections.Generic;
-using billc.TreeNodes;
 using billc;
+using billc.TreeNodes;
+using System.Collections.Generic;
 
 namespace com.calitha.goldparser
 {
-#if false
+
     [Serializable()]
     public class SymbolException : System.Exception
     {
@@ -309,23 +309,24 @@ namespace com.calitha.goldparser
         RULE_METHODSOPT2 = 129, // <Methods Opt> ::= 
         RULE_METHOD_MEMBERNAME = 130, // <Method> ::= MemberName
         RULE_METHOD_MEMBERNAME_LPAREN_RPAREN = 131, // <Method> ::= MemberName '(' <Arg List Opt> ')'
-        RULE_METHOD_PLUSPLUS = 132, // <Method> ::= '++'
-        RULE_METHOD_MINUSMINUS = 133, // <Method> ::= '--'
-        RULE_COMPILATIONUNIT = 134, // <Compilation Unit> ::= <Program Items>
-        RULE_PROGRAMITEMS = 135, // <Program Items> ::= <Program Items> <Program Item>
-        RULE_PROGRAMITEMS2 = 136, // <Program Items> ::= 
-        RULE_PROGRAMITEM = 137, // <Program Item> ::= <Method Dec>
-        RULE_PROGRAMITEM2 = 138, // <Program Item> ::= <Class Decl>
-        RULE_METHODDEC_IDENTIFIER_LPAREN_RPAREN = 139, // <Method Dec> ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
-        RULE_FORMALPARAMLISTOPT = 140, // <Formal Param List Opt> ::= <Formal Param List>
-        RULE_FORMALPARAMLISTOPT2 = 141, // <Formal Param List Opt> ::= 
-        RULE_FORMALPARAMLIST = 142, // <Formal Param List> ::= <Formal Param>
-        RULE_FORMALPARAMLIST_COMMA = 143, // <Formal Param List> ::= <Formal Param List> ',' <Formal Param>
-        RULE_FORMALPARAM_IDENTIFIER = 144, // <Formal Param> ::= <Qualified ID> Identifier
-        RULE_CLASSDECL_CLASS_IDENTIFIER_LPAREN_RPAREN_LBRACE_RBRACE = 145, // <Class Decl> ::= class Identifier '(' <Formal Param List Opt> ')' '{' <Class Item Decs Opt> '}'
-        RULE_CLASSITEMDECSOPT = 146, // <Class Item Decs Opt> ::= <Class Item Decs Opt> <Class Item>
-        RULE_CLASSITEMDECSOPT2 = 147, // <Class Item Decs Opt> ::= 
-        RULE_CLASSITEM = 148  // <Class Item> ::= <Method Dec>
+        RULE_METHOD_LBRACKET_RBRACKET = 132, // <Method> ::= '[' <Expression List> ']'
+        RULE_METHOD_PLUSPLUS = 133, // <Method> ::= '++'
+        RULE_METHOD_MINUSMINUS = 134, // <Method> ::= '--'
+        RULE_COMPILATIONUNIT = 135, // <Compilation Unit> ::= <Program Items>
+        RULE_PROGRAMITEMS = 136, // <Program Items> ::= <Program Items> <Program Item>
+        RULE_PROGRAMITEMS2 = 137, // <Program Items> ::= 
+        RULE_PROGRAMITEM = 138, // <Program Item> ::= <Method Dec>
+        RULE_PROGRAMITEM2 = 139, // <Program Item> ::= <Class Decl>
+        RULE_METHODDEC_IDENTIFIER_LPAREN_RPAREN = 140, // <Method Dec> ::= <Qualified ID> Identifier '(' <Formal Param List Opt> ')' <Block>
+        RULE_FORMALPARAMLISTOPT = 141, // <Formal Param List Opt> ::= <Formal Param List>
+        RULE_FORMALPARAMLISTOPT2 = 142, // <Formal Param List Opt> ::= 
+        RULE_FORMALPARAMLIST = 143, // <Formal Param List> ::= <Formal Param>
+        RULE_FORMALPARAMLIST_COMMA = 144, // <Formal Param List> ::= <Formal Param List> ',' <Formal Param>
+        RULE_FORMALPARAM_IDENTIFIER = 145, // <Formal Param> ::= <Qualified ID> Identifier
+        RULE_CLASSDECL_CLASS_IDENTIFIER_LPAREN_RPAREN_LBRACE_RBRACE = 146, // <Class Decl> ::= class Identifier '(' <Formal Param List Opt> ')' '{' <Class Item Decs Opt> '}'
+        RULE_CLASSITEMDECSOPT = 147, // <Class Item Decs Opt> ::= <Class Item Decs Opt> <Class Item>
+        RULE_CLASSITEMDECSOPT2 = 148, // <Class Item Decs Opt> ::= 
+        RULE_CLASSITEM = 149  // <Class Item> ::= <Method Dec>
     };
 
     public class MyParser
@@ -380,7 +381,7 @@ namespace com.calitha.goldparser
             NonterminalToken token = parser.Parse(source);
             if (token != null)
             {
-                Object obj = CreateObject(token);
+                object obj = CreateObject(token);
                 return obj;
             }
             return null;
@@ -399,15 +400,18 @@ namespace com.calitha.goldparser
             object o = CreateObject(token);
             if (o is Expression)
             {
-                return (Expression) o;
-            } else if (o is string)
+                return (Expression)o;
+            }
+            else if (o is string)
             {
                 errorReporter.Warning("Used the identifier constructor without line num");
                 return new Identifier((string)o);
-            } else if (o == null)
+            }
+            else if (o == null)
             {
                 return null;
-            } else
+            }
+            else
             {
                 errorReporter.Error("Unexpected expression type in create expression: " + o.GetType());
                 badParse = true;
@@ -646,7 +650,6 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_DECLITERAL:
                     //DecLiteral
-                    //todo: Create a new object that corresponds to the symbol
                     var decLit = new Literal(int.Parse(token.Text));
                     decLit.lineNum = token.Location.LineNr;
                     return decLit;
@@ -725,7 +728,6 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_REALLITERAL:
                     //RealLiteral
-                    //todo: Create a new object that corresponds to the symbol
                     var lit = new Literal(double.Parse(token.Text));
                     lit.lineNum = token.Location.LineNr;
                     return lit;
@@ -742,7 +744,6 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_STRINGLITERAL:
                     //StringLiteral
-                    //todo: Create a new object that corresponds to the symbol
                     var lit2 = new Literal(token.Text.Substring(1, token.Text.Length - 2));
                     lit2.lineNum = token.Location.LineNr;
                     return lit2;
@@ -830,6 +831,7 @@ namespace com.calitha.goldparser
 
                 case (int)SymbolConstants.SYMBOL_COMPILATIONUNIT:
                     //<Compilation Unit>
+                    //todo: Create a new object that corresponds to the symbol
                     return null;
 
                 case (int)SymbolConstants.SYMBOL_CONDITIONALEXP:
@@ -1058,7 +1060,8 @@ namespace com.calitha.goldparser
                     if (memb == null)
                     {
                         return CreateObject(token.Tokens[0]);
-                    } else
+                    }
+                    else
                     {
                         Expression vid = CreateExpression(token.Tokens[0]);
                         return new BinaryOperator(vid, memb, binops.dot);
@@ -1160,7 +1163,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_EXPRESSION_EQ:
                     //<Expression> ::= <Conditional Exp> '=' <Expression>
-                    //todo: Create a new object using the stored tokens.
                     Identifier ida = (Identifier)CreateExpression(token.Tokens[0]);
                     Expression rhsa = CreateExpression(token.Tokens[2]);
                     var asin = new Assignment(ida, rhsa);
@@ -1364,11 +1366,11 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PRIMARY:
                     //<Primary> ::= <Valid ID>
-                    return CreateObject(token.Tokens[0]);
+                    //todo: Create a new object using the stored tokens.
+                    return null;
 
                 case (int)RuleConstants.RULE_PRIMARY_LPAREN_RPAREN:
                     //<Primary> ::= <Valid ID> '(' <Arg List Opt> ')'
-                    //todo: Create a new object using the stored tokens.
                     Identifier fxnidf = (Identifier)CreateExpression(token.Tokens[0]);
                     List<Expression> concParamsf = (List<Expression>)CreateObject(token.Tokens[2]);
                     var inv = new FunctionInvocation(fxnidf, concParamsf);
@@ -1710,7 +1712,6 @@ namespace com.calitha.goldparser
                     assignExp.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
                     return assignExp;
 
-
                 case (int)RuleConstants.RULE_ASSIGNTAIL_PLUSEQ:
                     //<Assign Tail> ::= '+=' <Expression>
                     var rhses = CreateExpression(token.Tokens[1]);
@@ -1762,6 +1763,11 @@ namespace com.calitha.goldparser
                     //todo: Create a new object using the stored tokens.
                     return null;
 
+                case (int)RuleConstants.RULE_METHOD_LBRACKET_RBRACKET:
+                    //<Method> ::= '[' <Expression List> ']'
+                    //todo: Create a new object using the stored tokens.
+                    return null;
+
                 case (int)RuleConstants.RULE_METHOD_PLUSPLUS:
                     //<Method> ::= '++'
                     //todo: Create a new object using the stored tokens.
@@ -1783,18 +1789,20 @@ namespace com.calitha.goldparser
                     if (oitem is FunctionDecl)
                     {
                         prgrm.Add((FunctionDecl)oitem);
-                    } else if (oitem is ClassDecl)
+                    }
+                    else if (oitem is ClassDecl)
                     {
                         prgrm.Add((ClassDecl)oitem);
-                    } else
+                    }
+                    else
                     {
-                        Console.Error.WriteLine("ERROR! Unexpected program item type in parser!");
+                        errorReporter.Fatal("Unexpected program item type in parser!");
                     }
                     return prgrm;
 
                 case (int)RuleConstants.RULE_PROGRAMITEMS2:
                     //<Program Items> ::= 
-                    return new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>()); ;
+                    return new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
 
                 case (int)RuleConstants.RULE_PROGRAMITEM:
                     //<Program Item> ::= <Method Dec>
@@ -1868,14 +1876,13 @@ namespace com.calitha.goldparser
         private void TokenErrorEvent(LALRParser parser, TokenErrorEventArgs args)
         {
             string message = "Token error with input: '" + args.Token.ToString() + "'";
-            //todo: Report message to UI?
             errorReporter.Error(message);
         }
 
         private void ParseErrorEvent(LALRParser parser, ParseErrorEventArgs args)
         {
             string message = "Parse error caused by unexpected symbol: '" + args.UnexpectedToken.ToString() + "'";
-            if(args.UnexpectedToken != null)
+            if (args.UnexpectedToken != null)
             {
                 message += "\n\t at " + args.UnexpectedToken.Location.ToString();
             }
@@ -1883,5 +1890,4 @@ namespace com.calitha.goldparser
         }
 
     }
-#endif
 }
