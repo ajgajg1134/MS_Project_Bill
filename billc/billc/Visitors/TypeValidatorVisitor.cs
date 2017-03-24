@@ -345,5 +345,48 @@ namespace billc.Visitors
                 errorReporter.Error("No main function found");
             }
         }
+
+        public void visit(ForLoop floop)
+        {
+            TypeValidatorVisitor tvv = new TypeValidatorVisitor(this);
+            floop.decl.accept(tvv);
+            if(!tvv.isValidProgram)
+            {
+                isValidProgram = false;
+                return;
+            }
+            floop.condition.accept(tvv);
+            if (!tvv.isValidProgram)
+            {
+                isValidProgram = false;
+                return;
+            }
+            string condType = tvv.resultType;
+            if (condType != "bool")
+            {
+                isValidProgram = false;
+                errorReporter.Error("Condition in for loop must be of type boolean, detected type as " + condType + ".", floop);
+            }
+
+            foreach(Statement stmt in floop.iteratedStmts)
+            {
+                stmt.accept(tvv);
+                if (!tvv.isValidProgram)
+                {
+                    isValidProgram = false;
+                    return;
+                }
+            }
+
+            foreach (Statement stmt in floop.loopBody)
+            {
+                stmt.accept(tvv);
+                if (!tvv.isValidProgram)
+                {
+                    isValidProgram = false;
+                    return;
+                }
+            }
+        }
     }
 }

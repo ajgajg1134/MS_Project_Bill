@@ -52,6 +52,11 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(ForLoop floop)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(Identifier id)
         {
             throw new NotImplementedException();

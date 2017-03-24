@@ -333,6 +333,10 @@ namespace com.calitha.goldparser
         private LALRParser parser;
         internal IErrorReporter errorReporter = new ErrorReporter();
         public bool badParse = false;
+        /// <summary>
+        /// For use in Assign Tail rules which need context to properly create an AST
+        /// </summary>
+        private Identifier local_ident;
 
         public MyParser(string filename)
         {
@@ -1436,8 +1440,13 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_STATEMENT_FOR_LPAREN_SEMI_SEMI_RPAREN:
                     //<Statement> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var decls = (LocalVarDecl)CreateObject(token.Tokens[2]);
+                    var forconds = (Expression)CreateObject(token.Tokens[4]);
+                    var postloops = (List<Statement>)CreateObject(token.Tokens[6]);
+                    var floopbodys = (List<Statement>)CreateObject(token.Tokens[8]) ?? new List<Statement>();
+                    var floops = new ForLoop(floopbodys, decls, forconds, postloops);
+                    floops.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return floops;
 
                 case (int)RuleConstants.RULE_STATEMENT_FOREACH_LPAREN_IDENTIFIER_IN_RPAREN:
                     //<Statement> ::= foreach '(' <Valid ID> Identifier in <Expression> ')' <Statement>
@@ -1458,13 +1467,22 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_THENSTM_IF_LPAREN_RPAREN_ELSE:
                     //<Then Stm> ::= if '(' <Expression> ')' <Then Stm> else <Then Stm>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression condelset = CreateExpression(token.Tokens[2]);
+                    var teblockt = (List<Statement>)CreateObject(token.Tokens[4]) ?? new List<Statement>();
+                    var eblockt = (List<Statement>)CreateObject(token.Tokens[6]) ?? new List<Statement>();
+                    var tecondt = new Conditional(teblockt, eblockt, condelset);
+                    tecondt.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return tecondt;
 
                 case (int)RuleConstants.RULE_THENSTM_FOR_LPAREN_SEMI_SEMI_RPAREN:
                     //<Then Stm> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Then Stm>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var decl = (LocalVarDecl)CreateObject(token.Tokens[2]);
+                    var forcond = (Expression)CreateObject(token.Tokens[4]);
+                    var postloop = (List<Statement>)CreateObject(token.Tokens[6]);
+                    var floopbody = (List<Statement>)CreateObject(token.Tokens[8]) ?? new List<Statement>();
+                    var floop = new ForLoop(floopbody, decl, forcond, postloop);
+                    floop.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return floop;
 
                 case (int)RuleConstants.RULE_THENSTM_FOREACH_LPAREN_IDENTIFIER_IN_RPAREN:
                     //<Then Stm> ::= foreach '(' <Valid ID> Identifier in <Expression> ')' <Then Stm>
@@ -1590,8 +1608,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_FORINITOPT:
                     //<For Init Opt> ::= <Local Var Decl>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_FORINITOPT2:
                     //<For Init Opt> ::= <Statement Exp List>
@@ -1600,38 +1617,37 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_FORINITOPT3:
                     //<For Init Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_FORITERATOROPT:
                     //<For Iterator Opt> ::= <Statement Exp List>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_FORITERATOROPT2:
                     //<For Iterator Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_FORCONDITIONOPT:
                     //<For Condition Opt> ::= <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_FORCONDITIONOPT2:
                     //<For Condition Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_STATEMENTEXPLIST_COMMA:
                     //<Statement Exp List> ::= <Statement Exp List> ',' <Statement Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var stmtlst = (List<Statement>)CreateObject(token.Tokens[0]);
+                    Statement stmtexp = (Statement)CreateObject(token.Tokens[2]);
+                    stmtlst.Add(stmtexp);
+                    return stmtlst;
 
                 case (int)RuleConstants.RULE_STATEMENTEXPLIST:
                     //<Statement Exp List> ::= <Statement Exp>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var stmtexplst = new List<Statement>();
+                    Statement sexp = (Statement)CreateObject(token.Tokens[0]);
+                    stmtexplst.Add(sexp);
+                    return stmtexplst;
 
                 case (int)RuleConstants.RULE_LOCALVARDECL:
                     //<Local Var Decl> ::= <Qualified ID> <Variable Decs>
@@ -1673,8 +1689,9 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_STATEMENTEXP:
                     //<Statement Exp> ::= <Qualified ID> <Assign Tail>
                     Identifier id = (Identifier)CreateExpression(token.Tokens[0]);
-                    Expression rhs = CreateExpression(token.Tokens[1]);
-                    return new Assignment(id, rhs);
+                    local_ident = id; //Set context for use in <Assign Tail>
+                    Statement rhsexp = (Statement)CreateObject(token.Tokens[1]);
+                    return rhsexp;
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_PLUSPLUS:
                     //<Assign Tail> ::= '++'
@@ -1688,27 +1705,43 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_EQ:
                     //<Assign Tail> ::= '=' <Expression>
-                    return CreateObject(token.Tokens[1]);
+                    var rhs = CreateExpression(token.Tokens[1]);
+                    var assignExp = new Assignment(local_ident, rhs);
+                    assignExp.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return assignExp;
+
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_PLUSEQ:
                     //<Assign Tail> ::= '+=' <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var rhses = CreateExpression(token.Tokens[1]);
+                    var realrhs = new BinaryOperator(local_ident, rhses, binops.add);
+                    var assignplusexp = new Assignment(local_ident, realrhs);
+                    assignplusexp.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return assignplusexp;
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_MINUSEQ:
                     //<Assign Tail> ::= '-=' <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var rhsesm = CreateExpression(token.Tokens[1]);
+                    var realrhsm = new BinaryOperator(local_ident, rhsesm, binops.sub);
+                    var assignplusexpm = new Assignment(local_ident, realrhsm);
+                    assignplusexpm.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return assignplusexpm;
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_TIMESEQ:
                     //<Assign Tail> ::= '*=' <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var rhsest = CreateExpression(token.Tokens[1]);
+                    var realrhst = new BinaryOperator(local_ident, rhsest, binops.mul);
+                    var assignplusexpt = new Assignment(local_ident, realrhst);
+                    assignplusexpt.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return assignplusexpt;
 
                 case (int)RuleConstants.RULE_ASSIGNTAIL_DIVEQ:
                     //<Assign Tail> ::= '/=' <Expression>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var rhsesd = CreateExpression(token.Tokens[1]);
+                    var realrhsd = new BinaryOperator(local_ident, rhsesd, binops.div);
+                    var assignplusexpd = new Assignment(local_ident, realrhsd);
+                    assignplusexpd.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return assignplusexpd;
 
                 case (int)RuleConstants.RULE_METHODSOPT:
                     //<Methods Opt> ::= <Methods Opt> <Method>

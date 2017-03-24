@@ -26,5 +26,6 @@ namespace billc.TreeNodes
         void visit(Continue ct);
         void visit(FunctionInvocation fi);
         void visit(Identifier id);
+        void visit(ForLoop floop);
     }
 }

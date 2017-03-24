@@ -279,5 +279,10 @@ namespace billc.Visitors
                 errorReporter.Error("Runtime exception occurred. Exiting.");
             }
         }
+
+        public void visit(ForLoop floop)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

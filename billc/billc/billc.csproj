@@ -67,6 +67,7 @@
     <Compile Include="TreeNodes\ClassDecl.cs" />
     <Compile Include="TreeNodes\Conditional.cs" />
     <Compile Include="TreeNodes\Expression.cs" />
+    <Compile Include="TreeNodes\ForLoop.cs" />
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />
     <Compile Include="TreeNodes\FunctionInvocation.cs" />

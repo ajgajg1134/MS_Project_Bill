@@ -26,6 +26,9 @@ namespace billc
             string member_test = "void main() { a.thing = 10; }";
             string class_test = "class foo(int a, string s){ }";
             string assignparamTest = "void main() { toString(a = 3); }";
+            string forTest = "void main() { for(int i = 0; i < 10; i += 1){ } }";
+            string forTestbad = "void main() { for(int i = 2.5; i < 10; i += 1){ } }";
+
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
             string interpret3_test = "void main() { println(toStr(1 + 2)); }";
@@ -67,10 +70,9 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(list_test);
+                program = (ProgramNode)parser.Parse(forTestbad);
             } else
             {
-                //TODO: open a file and make it into a program
                 try
                 {
                     using (StreamReader sr = new StreamReader(args[0]))

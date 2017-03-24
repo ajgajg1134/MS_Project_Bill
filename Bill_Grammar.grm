@@ -70,7 +70,7 @@ Comment End = '*/'
 <Type>
         ::= int
          |  double
-     |  char
+         |  char
          |  String
          |  void
          |  bool
@@ -107,7 +107,7 @@ Comment End = '*/'
 
 <And Exp>
        ::= <And Exp> '&&' <Equality Exp>
-        |  <Equality Exp>
+        |  <Equality Exp>c
 
 <Equality Exp>  
        ::= <Equality Exp> '==' <Compare Exp>
@@ -137,7 +137,6 @@ Comment End = '*/'
         |  '-'  <Unary Exp>
         |  '++' <Unary Exp>
         |  '--' <Unary Exp>
-!------ |  '(' <Expression> ')' <Object Exp>     !Cast "expression" (Maybe optional)
         |  <Object Exp>
 
 <Object Exp>
