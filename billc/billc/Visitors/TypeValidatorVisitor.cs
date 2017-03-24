@@ -388,5 +388,36 @@ namespace billc.Visitors
                 }
             }
         }
+
+        public void visit(IndexOperation indexOperation)
+        {
+            indexOperation.id.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            //Check result type if we can even index this
+            //In the future add list support
+            if (resultType != "String")
+            {
+                errorReporter.Error("Array index operator can not be used on type '" + resultType + "'.", indexOperation);
+                isValidProgram = false;
+                return;
+            }
+
+            indexOperation.index.accept(this);
+            if (!isValidProgram)
+            {
+                return;
+            }
+            if (resultType != "int")
+            {
+                errorReporter.Error("Array index must be of type int. Detected type: '" + resultType + "'.", indexOperation);
+                isValidProgram = false;
+                return;
+            }
+            //In the future this will need to be determined from list type. for now only strings are supported
+            resultType = "char";
+        }
     }
 }

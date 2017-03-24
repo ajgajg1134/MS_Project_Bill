@@ -154,6 +154,11 @@ namespace billc
             var toStrDbl = new FunctionDecl(toStrDblParams, new Identifier("toStr"), "String", new List<Statement>());
             builtin_functions.Add(toStrDbl);
 
+            var toStrCharParams = new List<FormalParam>();
+            toStrCharParams.Add(new FormalParam(new Identifier(""), "char"));
+            var toStrChar = new FunctionDecl(toStrCharParams, new Identifier("toStr"), "String", new List<Statement>());
+            builtin_functions.Add(toStrChar);
+
             var printlnParams = new List<FormalParam>();
             printlnParams.Add(new FormalParam(new Identifier(""), "String"));
             var println = new FunctionDecl(printlnParams, new Identifier("println"), "void", new List<Statement>());

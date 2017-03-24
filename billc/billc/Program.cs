@@ -29,6 +29,7 @@ namespace billc
             string forTest = "void main() { for(int i = 0; i < 10; i += 1){ println(toStr(i)); } }";
             string forTestbad = "void main() { for(int i = 2.5; i < 10; i += 1){ } }";
             string strSubTest = "void main() { String s = \"hello\";\n char c = s[0]; }";
+            string strSubTestBadIdx = "void main() { String s = \"hello\";\n char c = s[2.5]; }";
 
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
@@ -39,6 +40,7 @@ namespace billc
             string interpret7_test = "void main() { println(toStr(-4)); }";
             string interpret8_test = "void main() { int a = 0; while(a < 5){ println(toStr(a));\n a = a + 1; }}";
             string interpret9_test = "void main() { println(\"hello\" + \"nerd\"); }";
+            string strSubInterTest = "void main() { String s = \"hello\";\n char c = s[0]; println(toStr(c));}";
 
             //Tests to see quality of parsing error messages
             string missingBrace = "void main() { ";
@@ -71,7 +73,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(interpret6_test);
+                program = (ProgramNode)parser.Parse(strSubInterTest);
             } else
             {
                 try

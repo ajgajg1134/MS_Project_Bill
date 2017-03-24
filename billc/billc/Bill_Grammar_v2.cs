@@ -339,6 +339,11 @@ namespace com.calitha.goldparser
         /// </summary>
         private Identifier local_ident;
 
+        /// <summary>
+        /// For use in MethodExp Method rules so the identifier from a rule above is available.
+        /// </summary>
+        private Identifier local_method_ident;
+
         public MyParser(string filename)
         {
             FileStream stream = new FileStream(filename,
@@ -1344,8 +1349,9 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHODEXP:
                     //<Method Exp> ::= <Method Exp> <Method>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier otest = (Identifier) CreateObject(token.Tokens[0]);
+                    local_method_ident = otest;
+                    return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_METHODEXP2:
                     //<Method Exp> ::= <Primary Exp>
@@ -1764,8 +1770,17 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHOD_LBRACKET_RBRACKET:
                     //<Method> ::= '[' <Expression List> ']'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    var expressions = (List<Expression>)CreateObject(token.Tokens[1]);
+                    //We don't want to support comma seperated access yet so just take the first element only.
+                    if (local_method_ident == null)
+                    {
+                        errorReporter.Fatal("Local_method_ident was not set for index operation");
+                        badParse = true;
+                        return null;
+                    }
+                    var indexop = new IndexOperation(local_method_ident, expressions[0]);
+                    indexop.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return indexop;
 
                 case (int)RuleConstants.RULE_METHOD_PLUSPLUS:
                     //<Method> ::= '++'

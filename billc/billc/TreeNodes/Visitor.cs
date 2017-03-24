@@ -10,6 +10,7 @@ namespace billc.TreeNodes
     {
         //TODO: Add more concrete visit functions for every node type
         void visit(ProgramNode node);
+        void visit(IndexOperation indexOperation);
         void visit(FunctionDecl fdecl);
         void visit(ClassDecl cdecl);
         void visit(Assignment astmt);

@@ -341,5 +341,15 @@ namespace billc.Visitors
                 }
             }
         }
+
+        public void visit(IndexOperation indexOperation)
+        {
+            indexOperation.id.accept(this);
+            Literal toIndex = result;
+            indexOperation.index.accept(this);
+            int index = result.i;
+
+            result = new Literal(toIndex.s[index]);
+        }
     }
 }
