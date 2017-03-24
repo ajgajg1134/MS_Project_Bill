@@ -1,0 +1,20 @@
+﻿void main(){
+	bool isPrime = true;
+	println("Enter a number:");
+	int n = toInt(input());
+	
+	for(int i = 2; i <= n / 2; i += 1)
+	{
+		if (n % i == 0)
+		{
+			isPrime = false;
+			break;
+		}
+	}
+
+	if (isPrime) {
+		println(toStr(n) + " is a prime number.");
+	} else {
+		println(toStr(n) + " is not a prime number.");
+	}
+}

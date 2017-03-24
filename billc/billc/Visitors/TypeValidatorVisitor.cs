@@ -367,8 +367,8 @@ namespace billc.Visitors
                 isValidProgram = false;
                 errorReporter.Error("Condition in for loop must be of type boolean, detected type as " + condType + ".", floop);
             }
-
-            foreach(Statement stmt in floop.iteratedStmts)
+            tvv.inLoop = true;
+            foreach(Statement stmt in floop.loopBody)
             {
                 stmt.accept(tvv);
                 if (!tvv.isValidProgram)
@@ -378,7 +378,7 @@ namespace billc.Visitors
                 }
             }
 
-            foreach (Statement stmt in floop.loopBody)
+            foreach (Statement stmt in floop.iteratedStmts)
             {
                 stmt.accept(tvv);
                 if (!tvv.isValidProgram)
