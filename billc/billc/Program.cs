@@ -71,7 +71,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(if_test);
+                program = (ProgramNode)parser.Parse(interpret6_test);
             } else
             {
                 try

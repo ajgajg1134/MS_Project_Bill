@@ -1366,8 +1366,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PRIMARY:
                     //<Primary> ::= <Valid ID>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_PRIMARY_LPAREN_RPAREN:
                     //<Primary> ::= <Valid ID> '(' <Arg List Opt> ')'
