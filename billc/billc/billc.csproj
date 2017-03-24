@@ -95,6 +95,9 @@
     <None Include="C_To_F.bill">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="factorial_test.bill">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="test_file.bill">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

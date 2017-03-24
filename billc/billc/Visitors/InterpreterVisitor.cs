@@ -87,7 +87,7 @@ namespace billc.Visitors
             if (SymbolTable.isLocalFunction(fi.fxnId.id))
             {
                 //User defined function
-                InterpreterVisitor param_iv = new InterpreterVisitor(this);
+                InterpreterVisitor param_iv = new InterpreterVisitor();
                 for(int i = 0; i < fi.paramsIn.Count; i++)
                 {
                     result = null;
@@ -179,6 +179,7 @@ namespace billc.Visitors
                 //Re-check conditional
                 wloop.conditional.accept(iv);
             }
+            copyStateChanges(iv);
         }
 
         public void visit(Continue ct)
@@ -206,9 +207,10 @@ namespace billc.Visitors
             {
                 errorReporter.Fatal("Interpreter found non boolean type in conditional. This should have failed in type check.");
             }
+            InterpreterVisitor iv;
             if (result.b)
             {
-                InterpreterVisitor iv = new InterpreterVisitor(this);
+                iv = new InterpreterVisitor(this);
                 foreach(Statement s in cond.thenBlock)
                 {
                     s.accept(iv);
@@ -222,7 +224,7 @@ namespace billc.Visitors
             }
             else
             {
-                InterpreterVisitor iv = new InterpreterVisitor(this);
+                iv = new InterpreterVisitor(this);
                 foreach (Statement s in cond.elseBlock)
                 {
                     s.accept(iv);
@@ -235,6 +237,7 @@ namespace billc.Visitors
                 }
             }
             result = null;
+            copyStateChanges(iv);
         }
 
         public void visit(Literal literal)
@@ -319,6 +322,23 @@ namespace billc.Visitors
                 }
                 //Re-check conditional
                 floop.condition.accept(iv);
+            }
+            copyStateChanges(iv);
+        }
+
+        /// <summary>
+        /// Take an interpreter visitor that has finished executing at lower scope
+        /// copy all changes in state for variables that existed at higher scope up
+        /// </summary>
+        /// <param name="lowerScope">the interpreter visitor from lower scope</param>
+        public void copyStateChanges(InterpreterVisitor lowerScope)
+        {
+            foreach (var kv in lowerScope.primitive_vars)
+            {
+                if (primitive_vars.ContainsKey(kv.Key))
+                {
+                    primitive_vars[kv.Key] = kv.Value;
+                }
             }
         }
     }
