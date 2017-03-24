@@ -282,7 +282,44 @@ namespace billc.Visitors
 
         public void visit(ForLoop floop)
         {
-            throw new NotImplementedException();
+            InterpreterVisitor iv = new InterpreterVisitor(this);
+            floop.decl.accept(iv);
+
+            floop.condition.accept(iv);
+            if (iv.result.type != lit_type.boolean)
+            {
+                errorReporter.Fatal("Interpreter found non boolean type in for loop. This should have failed in type check.");
+            }
+            while (iv.result.b)
+            {
+                foreach (Statement s in floop.loopBody)
+                {
+                    s.accept(iv);
+                    if (iv.shouldContinue || iv.leaveLoop || iv.leaveFxn)
+                    {
+                        break;
+                    }
+                }
+                if (iv.leaveLoop || iv.leaveFxn)
+                {
+                    break;
+                }
+
+                foreach (Statement s in floop.iteratedStmts)
+                {
+                    s.accept(iv);
+                    if (iv.shouldContinue || iv.leaveLoop || iv.leaveFxn)
+                    {
+                        break;
+                    }
+                }
+                if (iv.leaveLoop || iv.leaveFxn)
+                {
+                    break;
+                }
+                //Re-check conditional
+                floop.condition.accept(iv);
+            }
         }
     }
 }

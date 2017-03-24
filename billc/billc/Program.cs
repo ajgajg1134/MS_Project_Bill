@@ -26,7 +26,7 @@ namespace billc
             string member_test = "void main() { a.thing = 10; }";
             string class_test = "class foo(int a, string s){ }";
             string assignparamTest = "void main() { toString(a = 3); }";
-            string forTest = "void main() { for(int i = 0; i < 10; i += 1){ } }";
+            string forTest = "void main() { for(int i = 0; i < 10; i += 1){ println(toStr(i)); } }";
             string forTestbad = "void main() { for(int i = 2.5; i < 10; i += 1){ } }";
 
             string interpret_test = "void main() { println(\"hello world\"); }";
@@ -70,7 +70,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(forTestbad);
+                program = (ProgramNode)parser.Parse(forTest);
             } else
             {
                 try
