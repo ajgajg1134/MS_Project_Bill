@@ -1765,7 +1765,6 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME_LPAREN_RPAREN:
                     //<Method> ::= MemberName '(' <Arg List Opt> ')'
-                    //todo: Create a new object using the stored tokens.
                     return null;
 
                 case (int)RuleConstants.RULE_METHOD_LBRACKET_RBRACKET:

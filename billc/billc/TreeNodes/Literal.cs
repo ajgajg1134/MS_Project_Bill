@@ -184,8 +184,16 @@ namespace billc.TreeNodes
                             return null;
                     }
                 case lit_type.character:
-                    throw new NotImplementedException();
-                case lit_type.floating:
+                    switch (bop)
+                    {
+                        case binops.eq:
+                            return new Literal(l.c == r.c);
+                        case binops.neq:
+                            return new Literal(l.c != r.c);
+                        default:
+                            return null;
+                    }
+                        case lit_type.floating:
                     switch (bop)
                     {
                         case binops.eq:

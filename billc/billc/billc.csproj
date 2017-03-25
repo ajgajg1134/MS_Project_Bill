@@ -103,6 +103,9 @@
     <None Include="factorial_test.bill">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="isPalindrome.bill">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="is_prime.bill">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

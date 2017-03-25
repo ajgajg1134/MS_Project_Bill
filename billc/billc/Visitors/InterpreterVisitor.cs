@@ -141,6 +141,11 @@ namespace billc.Visitors
                         fi.paramsIn[0].accept(paramivdbl);
                         result = new Literal(double.Parse(paramivdbl.result.s));
                         return;
+                    case "length":
+                        InterpreterVisitor paramivlen = new InterpreterVisitor(this);
+                        fi.paramsIn[0].accept(paramivlen);
+                        result = new Literal(paramivlen.result.s.Length);
+                        return;
                     default:
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
                         throw new NotImplementedException();
@@ -323,6 +328,8 @@ namespace billc.Visitors
                 //Re-check conditional
                 floop.condition.accept(iv);
             }
+            leaveFxn = iv.leaveFxn;
+            result = iv.result;
             copyStateChanges(iv);
         }
 

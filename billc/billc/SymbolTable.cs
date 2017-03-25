@@ -177,6 +177,11 @@ namespace billc
             toDblParams.Add(new FormalParam(new Identifier(""), "String"));
             var toDbl = new FunctionDecl(toDblParams, new Identifier("toDouble"), "double", new List<Statement>());
             builtin_functions.Add(toDbl);
+
+            var lengthParams = new List<FormalParam>();
+            lengthParams.Add(new FormalParam(new Identifier(""), "String"));
+            var length = new FunctionDecl(lengthParams, new Identifier("length"), "int", new List<Statement>());
+            builtin_functions.Add(length);
         }
     }
 }

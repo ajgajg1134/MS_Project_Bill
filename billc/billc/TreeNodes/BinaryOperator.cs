@@ -101,7 +101,7 @@ namespace billc.TreeNodes
                 case binops.mul:
                 case binops.neq:
                 case binops.sub:
-                    return PrimitiveTypes.isNumberType(type);
+                    return PrimitiveTypes.isNumberType(type) || type == "char";
                 case binops.and:
                 case binops.or:
                     return type == "bool";
