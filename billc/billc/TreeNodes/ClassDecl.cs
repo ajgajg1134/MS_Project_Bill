@@ -9,7 +9,7 @@ namespace billc.TreeNodes
     class ClassDecl : Node
     {
         public Identifier id;
-        List<FormalParam> fields;
+        public List<FormalParam> fields;
         //List<FunctionDecl> methods; //To be implemented as possible future work
 
         public ClassDecl(Identifier id, List<FormalParam> f)

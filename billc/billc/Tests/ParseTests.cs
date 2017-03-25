@@ -41,7 +41,7 @@ namespace billc.Tests
 
         MyParser parser;
         TestErrorReporter errReporter;
-        
+
         [SetUp]
         protected void SetUp()
         {
@@ -109,6 +109,77 @@ namespace billc.Tests
             object parseRet = parser.Parse(src);
             Assert.IsNull(parseRet);
             Assert.IsNotEmpty(errReporter.buffer);
+        }
+
+        [Test]
+        public void InvokeParseOneArg()
+        {
+            string src = "void main() { foo(5);\n}";
+            var prgrm = testParse(src);
+            Assert.IsNotNull(prgrm);
+            Assert.NotZero(prgrm.functions[0].block.Count);
+            Assert.IsInstanceOf<FunctionInvocation>(prgrm.functions[0].block[0]);
+            FunctionInvocation lvDecl = prgrm.functions[0].block[0] as FunctionInvocation;
+            Assert.AreEqual(lvDecl.fxnId, new Identifier("foo"));
+            Assert.AreEqual(lvDecl.paramsIn.Count, 1);
+            Assert.IsInstanceOf<Literal>(lvDecl.paramsIn[0]);
+            Assert.AreEqual((lvDecl.paramsIn[0] as Literal).i, 5);
+        }
+
+        [Test]
+        public void InvokeParseMultipleArgs()
+        {
+            string src = "void main() { bar(5, true, 2.5); \n}";
+            var prgrm = testParse(src);
+            Assert.IsNotNull(prgrm);
+            Assert.NotZero(prgrm.functions[0].block.Count);
+            Assert.IsInstanceOf<FunctionInvocation>(prgrm.functions[0].block[0]);
+            FunctionInvocation fi = prgrm.functions[0].block[0] as FunctionInvocation;
+            Assert.AreEqual(fi.fxnId, new Identifier("bar"));
+            Assert.AreEqual(fi.paramsIn.Count, 3);
+            Assert.IsInstanceOf<Literal>(fi.paramsIn[0]);
+            Assert.AreEqual((fi.paramsIn[0] as Literal).i, 5);
+        }
+
+        [Test]
+        public void BasicWhileLoop()
+        {
+            string src = "void main() {\n while(b){ return 2; }\n}";
+            var prgrm = testParse(src);
+            Assert.IsNotNull(prgrm);
+            Assert.NotZero(prgrm.functions[0].block.Count);
+            Assert.IsInstanceOf<WhileLoop>(prgrm.functions[0].block[0]);
+            WhileLoop wloop = prgrm.functions[0].block[0] as WhileLoop;
+            Assert.IsInstanceOf<Identifier>(wloop.conditional);
+        }
+
+
+        [Test]
+        public void BasicClassDecl()
+        {
+            string src = "void main() { }\n class foo(int a, string s){ }";
+            var prgrm = testParse(src);
+            Assert.IsNotNull(prgrm);
+            Assert.NotNull(prgrm.classes.Count);
+            ClassDecl cs = prgrm.classes[0];
+            Assert.AreEqual(cs.id, new Identifier("foo"));
+            Assert.AreEqual(cs.fields.Count, 2);
+        }
+
+        [Test]
+        public void ForLoop()
+        {
+            string src = "void main() { for(int i = 0; i < 10; i += 1){ println(toStr(i)); } }";
+            var prgrm = testParse(src);
+            Assert.IsNotNull(prgrm);
+            Assert.NotZero(prgrm.functions[0].block.Count);
+            Assert.IsInstanceOf<ForLoop>(prgrm.functions[0].block[0]);
+            ForLoop floop = prgrm.functions[0].block[0] as ForLoop;
+            Assert.IsNotNull(floop.decl);
+            Assert.IsNotNull(floop.condition);
+            Assert.IsNotNull(floop.iteratedStmts);
+            Assert.AreEqual(floop.iteratedStmts.Count, 1);
+            Assert.AreEqual(floop.loopBody.Count, 1);
         }
     }
 }
