@@ -8,37 +8,6 @@ namespace billc.Tests
     [TestFixture]
     class ParseTests
     {
-        internal class TestErrorReporter : IErrorReporter
-        {
-            internal string buffer;
-            internal Node inObj;
-            public void Error(string msg)
-            {
-                buffer = msg;
-            }
-
-            public void Error(string msg, Node n)
-            {
-                buffer = msg;
-                inObj = n;
-            }
-
-            public void Warning(string msg)
-            {
-                buffer = msg;
-            }
-
-            public void Warning(string msg, Node n)
-            {
-                buffer = msg;
-                inObj = n;
-            }
-            public void Fatal(string msg)
-            {
-                buffer = msg;
-            }
-        }
-
         MyParser parser;
         TestErrorReporter errReporter;
 

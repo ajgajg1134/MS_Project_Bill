@@ -61,6 +61,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolTable.cs" />
     <Compile Include="Tests\ParseTests.cs" />
+    <Compile Include="Tests\TestErrorReporter.cs" />
+    <Compile Include="Tests\TypeValidatorVisitorTests.cs" />
     <Compile Include="TreeNodes\Assignment.cs" />
     <Compile Include="TreeNodes\BinaryOperator.cs" />
     <Compile Include="TreeNodes\Continue.cs" />

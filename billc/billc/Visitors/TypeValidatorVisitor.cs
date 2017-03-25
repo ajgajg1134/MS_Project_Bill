@@ -10,7 +10,7 @@ namespace billc.Visitors
     class TypeValidatorVisitor : Visitor
     {
         SymbolTable table;
-        IErrorReporter errorReporter = new ErrorReporter();
+        internal IErrorReporter errorReporter = new ErrorReporter();
         public bool isValidProgram = true;
         /// <summary>
         /// Is set by this visitor to indicate what the result type of a visited node is.
@@ -33,6 +33,7 @@ namespace billc.Visitors
             table = new SymbolTable(tvv.table);
             returnType = tvv.returnType;
             inLoop = tvv.inLoop;
+            errorReporter = tvv.errorReporter;
         }
 
         public void visit(ClassDecl cdecl)
