@@ -42,6 +42,9 @@ namespace billc.Tests
                 parser = new MyParser(stream);
             }
             parser.errorReporter = errorReporter;
+
+            SymbolTable.functions.Clear();
+            SymbolTable.classes.Clear();
         }
 
         private void testPrinter(string s)

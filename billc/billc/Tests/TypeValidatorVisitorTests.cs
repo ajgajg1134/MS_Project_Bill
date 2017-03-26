@@ -21,6 +21,8 @@ namespace billc.Tests
             errReporter = new TestErrorReporter();
             tvv = new TypeValidatorVisitor();
             tvv.errorReporter = errReporter;
+            SymbolTable.functions.Clear();
+            SymbolTable.classes.Clear();
         }
 
         [Test]
@@ -40,8 +42,8 @@ namespace billc.Tests
             prgrm.functions.Add(new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>()));
 
             prgrm.accept(tvv);
-            Assert.True(tvv.isValidProgram);
             Assert.IsEmpty(errReporter.buffer);
+            Assert.True(tvv.isValidProgram);
         }
 
         [Test]
@@ -119,6 +121,20 @@ namespace billc.Tests
             fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new Literal(true)));
             fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new Literal(false)));
             prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.False(tvv.isValidProgram);
+            Assert.IsNotEmpty(errReporter.buffer);
+        }
+
+        [Test]
+        public void redeclaredFunction()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            var fdecl2 = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            prgrm.functions.Add(fdecl);
+            prgrm.functions.Add(fdecl2);
 
             prgrm.accept(tvv);
             Assert.False(tvv.isValidProgram);

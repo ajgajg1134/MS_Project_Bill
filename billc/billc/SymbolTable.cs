@@ -18,13 +18,13 @@ namespace billc
         /// A list of all functions
         /// (Static as functions exist at global scope)
         /// </summary>
-        static List<FunctionDecl> functions = new List<FunctionDecl>();
+        internal static List<FunctionDecl> functions = new List<FunctionDecl>();
 
         /// <summary>
         /// A dictionary mapping class names to their class decl object
         /// (Static as class decls exist at global scope)
         /// </summary>
-        static Dictionary<string, ClassDecl> classes = new Dictionary<string, ClassDecl>();
+        internal static Dictionary<string, ClassDecl> classes = new Dictionary<string, ClassDecl>();
 
         static List<FunctionDecl> builtin_functions = new List<FunctionDecl>();
 

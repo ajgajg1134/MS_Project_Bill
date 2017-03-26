@@ -336,7 +336,17 @@ namespace billc.Visitors
         public void visit(ProgramNode node)
         {
             //Copy function decls to local visitor
-            node.functions.ForEach(f => SymbolTable.addFunction(f));
+            foreach(var fdecl in node.functions)
+            {
+                if (SymbolTable.isFunction(fdecl))
+                {
+                    isValidProgram = false;
+                    errorReporter.Error("A function with name '" + fdecl.id + "' already exists.", fdecl);
+                    return;
+                }
+                SymbolTable.addFunction(fdecl);
+            }
+            
 
             //node.classes.ForEach(c => c.accept(this));
 
