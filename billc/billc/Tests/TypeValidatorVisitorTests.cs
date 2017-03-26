@@ -57,6 +57,33 @@ namespace billc.Tests
             Assert.IsNotEmpty(errReporter.buffer);
         }
 
+        [Test]
+        public void breakOutsideLoop()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            fdecl.block.Add(new Break());
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.False(tvv.isValidProgram);
+            Assert.IsNotEmpty(errReporter.buffer);
+        }
+
+        [Test]
+        public void breakInsideLoop()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            var loopBody = new List<Statement>();
+            loopBody.Add(new Break());
+            fdecl.block.Add(new WhileLoop(loopBody, new Literal(false)));
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.True(tvv.isValidProgram);
+            Assert.IsEmpty(errReporter.buffer);
+        }
 
     }
 }
