@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bill_Grammar.cs" />
     <Compile Include="Bill_Grammar_v2.cs" />
     <Compile Include="ErrorReporter.cs" />
     <Compile Include="IErrorReporter.cs" />
@@ -93,9 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Bill_Grammar.cgt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Bill_Grammar_v2.cgt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

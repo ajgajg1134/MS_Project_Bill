@@ -67,6 +67,8 @@ namespace billc.TreeNodes
             {
                 code = code ^ fParams[i].GetHashCode();
             }
+
+            return code;
         }
     }
 }
