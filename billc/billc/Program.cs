@@ -13,8 +13,9 @@ namespace billc
     class Program
     {
         static void Main(string[] args)
-        { 
+        {
             //These tests create semantically invalid programs, but are sufficient to test construction of the AST
+            /*
             string binop_test = "void main() {\n int a = a + 2;\n}";
             string list_test = "void main() {\n List<int> a = new List<int>();\n }";
             string fxn_test = "void main() {\n int a = 5;\n return a;\n}";
@@ -30,7 +31,6 @@ namespace billc
             string forTestbad = "void main() { for(int i = 2.5; i < 10; i += 1){ } }";
             string strSubTest = "void main() { String s = \"hello\";\n char c = s[0]; }";
             string strSubTestBadIdx = "void main() { String s = \"hello\";\n char c = s[2.5]; }";
-            string strLengthTest = "void main() { int a = length(\"hello\"); println(toStr(a)); }";
 
             string interpret_test = "void main() { println(\"hello world\"); }";
             string interpret2_test = "void main() { println(toStr(2)); }";
@@ -62,7 +62,8 @@ namespace billc
             string assignTest = "void main() {\n a = 3;\n }";
             string funcInvokeTest = "void main() { println(toStr(addTwo(4))); }\n int addTwo(int a){ return a + 2; }";
             string funcInvokeTest2 = "void main() { addTwo(); }\n int addTwo(int a){ return a + 2; }";
-
+            */
+            string strLengthTest = "void main() { int a = length(\"hello\"); println(toStr(a)); }";
 
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");

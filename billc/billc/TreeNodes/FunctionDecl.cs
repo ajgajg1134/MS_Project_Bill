@@ -58,5 +58,15 @@ namespace billc.TreeNodes
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            int code = id.GetHashCode();
+
+            for (int i = 0; i < fParams.Count; i++)
+            {
+                code = code ^ fParams[i].GetHashCode();
+            }
+        }
     }
 }

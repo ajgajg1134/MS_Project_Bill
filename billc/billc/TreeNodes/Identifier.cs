@@ -41,5 +41,10 @@ namespace billc.TreeNodes
                 return false;
             return other.id == id;
         }
+
+        public override int GetHashCode()
+        {
+            return id.GetHashCode();
+        }
     }
 }
