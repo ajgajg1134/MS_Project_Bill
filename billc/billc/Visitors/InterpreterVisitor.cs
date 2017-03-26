@@ -24,12 +24,12 @@ namespace billc.Visitors
         /// <summary>
         /// name of variable to the value it currently holds
         /// </summary>
-        Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
+        internal Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
 
         internal IErrorReporter errorReporter = new ErrorReporter();
 
-        internal Println println = Console.WriteLine;
-        internal Input input = Console.ReadLine;
+        internal Println println;
+        internal Input input;
 
         Literal result = null;
         bool leaveFxn = false;
@@ -38,7 +38,14 @@ namespace billc.Visitors
 
         public InterpreterVisitor()
         {
-            
+            println = Console.WriteLine;
+            input = Console.ReadLine;
+        }
+
+        public InterpreterVisitor(Println printer, Input inp)
+        {
+            println = printer;
+            input = inp;
         }
         public InterpreterVisitor(InterpreterVisitor iv)
         {
@@ -96,7 +103,7 @@ namespace billc.Visitors
             if (SymbolTable.isLocalFunction(fi.fxnId.id))
             {
                 //User defined function
-                InterpreterVisitor param_iv = new InterpreterVisitor();
+                InterpreterVisitor param_iv = new InterpreterVisitor(println, input);
                 for(int i = 0; i < fi.paramsIn.Count; i++)
                 {
                     result = null;

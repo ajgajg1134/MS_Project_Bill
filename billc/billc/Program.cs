@@ -63,7 +63,7 @@ namespace billc
             string funcInvokeTest = "void main() { println(toStr(addTwo(4))); }\n int addTwo(int a){ return a + 2; }";
             string funcInvokeTest2 = "void main() { addTwo(); }\n int addTwo(int a){ return a + 2; }";
             */
-            string strLengthTest = "void main() { int a = length(\"hello\"); println(toStr(a)); }";
+            string funcInvokeTest2 = "void main() { println(toStr(addTwo(0))); }\n int addTwo(int a){ return a + 2; }";
 
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
@@ -75,7 +75,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(strLengthTest);
+                program = (ProgramNode)parser.Parse(funcInvokeTest2);
             } else
             {
                 try
