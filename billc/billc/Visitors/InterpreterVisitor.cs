@@ -10,7 +10,10 @@ namespace billc.Visitors
     class BillRuntimeException : Exception
     {
 
-    } 
+    }
+
+    public delegate void Println(string s);
+    public delegate string Input();
 
     /// <summary>
     /// A visitor that will interpret the code of the part of the tree it visits
@@ -25,6 +28,9 @@ namespace billc.Visitors
 
         internal IErrorReporter errorReporter = new ErrorReporter();
 
+        internal Println println = Console.WriteLine;
+        internal Input input = Console.ReadLine;
+
         Literal result = null;
         bool leaveFxn = false;
         bool shouldContinue = false;
@@ -32,12 +38,14 @@ namespace billc.Visitors
 
         public InterpreterVisitor()
         {
-
+            
         }
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
             errorReporter = iv.errorReporter;
+            println = iv.println;
+            input = iv.input;
         }
 
         public void visit(ClassDecl cdecl)
@@ -122,7 +130,7 @@ namespace billc.Visitors
                     case "println":
                         InterpreterVisitor paramiv = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramiv);
-                        Console.Out.WriteLine(paramiv.result.s);
+                        println(paramiv.result.s);
                         return;
                     case "toStr":
                         InterpreterVisitor paramivstr = new InterpreterVisitor(this);
@@ -130,7 +138,7 @@ namespace billc.Visitors
                         result = new Literal(paramivstr.result.ToString());
                         return;
                     case "input":
-                        result = new Literal(Console.ReadLine());
+                        result = new Literal(input());
                         return;
                     case "toInt":
                         InterpreterVisitor paramivint = new InterpreterVisitor(this);
