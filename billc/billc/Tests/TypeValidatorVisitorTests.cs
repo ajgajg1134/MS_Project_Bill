@@ -85,5 +85,30 @@ namespace billc.Tests
             Assert.IsEmpty(errReporter.buffer);
         }
 
+        [Test]
+        public void notUnopOnInt()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new UnaryOperator(new Literal(2), unops.not)));
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.False(tvv.isValidProgram);
+            Assert.IsNotEmpty(errReporter.buffer);
+        }
+
+        [Test]
+        public void notUnopOnBool()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new UnaryOperator(new Literal(true), unops.not)));
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.True(tvv.isValidProgram);
+            Assert.IsEmpty(errReporter.buffer);
+        }
     }
 }

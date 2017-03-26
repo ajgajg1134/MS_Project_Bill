@@ -59,6 +59,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolTable.cs" />
+    <Compile Include="Tests\InterpreterVisitorTests.cs" />
     <Compile Include="Tests\ParseTests.cs" />
     <Compile Include="Tests\TestErrorReporter.cs" />
     <Compile Include="Tests\TypeValidatorVisitorTests.cs" />

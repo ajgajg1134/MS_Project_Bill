@@ -37,6 +37,7 @@ namespace billc.Visitors
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
+            errorReporter = iv.errorReporter;
         }
 
         public void visit(ClassDecl cdecl)
