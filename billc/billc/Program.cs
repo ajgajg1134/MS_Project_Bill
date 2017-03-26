@@ -75,7 +75,9 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(funcInvokeTest2);
+                //program = (ProgramNode)parser.Parse(funcInvokeTest2);
+                Console.WriteLine("Usage: billc <filename>");
+                return;
             } else
             {
                 try
@@ -108,15 +110,15 @@ namespace billc
                 errorReporter.Error("Type check failed, Exiting.");
                 return;
             }
-            Console.WriteLine(program.ToString());
+            //Console.WriteLine(program.ToString());
 
             InterpreterVisitor iv = new InterpreterVisitor();
 
-            Console.WriteLine("Execute interpreter");
+            //Console.WriteLine("Execute interpreter");
             program.accept(iv);
-            Console.WriteLine("Execution complete");
+            //Console.WriteLine("Execution complete");
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

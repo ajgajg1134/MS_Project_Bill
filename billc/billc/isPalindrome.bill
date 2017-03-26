@@ -15,8 +15,6 @@ bool isPalindrome(String s){
 	{
 		if (s[i] != s[length(s) - 1 - i])
 		{
-			println("f: " + toStr(s[i]));
-			println("s: " + toStr(s[length(s) - 1 - i]));
 			return false;
 		}
 	}
