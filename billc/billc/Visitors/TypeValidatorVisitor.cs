@@ -104,6 +104,12 @@ namespace billc.Visitors
                 errorReporter.Error("Declared type of " + ldecl.type + " does not match expression type of " + valType, ldecl);
             }
 
+            if(table.isLocalVar(ldecl.id.id))
+            {
+                isValidProgram = false;
+                errorReporter.Error("Variable '" + ldecl.id + "' has already been declared.", ldecl);
+                return;
+            }
             table.addLocalVar(ldecl.id.id, valType);
             resultType = "";
         }

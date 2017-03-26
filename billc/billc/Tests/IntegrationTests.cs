@@ -71,7 +71,7 @@ namespace billc.Tests
             Assert.AreEqual("01234", outputBuffer);
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void ConditionalPrint([Values("true", "false")] string boolean)
         {
             const string falsePrint = "Was False";
@@ -96,7 +96,7 @@ namespace billc.Tests
             }
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void StringLength([Values("", "hello", "what a long string")] string val)
         {
             string src = "void main() { int a = length(\"" + val + "\"); println(toStr(a)); }";
@@ -112,7 +112,7 @@ namespace billc.Tests
             Assert.AreEqual(val.Length + "", outputBuffer);
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void FunctionCallWithParams([Values(0, 5)] int val)
         {
             string src = "void main() { println(toStr(addTwo(" + val + "))); }\n int addTwo(int a){ return a + 2; }";

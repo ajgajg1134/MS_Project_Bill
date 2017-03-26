@@ -110,5 +110,19 @@ namespace billc.Tests
             Assert.True(tvv.isValidProgram);
             Assert.IsEmpty(errReporter.buffer);
         }
+
+        [Test]
+        public void redeclaredLocal()
+        {
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new Literal(true)));
+            fdecl.block.Add(new LocalVarDecl("bool", new Identifier("a"), new Literal(false)));
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(tvv);
+            Assert.False(tvv.isValidProgram);
+            Assert.IsNotEmpty(errReporter.buffer);
+        }
     }
 }
