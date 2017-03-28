@@ -135,5 +135,28 @@ namespace billc.Tests
             Assert.IsEmpty(errorReporter.buffer);
             Assert.AreEqual((a + b) + "", outputBuffer);
         }
+
+        [Test]
+        public void OverflowTest()
+        {
+            const string varName = "a";
+            ProgramNode prgrm = new ProgramNode(new List<FunctionDecl>(), new List<ClassDecl>());
+            var fdecl = new FunctionDecl(new List<FormalParam>(), new Identifier("main"), "void", new List<Statement>());
+            //int a = 5;
+            var add = new BinaryOperator(new Literal(1000000000), new Literal(525252), binops.mul);
+            fdecl.block.Add(new LocalVarDecl("int", new Identifier(varName), add));
+
+            //println(toStr(a));
+            var toStrExp = new List<Expression>();
+            toStrExp.Add(new Identifier("a"));
+            var toPrintExp = new List<Expression>();
+            toPrintExp.Add(new FunctionInvocation(new Identifier("toStr"), toStrExp));
+            fdecl.block.Add(new FunctionInvocation(new Identifier("println"), toPrintExp));
+            prgrm.functions.Add(fdecl);
+
+            prgrm.accept(iv);
+
+            Assert.IsNotEmpty(errorReporter.buffer);
+        }
     }
 }
