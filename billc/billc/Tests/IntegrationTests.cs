@@ -42,6 +42,7 @@ namespace billc.Tests
                 parser = new MyParser(stream);
             }
             parser.errorReporter = errorReporter;
+            tvv.errorReporter = errorReporter;
 
             SymbolTable.functions.Clear();
             SymbolTable.classes.Clear();
@@ -130,6 +131,22 @@ namespace billc.Tests
             prgrm.accept(iv);
             Assert.IsEmpty(errorReporter.buffer);
             Assert.AreEqual((val + 2) + "", outputBuffer);
+        }
+
+        [Test]
+        public void FunctionCallAsExpression()
+        {
+            string src = "void main() { addTwo(5); }\n int addTwo(int a){ return a + 2; }";
+            object parseResult = parser.Parse(src);
+            Assert.NotNull(parseResult);
+            Assert.False(parser.badParse);
+            Assert.IsEmpty(errorReporter.buffer);
+            Assert.IsInstanceOf<ProgramNode>(parseResult);
+            var prgrm = parseResult as ProgramNode;
+
+            prgrm.accept(tvv);
+            prgrm.accept(iv);
+            Assert.IsNotEmpty(errorReporter.buffer);
         }
     }
 }

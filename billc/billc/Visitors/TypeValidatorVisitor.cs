@@ -324,6 +324,7 @@ namespace billc.Visitors
                     isValidProgram = false;
                     return;
                 }
+                fxnVisitor.checkStatementForNonVoid(s);
             }
 
             if (!fxnVisitor.isValidProgram)
@@ -435,6 +436,18 @@ namespace billc.Visitors
             }
             //In the future this will need to be determined from list type. for now only strings are supported
             resultType = "char";
+        }
+
+        public void checkStatementForNonVoid(Statement s)
+        {
+            if (s is FunctionInvocation)
+            {
+                var fi = s as FunctionInvocation;
+                if (fi.actualFunction.retType != "void")
+                {
+                    errorReporter.Warning("Using a non-void function as an expression.", s);
+                }
+            }
         }
     }
 }
