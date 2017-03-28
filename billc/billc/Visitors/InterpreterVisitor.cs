@@ -70,7 +70,14 @@ namespace billc.Visitors
             InterpreterVisitor iv_right = new InterpreterVisitor(this);
             bop.left.accept(iv_left);
             bop.right.accept(iv_right);
-            result = Literal.performBinOp(iv_left.result, iv_right.result, bop.op);
+            try
+            {
+                result = Literal.performBinOp(iv_left.result, iv_right.result, bop.op);
+            } catch (OverflowException)
+            {
+                errorReporter.Error("Integer overflow occurred, number too big or too small.", bop);
+                throw new BillRuntimeException();
+            }
         }
 
         public void visit(FormalParam fparam)

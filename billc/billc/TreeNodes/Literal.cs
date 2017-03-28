@@ -238,13 +238,13 @@ namespace billc.TreeNodes
                         case binops.neq:
                             return new Literal(l.i != r.i);
                         case binops.add:
-                            return new Literal(l.i + r.i);
+                            return new Literal(checked(l.i + r.i));
                         case binops.div:
                             return new Literal(l.i / r.i); //TODO: div by zero check?
                         case binops.mul:
-                            return new Literal(l.i * r.i);
+                            return new Literal(checked(l.i * r.i));
                         case binops.sub:
-                            return new Literal(l.i - r.i);
+                            return new Literal(checked(l.i - r.i));
                         case binops.mod:
                             return new Literal(l.i % r.i);
                         default:
