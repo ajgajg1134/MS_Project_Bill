@@ -163,7 +163,15 @@ namespace billc.Visitors
                     case "toInt":
                         InterpreterVisitor paramivint = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramivint);
-                        result = new Literal(int.Parse(paramivint.result.s));
+                        try
+                        {
+                            result = new Literal(int.Parse(paramivint.result.s));
+                        } catch (FormatException)
+                        {
+                            errorReporter.Error("Unable to convert string '" + paramivint.result.s + "' to integer.", fi);
+                            stack_counter--;
+                            throw new BillRuntimeException();
+                        }
                         stack_counter--;
                         return;
                     case "toDouble":
