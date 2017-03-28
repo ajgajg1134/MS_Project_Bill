@@ -31,6 +31,9 @@ namespace billc.Visitors
         internal Println println;
         internal Input input;
 
+        internal static int stack_counter = 0;
+        internal const int MAX_STACK = 1000;
+
         Literal result = null;
         bool leaveFxn = false;
         bool shouldContinue = false;
@@ -100,6 +103,12 @@ namespace billc.Visitors
 
         public void visit(FunctionInvocation fi)
         {
+            stack_counter++;
+            if(stack_counter > MAX_STACK)
+            {
+                errorReporter.Error("Stack overflow occurred! Check you aren't infinitely looping or recursing.", fi);
+                throw new BillRuntimeException();
+            }
             if (SymbolTable.isLocalFunction(fi.fxnId.id))
             {
                 //User defined function
@@ -123,6 +132,7 @@ namespace billc.Visitors
                     {
                         leaveFxn = true;
                         result = param_iv.result;
+                        stack_counter--;
                         return;
                     }
                 }
@@ -138,29 +148,35 @@ namespace billc.Visitors
                         InterpreterVisitor paramiv = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramiv);
                         println(paramiv.result.s);
+                        stack_counter--;
                         return;
                     case "toStr":
                         InterpreterVisitor paramivstr = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramivstr);
                         result = new Literal(paramivstr.result.ToString());
+                        stack_counter--;
                         return;
                     case "input":
                         result = new Literal(input());
+                        stack_counter--;
                         return;
                     case "toInt":
                         InterpreterVisitor paramivint = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramivint);
                         result = new Literal(int.Parse(paramivint.result.s));
+                        stack_counter--;
                         return;
                     case "toDouble":
                         InterpreterVisitor paramivdbl = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramivdbl);
                         result = new Literal(double.Parse(paramivdbl.result.s));
+                        stack_counter--;
                         return;
                     case "length":
                         InterpreterVisitor paramivlen = new InterpreterVisitor(this);
                         fi.paramsIn[0].accept(paramivlen);
                         result = new Literal(paramivlen.result.s.Length);
+                        stack_counter--;
                         return;
                     default:
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
@@ -173,6 +189,7 @@ namespace billc.Visitors
                 errorReporter.Fatal("Unknown function call: " + fi.fxnId + " should have been caught by typechecker");
                 throw new BillRuntimeException();
             }
+            stack_counter--;
         }
 
         public void visit(WhileLoop wloop)
