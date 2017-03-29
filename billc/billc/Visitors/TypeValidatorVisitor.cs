@@ -38,7 +38,18 @@ namespace billc.Visitors
 
         public void visit(ClassDecl cdecl)
         {
-            throw new NotImplementedException();
+            foreach (var fparam in cdecl.fields)
+            {
+                if (!PrimitiveTypes.isPrimitiveType(fparam.type) && fparam.type != "String" && SymbolTable.isClass(fparam.type))
+                {
+                    isValidProgram = false;
+                    errorReporter.Error("Unknown type '" + fparam.type + "'", fparam);
+                    return;
+                }
+            }
+            //Add constructor as classname.new
+            var fdecl = new FunctionDecl(cdecl.fields, new Identifier(cdecl.id.id + ".new"), cdecl.id.id, new List<Statement>());
+            SymbolTable.addFunction(fdecl);
         }
 
         public void visit(BinaryOperator bop)
@@ -86,7 +97,23 @@ namespace billc.Visitors
 
         public void visit(FormalParam fparam)
         {
-            table.addLocalVar(fparam.id.id, fparam.type);
+            if (PrimitiveTypes.isPrimitiveType(fparam.type) || fparam.type == "String")
+            {
+                table.addLocalVar(fparam.id.id, fparam.type);
+            }
+            else
+            {
+                //Check to see if this is a valid class
+                if (!SymbolTable.isClass(fparam.type))
+                {
+                    isValidProgram = false;
+                    errorReporter.Error("Unknown type '" + fparam.type + "'", fparam);
+                } else
+                {
+                    //Put everything available in that class available as a variable
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         public void visit(LocalVarDecl ldecl)
@@ -348,8 +375,24 @@ namespace billc.Visitors
                 SymbolTable.addFunction(fdecl);
             }
             
+            //Add classes to the symbol table
+            foreach(var cd in node.classes)
+            {
+                if (SymbolTable.isClass(cd))
+                {
+                    isValidProgram = false;
+                    errorReporter.Error("A class with name'" + cd.id + "' already exists.", cd);
+                    return;
+                }
+                SymbolTable.addClass(cd.id.id, cd);
+            }
 
-            //node.classes.ForEach(c => c.accept(this));
+            node.classes.ForEach(c => c.accept(this));
+
+            if (!isValidProgram)
+            {
+                return;
+            }
 
             //Don't worry about this visitor getting polluted by other functions, 
             //Visiting a function decl will create a copy and use that to check the function 

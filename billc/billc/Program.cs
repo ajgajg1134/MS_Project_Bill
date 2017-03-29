@@ -63,7 +63,7 @@ namespace billc
             string funcInvokeTest = "void main() { println(toStr(addTwo(4))); }\n int addTwo(int a){ return a + 2; }";
             string funcInvokeTest2 = "void main() { addTwo(); }\n int addTwo(int a){ return a + 2; }";
             */
-            string funcInvokeTest2 = "void main() { println(toStr(addTwo(0))); }\n int addTwo(int a){ return a + 2; }";
+            string classConst = "class foo(int a){ }\n void main() { foo x = new foo(5); }";
 
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
@@ -75,9 +75,9 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                //program = (ProgramNode)parser.Parse(funcInvokeTest2);
-                Console.WriteLine("Usage: billc <filename>");
-                return;
+                program = (ProgramNode)parser.Parse(classConst);
+                //Console.WriteLine("Usage: billc <filename>");
+                //return;
             } else
             {
                 try

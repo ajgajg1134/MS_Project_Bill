@@ -14,6 +14,8 @@ namespace billc
         /// </summary>
         Dictionary<string, string> localVars = new Dictionary<string, string>();
 
+
+
         /// <summary>
         /// A list of all functions
         /// (Static as functions exist at global scope)
@@ -59,6 +61,30 @@ namespace billc
         public static bool isFunction(FunctionDecl fd)
         {
             return functions.Contains(fd) || builtin_functions.Contains(fd);
+        }
+
+        public static bool isConstructor(string id)
+        {
+            if (id.Substring(id.Length - 4) == ".new")
+            {
+                return isClass(id.Substring(0, id.Length - 4));
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a given classdecl already exists in the symbol table
+        /// </summary>
+        /// <param name="cd">The class to add</param>
+        /// <returns>true if it exist already, false otherwise</returns>
+        public static bool isClass(ClassDecl cd)
+        {
+            return classes.ContainsKey(cd.id.id);
+        }
+
+        public static bool isClass(string s)
+        {
+            return classes.ContainsKey(s);
         }
 
 

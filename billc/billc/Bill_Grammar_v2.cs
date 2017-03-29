@@ -1359,8 +1359,12 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_PRIMARYEXP_NEW_LPAREN_RPAREN:
                     //<Primary Exp> ::= new <Valid ID> '(' <Arg List Opt> ')'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Identifier className = (Identifier)CreateExpression(token.Tokens[1]);
+                    Identifier constName = new Identifier(className.id + ".new");
+                    List<Expression> constParamsf = (List<Expression>)CreateObject(token.Tokens[3]);
+                    var constCall = new FunctionInvocation(constName, constParamsf);
+                    constCall.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
+                    return constCall;
 
                 case (int)RuleConstants.RULE_PRIMARYEXP:
                     //<Primary Exp> ::= <Primary>
@@ -1658,10 +1662,21 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_LOCALVARDECL:
                     //<Local Var Decl> ::= <Qualified ID> <Variable Decs>
-                    string typeDecl = (string)CreateObject(token.Tokens[0]);
-                    LocalVarDecl declNoType = (LocalVarDecl)CreateObject(token.Tokens[1]);
-                    declNoType.addType(typeDecl);
-                    return declNoType;
+                    object typeDecl = CreateObject(token.Tokens[0]);
+                    if (typeDecl is string)
+                    {
+                        string typeDecl_str = typeDecl as string;
+                        LocalVarDecl declNoType = (LocalVarDecl)CreateObject(token.Tokens[1]);
+                        declNoType.addType(typeDecl_str);
+                        return declNoType;
+                    }
+                    else
+                    {
+                        Identifier typeIde = typeDecl as Identifier;
+                        LocalVarDecl declNoType = (LocalVarDecl)CreateObject(token.Tokens[1]);
+                        declNoType.addType(typeIde.id);
+                        return declNoType;
+                    }
 
                 case (int)RuleConstants.RULE_STATEMENTEXP_LPAREN_RPAREN:
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')'
