@@ -409,7 +409,7 @@ namespace com.calitha.goldparser
             }
             else if (o is string)
             {
-                errorReporter.Warning("Used the identifier constructor without line num");
+                //errorReporter.Warning("Used the identifier constructor without line num");
                 return new Identifier((string)o);
             }
             else if (o == null)

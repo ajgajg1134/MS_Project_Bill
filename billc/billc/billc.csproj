@@ -102,6 +102,7 @@
     <Compile Include="TreeNodes\UnaryOperator.cs" />
     <Compile Include="TreeNodes\Visitable.cs" />
     <Compile Include="TreeNodes\WhileLoop.cs" />
+    <Compile Include="TypeMethods.cs" />
     <Compile Include="Visitors\InterpreterVisitor.cs" />
     <Compile Include="Visitors\SymbolTableVisitor.cs" />
     <Compile Include="TreeNodes\Visitor.cs" />

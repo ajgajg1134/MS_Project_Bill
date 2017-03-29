@@ -208,6 +208,15 @@ namespace billc
             lengthParams.Add(new FormalParam(new Identifier(""), "String"));
             var length = new FunctionDecl(lengthParams, new Identifier("length"), "int", new List<Statement>());
             builtin_functions.Add(length);
+
+            var buildListInt = new List<FormalParam>();
+            var intList = new FunctionDecl(buildListInt, new Identifier("List<int>.new"), "List<int>", new List<Statement>());
+            builtin_functions.Add(intList);
+
+            var buildListDbl = new List<FormalParam>();
+            var dblList = new FunctionDecl(buildListDbl, new Identifier("List<double>.new"), "List<double>", new List<Statement>());
+            builtin_functions.Add(dblList);
+            //Todo: add more of these
         }
     }
 }

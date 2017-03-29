@@ -97,27 +97,25 @@ namespace billc.Visitors
 
         public void visit(FormalParam fparam)
         {
-            if (PrimitiveTypes.isPrimitiveType(fparam.type) || fparam.type == "String")
+            if (doesTypeExist(fparam.type))
             {
                 table.addLocalVar(fparam.id.id, fparam.type);
             }
             else
             {
-                //Check to see if this is a valid class
-                if (!SymbolTable.isClass(fparam.type))
-                {
-                    isValidProgram = false;
-                    errorReporter.Error("Unknown type '" + fparam.type + "'", fparam);
-                } else
-                {
-                    //Put everything available in that class available as a variable
-                    throw new NotImplementedException();
-                }
+                isValidProgram = false;
+                errorReporter.Error("Unknown type '" + fparam.type + "'", fparam);
             }
         }
 
         public void visit(LocalVarDecl ldecl)
         {
+            if (!doesTypeExist(ldecl.type))
+            {
+                isValidProgram = false;
+                errorReporter.Error("Unknown type '" + ldecl.type + "'", ldecl);
+                return;
+            }
             ldecl.val.accept(this);
             if (!isValidProgram)
             {
@@ -491,6 +489,23 @@ namespace billc.Visitors
                     errorReporter.Warning("Using a non-void function as an expression.", s);
                 }
             }
+        }
+
+        public bool doesTypeExist(string s)
+        {
+            if (PrimitiveTypes.isPrimitiveType(s) || s == "String")
+            {
+                return true;
+            }
+            if (SymbolTable.isClass(s))
+            {
+                return true;
+            }
+            if (s.IsList())
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
