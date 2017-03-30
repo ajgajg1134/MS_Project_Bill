@@ -67,7 +67,7 @@ namespace billc
         {
             if (id.Substring(id.Length - 4) == ".new")
             {
-                return isClass(id.Substring(0, id.Length - 4));
+                return true;
             }
             return false;
         }

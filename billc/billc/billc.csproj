@@ -92,6 +92,7 @@
     <Compile Include="TreeNodes\FunctionInvocation.cs" />
     <Compile Include="TreeNodes\Identifier.cs" />
     <Compile Include="TreeNodes\IndexOperation.cs" />
+    <Compile Include="TreeNodes\ListLiteral.cs" />
     <Compile Include="TreeNodes\Literal.cs" />
     <Compile Include="TreeNodes\LocalVarDecl.cs" />
     <Compile Include="TreeNodes\Node.cs" />

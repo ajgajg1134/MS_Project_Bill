@@ -1589,8 +1589,7 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_ARRAYINITIALIZER_LBRACE_RBRACE:
                     //<Array Initializer> ::= '{' <Variable Initializer List Opt> '}'
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_ARRAYINITIALIZER_LBRACE_COMMA_RBRACE:
                     //<Array Initializer> ::= '{' <Variable Initializer List> ',' '}'
@@ -1599,23 +1598,25 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZERLISTOPT:
                     //<Variable Initializer List Opt> ::= <Variable Initializer List>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return CreateObject(token.Tokens[0]);
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZERLISTOPT2:
                     //<Variable Initializer List Opt> ::= 
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    return new ListLiteral(new List<Expression>(), "");
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZERLIST:
                     //<Variable Initializer List> ::= <Variable Initializer>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    List<Expression> internalLiteralList = new List<Expression>();
+                    Expression elem = CreateObject(token.Tokens[0]) as Expression;
+                    internalLiteralList.Add(elem);
+                    return new ListLiteral(internalLiteralList, "");
 
                 case (int)RuleConstants.RULE_VARIABLEINITIALIZERLIST_COMMA:
                     //<Variable Initializer List> ::= <Variable Initializer List> ',' <Variable Initializer>
-                    //todo: Create a new object using the stored tokens.
-                    return null;
+                    Expression lastElem = CreateObject(token.Tokens[2]) as Expression;
+                    ListLiteral varList = CreateObject(token.Tokens[0]) as ListLiteral;
+                    varList.list.Add(lastElem);
+                    return varList;
 
                 case (int)RuleConstants.RULE_FORINITOPT:
                     //<For Init Opt> ::= <Local Var Decl>

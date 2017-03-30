@@ -25,6 +25,14 @@ namespace billc.Visitors
         /// name of variable to the value it currently holds
         /// </summary>
         internal Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
+        /// <summary>
+        /// Maps name of list variable to the actual list object
+        /// </summary>
+        internal Dictionary<string, List<object>> lists = new Dictionary<string, List<object>>();
+        /// <summary>
+        /// Maps Identifiers to their type
+        /// </summary>
+        internal Dictionary<Identifier, string> id_to_type = new Dictionary<Identifier, string>();
 
         internal IErrorReporter errorReporter = new ErrorReporter();
 
@@ -35,9 +43,12 @@ namespace billc.Visitors
         internal const int MAX_STACK = 1000;
 
         Literal result = null;
+        object result_ref = null;
+        
         bool leaveFxn = false;
         bool shouldContinue = false;
         bool leaveLoop = false;
+        bool wasReferenceResult = false;
 
         public InterpreterVisitor()
         {
@@ -53,6 +64,8 @@ namespace billc.Visitors
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
+            lists = new Dictionary<string, List<object>>(iv.lists);
+            id_to_type = new Dictionary<Identifier, string>(iv.id_to_type);
             errorReporter = iv.errorReporter;
             println = iv.println;
             input = iv.input;
@@ -89,7 +102,20 @@ namespace billc.Visitors
         {
             InterpreterVisitor sub_exp = new InterpreterVisitor(this);
             ldecl.val.accept(sub_exp);
-            primitive_vars.Add(ldecl.id.id, sub_exp.result);
+            if (!sub_exp.wasReferenceResult)
+            {
+                primitive_vars.Add(ldecl.id.id, sub_exp.result);
+            }
+            else
+            {
+                //For now just handle lists
+                if (!(sub_exp.result_ref is List<object>))
+                {
+                    errorReporter.Fatal("Expected reference type in local var decl but was not List<object>!");
+                }
+                lists.Add(ldecl.id.id, sub_exp.result_ref as List<object>);
+                id_to_type.Add(ldecl.id, ldecl.type);
+            }
         }
 
         public void visit(UnaryOperator unop)
@@ -105,7 +131,17 @@ namespace billc.Visitors
 
         public void visit(Identifier id)
         {
-            result = primitive_vars[id.id];
+            if (primitive_vars.ContainsKey(id.id))
+            {
+                result = primitive_vars[id.id];
+            } else if (lists.ContainsKey(id.id))
+            {
+                wasReferenceResult = true;
+                result_ref = lists[id.id];
+            } else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void visit(FunctionInvocation fi)
@@ -194,6 +230,11 @@ namespace billc.Visitors
                         stack_counter--;
                         return;
                     default:
+                        if (SymbolTable.isConstructor(fi.fxnId.id))
+                        {
+                            handleConstructors(fi);
+                            return;
+                        }
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
                         throw new NotImplementedException();
                 }
@@ -205,6 +246,16 @@ namespace billc.Visitors
                 throw new BillRuntimeException();
             }
             stack_counter--;
+        }
+
+        public void handleConstructors(FunctionInvocation fi)
+        {
+            if (fi.fxnId.id.IsList())
+            {
+                //string listType = string.Concat(fi.fxnId.id.Substring(5).TakeWhile(c => c != '>'));
+                result_ref = new List<object>();
+                wasReferenceResult = true;
+            }
         }
 
         public void visit(WhileLoop wloop)
@@ -399,12 +450,35 @@ namespace billc.Visitors
 
         public void visit(IndexOperation indexOperation)
         {
-            indexOperation.id.accept(this);
-            Literal toIndex = result;
             indexOperation.index.accept(this);
             int index = result.i;
 
-            result = new Literal(toIndex.s[index]);
+            indexOperation.id.accept(this);
+            if (wasReferenceResult)
+            {
+                //Just lists for now
+                List<object> list = result_ref as List<object>;
+                string internal_type = id_to_type[indexOperation.id].GetListType();
+                switch (internal_type)
+                {
+                    case "int":
+                        int resTemp = (int)list[index];
+                        result = new Literal(resTemp);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                Literal toIndex = result;
+                result = new Literal(toIndex.s[index]);
+            }            
+        }
+
+        public void visit(ListLiteral listLiteral)
+        {
+            throw new NotImplementedException();
         }
     }
 }

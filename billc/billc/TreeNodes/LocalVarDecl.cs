@@ -33,6 +33,10 @@ namespace billc.TreeNodes
         public void addType(string t)
         {
             type = t;
+            if (val is ListLiteral)
+            {
+                (val as ListLiteral).internal_type = t;
+            }
         }
 
         public override string ToString()

@@ -57,6 +57,11 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(ListLiteral listLiteral)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(IndexOperation indexOperation)
         {
             throw new NotImplementedException();

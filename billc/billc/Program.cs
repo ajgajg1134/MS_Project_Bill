@@ -64,7 +64,8 @@ namespace billc
             string funcInvokeTest2 = "void main() { addTwo(); }\n int addTwo(int a){ return a + 2; }";
             string classConst = "class foo(int a){ }\n void main() { foo x = new foo(5); }";
             */
-            string listConst = "void main() { List<int> x = new List<int>(); }";
+            //string listConst = "void main() { List<int> x = new List<int>();\n int a = x[0]; }";
+            string listConst = "void main() { List<int> x = {0, 1}; }";
 
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
