@@ -518,8 +518,17 @@ namespace billc.Visitors
         {
             foreach (var exp in listLiteral.list)
             {
-
+                exp.accept(this);
+                if (!isValidProgram)
+                {
+                    return;
+                }
+                if (resultType != listLiteral.internal_type)
+                {
+                    errorReporter.Error("Expression '" + exp.ToString() + "' does not match type of List '" + listLiteral.internal_type + "'.", listLiteral);
+                }
             }
+            resultType = listLiteral.getResultType();
         }
     }
 }

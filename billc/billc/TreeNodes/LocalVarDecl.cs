@@ -35,7 +35,7 @@ namespace billc.TreeNodes
             type = t;
             if (val is ListLiteral)
             {
-                (val as ListLiteral).internal_type = t;
+                (val as ListLiteral).internal_type = t.GetListType();
             }
         }
 
