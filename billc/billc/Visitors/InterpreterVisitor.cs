@@ -28,7 +28,7 @@ namespace billc.Visitors
         /// <summary>
         /// Maps name of list variable to the actual list object
         /// </summary>
-        internal Dictionary<string, List<object>> lists = new Dictionary<string, List<object>>();
+        internal Dictionary<string, List<Expression>> lists = new Dictionary<string, List<Expression>>();
         /// <summary>
         /// Maps Identifiers to their type
         /// </summary>
@@ -64,7 +64,7 @@ namespace billc.Visitors
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
-            lists = new Dictionary<string, List<object>>(iv.lists);
+            lists = new Dictionary<string, List<Expression>>(iv.lists);
             id_to_type = new Dictionary<Identifier, string>(iv.id_to_type);
             errorReporter = iv.errorReporter;
             println = iv.println;
@@ -109,11 +109,12 @@ namespace billc.Visitors
             else
             {
                 //For now just handle lists
-                if (!(sub_exp.result_ref is List<object>))
+                if (!(sub_exp.result_ref is List<Expression>))
                 {
-                    errorReporter.Fatal("Expected reference type in local var decl but was not List<object>!");
+                    errorReporter.Fatal("Expected reference type in local var decl but was not List<Expression>!");
+                    throw new BillRuntimeException();
                 }
-                lists.Add(ldecl.id.id, sub_exp.result_ref as List<object>);
+                lists.Add(ldecl.id.id, sub_exp.result_ref as List<Expression>);
                 id_to_type.Add(ldecl.id, ldecl.type);
             }
         }
@@ -457,12 +458,12 @@ namespace billc.Visitors
             if (wasReferenceResult)
             {
                 //Just lists for now
-                List<object> list = result_ref as List<object>;
+                List<Expression> list = result_ref as List<Expression>;
                 string internal_type = id_to_type[indexOperation.id].GetListType();
                 switch (internal_type)
                 {
                     case "int":
-                        int resTemp = (int)list[index];
+                        int resTemp = ((Literal)list[index]).i;
                         result = new Literal(resTemp);
                         break;
                     default:
@@ -478,7 +479,8 @@ namespace billc.Visitors
 
         public void visit(ListLiteral listLiteral)
         {
-            throw new NotImplementedException();
+            wasReferenceResult = true;
+            result_ref = listLiteral.list;
         }
     }
 }
