@@ -463,8 +463,9 @@ namespace billc.Visitors
                 switch (internal_type)
                 {
                     case "int":
-                        int resTemp = ((Literal)list[index]).i;
-                        result = new Literal(resTemp);
+                        InterpreterVisitor iv = new InterpreterVisitor(this);
+                        list[index].accept(iv);
+                        result = iv.result;
                         break;
                     default:
                         throw new NotImplementedException();
