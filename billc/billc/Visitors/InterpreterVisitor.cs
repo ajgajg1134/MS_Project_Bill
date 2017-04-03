@@ -460,15 +460,16 @@ namespace billc.Visitors
                 //Just lists for now
                 List<Expression> list = result_ref as List<Expression>;
                 string internal_type = id_to_type[indexOperation.id].GetListType();
-                switch (internal_type)
+                InterpreterVisitor iv = new InterpreterVisitor(this);
+                list[index].accept(iv);
+                if (iv.wasReferenceResult)
                 {
-                    case "int":
-                        InterpreterVisitor iv = new InterpreterVisitor(this);
-                        list[index].accept(iv);
-                        result = iv.result;
-                        break;
-                    default:
-                        throw new NotImplementedException();
+                    wasReferenceResult = true;
+                    result_ref = iv.result_ref;
+                }
+                else
+                {
+                    result = iv.result;
                 }
             }
             else

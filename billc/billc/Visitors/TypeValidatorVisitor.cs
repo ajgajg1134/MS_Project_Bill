@@ -526,6 +526,8 @@ namespace billc.Visitors
                 if (resultType != listLiteral.internal_type)
                 {
                     errorReporter.Error("Expression '" + exp.ToString() + "' does not match type of List '" + listLiteral.internal_type + "'.", listLiteral);
+                    isValidProgram = false;
+                    return;
                 }
             }
             resultType = listLiteral.getResultType();
