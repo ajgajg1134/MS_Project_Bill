@@ -242,7 +242,7 @@ namespace billc
             var listAddParams = new List<FormalParam>();
             listAddParams.Add(new FormalParam(new Identifier(""), "List<" + s + ">"));
             listAddParams.Add(new FormalParam(new Identifier(""), s));
-            var listAdd = new FunctionDecl(listAddParams, new Identifier("List<" + s + ">.add"), s, new List<Statement>());
+            var listAdd = new FunctionDecl(listAddParams, new Identifier("List<" + s + ">.add"), "void", new List<Statement>());
             builtin_functions.Add(listAdd);
         }
     }

@@ -251,6 +251,29 @@ namespace billc.Visitors
                                 return;
                             }
 
+                            //Check for a List<type>.add() function
+                            const string listaddreg = @"(List<)\w+(>\.add)";
+                            Regex addreg = new Regex(listaddreg);
+                            if (addreg.IsMatch(fi.fxnId.id))
+                            {
+                                InterpreterVisitor iv = new InterpreterVisitor(this);
+                                fi.paramsIn[0].accept(iv);
+                                List<Expression> list = iv.result_ref as List<Expression>;
+                                iv.wasReferenceResult = false;
+                                fi.paramsIn[1].accept(iv);
+                                if (iv.wasReferenceResult)
+                                {
+                                    list.Add(iv.result_ref as Expression);
+                                }
+                                else
+                                {
+                                    list.Add(iv.result);
+                                }
+                                result = new Literal();
+                                stack_counter--;
+                                return;
+                            }
+
                         }
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
                         throw new NotImplementedException();
