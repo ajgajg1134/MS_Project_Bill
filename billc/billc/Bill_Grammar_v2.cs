@@ -1068,15 +1068,21 @@ namespace com.calitha.goldparser
                     }
                     else
                     {
-                        Expression vid = CreateExpression(token.Tokens[0]);
-                        return new BinaryOperator(vid, memb, binops.dot);
+                        Identifier vid = CreateExpression(token.Tokens[0]) as Identifier;
+                        Identifier memlist = CreateObject(token.Tokens[1]) as Identifier;
+                        return new Identifier(vid.id + memlist.id);
                     }
 
                 case (int)RuleConstants.RULE_MEMBERLIST_MEMBERNAME:
                     //<Member List> ::= <Member List> MemberName
-                    Expression memblst = CreateExpression(token.Tokens[0]);
-                    Expression rhsmem = CreateExpression(token.Tokens[1]);
-                    return memblst == null ? rhsmem : new BinaryOperator(memblst, rhsmem, binops.dot);
+                    Identifier memblst = CreateExpression(token.Tokens[0]) as Identifier ?? new Identifier("");
+                    Identifier rhsmem = CreateExpression(token.Tokens[1]) as Identifier;
+                    return new Identifier(memblst.id + "." + rhsmem.id);
+                /*
+                Expression memblst = CreateExpression(token.Tokens[0]);
+                Expression rhsmem = CreateExpression(token.Tokens[1]);
+                return memblst == null ? rhsmem : new BinaryOperator(memblst, rhsmem, binops.dot);
+                */
 
                 case (int)RuleConstants.RULE_MEMBERLIST:
                     //<Member List> ::= 
@@ -1683,7 +1689,18 @@ namespace com.calitha.goldparser
                     //<Statement Exp> ::= <Qualified ID> '(' <Arg List Opt> ')'
                     Identifier fxnid = (Identifier)CreateExpression(token.Tokens[0]);
                     List<Expression> concParams = (List<Expression>)CreateObject(token.Tokens[2]);
+                    bool isMethod = false;
+                    if (fxnid.id.Contains("."))
+                    {
+                        //This is actually a method, grab the first bit and put it in the first param slot
+                        int index = fxnid.id.IndexOf('.');
+                        string firstparam = fxnid.id.Substring(0, index);
+                        fxnid = new Identifier(fxnid.id.Substring(index + 1));
+                        concParams.Insert(0, new Identifier(firstparam));
+                        isMethod = true;
+                    }
                     var inv2 = new FunctionInvocation(fxnid, concParams);
+                    inv2.isMethod = isMethod;
                     inv2.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
                     return inv2;
 

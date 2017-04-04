@@ -237,6 +237,13 @@ namespace billc
             listSizeParams.Add(new FormalParam(new Identifier(""), "List<" + s + ">"));
             var listSize = new FunctionDecl(listSizeParams, new Identifier("List<" + s + ">.size"), "int", new List<Statement>());
             builtin_functions.Add(listSize);
+
+            //Add a list<s>.add(s) function for this type
+            var listAddParams = new List<FormalParam>();
+            listAddParams.Add(new FormalParam(new Identifier(""), "List<" + s + ">"));
+            listAddParams.Add(new FormalParam(new Identifier(""), s));
+            var listAdd = new FunctionDecl(listAddParams, new Identifier("List<" + s + ">.add"), s, new List<Statement>());
+            builtin_functions.Add(listAdd);
         }
     }
 }
