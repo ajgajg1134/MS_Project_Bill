@@ -1,0 +1,16 @@
+void main(){
+	println("Enter a number (-1 to quit): ");
+	int num = toInt(input());
+	List<int> nums = new List<int>();
+	while (num != -1){
+		nums.add(num);
+		println("Enter a number (-1 to quit): ");
+		num = toInt(input());
+	}
+	println("You entered " + toStr(nums.size()) + " numbers.");
+	int sum = 0;
+	for (int i = 0; i < nums.size(); i += 1){
+		sum += nums[i];
+	}
+	println("The sum is: " + toStr(sum));
+}
