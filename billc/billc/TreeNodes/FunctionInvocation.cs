@@ -16,6 +16,8 @@ namespace billc.TreeNodes
         /// </summary>
         public FunctionDecl actualFunction;
 
+        public bool isMethod = false;
+
         public FunctionInvocation(Identifier id, List<Expression> paramsIn)
         {
             fxnId = id;

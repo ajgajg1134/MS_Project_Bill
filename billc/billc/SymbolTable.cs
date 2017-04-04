@@ -216,7 +216,27 @@ namespace billc
             var buildListDbl = new List<FormalParam>();
             var dblList = new FunctionDecl(buildListDbl, new Identifier("List<double>.new"), "List<double>", new List<Statement>());
             builtin_functions.Add(dblList);
-            //Todo: add more of these
+
+            string[] arrayableTypes = { "int", "double", "char", "bool" };
+            foreach(string s in arrayableTypes)
+            {
+                addTypeFunctions(s);
+            }
+        }
+
+        /// <summary>
+        /// Add pre-built functions to the symbol table for a type with name s
+        /// </summary>
+        /// <param name="s">the name of the type</param>
+        public static void addTypeFunctions(string s)
+        {
+            //Todo: refactor some functions into using this format
+
+            //Add a list<s>.size() function for this type
+            var listSizeParams = new List<FormalParam>();
+            listSizeParams.Add(new FormalParam(new Identifier(""), "List<" + s + ">"));
+            var listSize = new FunctionDecl(listSizeParams, new Identifier("List<" + s + ">.size"), "int", new List<Statement>());
+            builtin_functions.Add(listSize);
         }
     }
 }

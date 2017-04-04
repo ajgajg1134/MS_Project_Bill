@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using billc.TreeNodes;
+using System.Text.RegularExpressions;
 
 namespace billc.Visitors
 {
@@ -236,6 +237,21 @@ namespace billc.Visitors
                             handleConstructors(fi);
                             return;
                         }
+                        if (fi.isMethod)
+                        {
+                            //Check for a List<type>.size() function
+                            const string listsizereg = @"(List<)\w+(>\.size)";
+                            Regex regex = new Regex(listsizereg);
+                            if (regex.IsMatch(fi.fxnId.id))
+                            {
+                                InterpreterVisitor listsize = new InterpreterVisitor(this);
+                                fi.paramsIn[0].accept(listsize);
+                                result = new Literal((listsize.result_ref as List<Expression>).Count);
+                                stack_counter--;
+                                return;
+                            }
+
+                        }
                         errorReporter.Fatal("Interpreter encountered builtin-function in symbol table but without known implementation.");
                         throw new NotImplementedException();
                 }
@@ -254,7 +270,7 @@ namespace billc.Visitors
             if (fi.fxnId.id.IsList())
             {
                 //string listType = string.Concat(fi.fxnId.id.Substring(5).TakeWhile(c => c != '>'));
-                result_ref = new List<object>();
+                result_ref = new List<Expression>();
                 wasReferenceResult = true;
             }
         }
@@ -459,7 +475,6 @@ namespace billc.Visitors
             {
                 //Just lists for now
                 List<Expression> list = result_ref as List<Expression>;
-                string internal_type = id_to_type[indexOperation.id].GetListType();
                 InterpreterVisitor iv = new InterpreterVisitor(this);
                 list[index].accept(iv);
                 if (iv.wasReferenceResult)

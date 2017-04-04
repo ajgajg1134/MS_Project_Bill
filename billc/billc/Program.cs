@@ -65,7 +65,7 @@ namespace billc
             string classConst = "class foo(int a){ }\n void main() { foo x = new foo(5); }";
             */
             //string listConst = "void main() { List<int> x = new List<int>();\n int a = x[0]; }";
-            string listConst = "void main() { List<double> x = {\"hello\", 1.5}; println(toStr(x[1]));}";
+            string listConst = "void main() { List<int> x = {5, 2, 0, 10, 3}; println(toStr(x.size()));}";
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
 

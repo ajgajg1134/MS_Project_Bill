@@ -188,6 +188,25 @@ namespace billc.Visitors
 
         public void visit(FunctionInvocation fi)
         {
+            //Methods need to have the type they're acting on added to the FI name
+            //This is so the interpreter can locate the correct function to call
+            //Luckily whatever is in the first parameter slot holds what we're going to act on
+            if (fi.isMethod)
+            {
+                TypeValidatorVisitor tvv = new TypeValidatorVisitor(this);
+                if(fi.paramsIn.Count < 1)
+                {
+                    errorReporter.Fatal("Method missing mandatory first argument.");
+                    isValidProgram = false;
+                    return;
+                }
+                fi.paramsIn[0].accept(tvv);
+                if (!tvv.isValidProgram)
+                {
+                    return;
+                }
+                fi.fxnId = new Identifier(tvv.resultType + "." + fi.fxnId);
+            }
             if (!SymbolTable.isLocalFunction(fi.fxnId.id) && !SymbolTable.isBuiltinFunction(fi.fxnId.id))
             {
                 isValidProgram = false;
@@ -475,7 +494,7 @@ namespace billc.Visitors
             }
             else if (resultType.IsList())
             {
-                resultType = table.getLocalVar(indexOperation.id.id).GetListType();
+                resultType = resultType.GetListType();
             }
             else
             {

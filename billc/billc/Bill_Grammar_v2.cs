@@ -342,7 +342,7 @@ namespace com.calitha.goldparser
         /// <summary>
         /// For use in MethodExp Method rules so the identifier from a rule above is available.
         /// </summary>
-        private Identifier local_method_ident;
+        private Expression local_method_exp;
 
         public MyParser(string filename)
         {
@@ -1350,7 +1350,7 @@ namespace com.calitha.goldparser
                 case (int)RuleConstants.RULE_METHODEXP:
                     //<Method Exp> ::= <Method Exp> <Method>
                     Identifier otest = (Identifier) CreateObject(token.Tokens[0]);
-                    local_method_ident = otest;
+                    local_method_exp = otest;
                     return CreateObject(token.Tokens[1]);
 
                 case (int)RuleConstants.RULE_METHODEXP2:
@@ -1781,19 +1781,31 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME_LPAREN_RPAREN:
                     //<Method> ::= MemberName '(' <Arg List Opt> ')'
-                    return null;
+                    if (local_method_exp == null)
+                    {
+                        errorReporter.Fatal("Local_method_ident was not set for method call");
+                        badParse = true;
+                        return null;
+                    }
+                    string name = CreateObject(token.Tokens[0]) as string;
+                    List<Expression> methodParams = (List<Expression>)CreateObject(token.Tokens[2]);
+                    methodParams.Insert(0, local_method_exp); //Insert thing calling this method as first arg to function call
+                    FunctionInvocation methodcall = new FunctionInvocation(new Identifier(name), methodParams);
+                    methodcall.lineNum = (token.Tokens[1] as TerminalToken).Location.LineNr;
+                    methodcall.isMethod = true;
+                    return methodcall;
 
                 case (int)RuleConstants.RULE_METHOD_LBRACKET_RBRACKET:
                     //<Method> ::= '[' <Expression List> ']'
                     var expressions = (List<Expression>)CreateObject(token.Tokens[1]);
                     //We don't want to support comma seperated access yet so just take the first element only.
-                    if (local_method_ident == null)
+                    if (local_method_exp == null)
                     {
                         errorReporter.Fatal("Local_method_ident was not set for index operation");
                         badParse = true;
                         return null;
                     }
-                    var indexop = new IndexOperation(local_method_ident, expressions[0]);
+                    var indexop = new IndexOperation(local_method_exp, expressions[0]);
                     indexop.lineNum = (token.Tokens[0] as TerminalToken).Location.LineNr;
                     return indexop;
 

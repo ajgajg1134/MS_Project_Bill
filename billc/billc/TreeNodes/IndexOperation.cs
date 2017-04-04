@@ -8,10 +8,12 @@ namespace billc.TreeNodes
 {
     class IndexOperation : Expression
     {
-        public Identifier id;
+        //An index operation can be performed on the result of a function call that returns a string
+        //That's why this needs to be an expression and not just an Identifier
+        public Expression id; 
         public Expression index;
 
-        public IndexOperation(Identifier i, Expression ix)
+        public IndexOperation(Expression i, Expression ix)
         {
             id = i;
             index = ix;
