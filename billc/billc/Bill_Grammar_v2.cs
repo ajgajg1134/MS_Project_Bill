@@ -1794,7 +1794,8 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME:
                     //<Method> ::= MemberName
-                    return CreateObject(token.Tokens[0]);
+                    var fieldAccess = new FieldAccess(local_method_exp, new Identifier(CreateObject(token.Tokens[0]) as string));
+                    return fieldAccess;
 
                 case (int)RuleConstants.RULE_METHOD_MEMBERNAME_LPAREN_RPAREN:
                     //<Method> ::= MemberName '(' <Arg List Opt> ')'

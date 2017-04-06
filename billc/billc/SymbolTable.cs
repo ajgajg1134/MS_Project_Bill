@@ -31,10 +31,19 @@ namespace billc
         static List<FunctionDecl> builtin_functions = new List<FunctionDecl>();
 
         public SymbolTable()
-        { }
+        {
+            if (builtin_functions.Count == 0)
+            {
+                populateBuiltins();
+            }
+        }
 
         public SymbolTable(SymbolTable table)
         {
+            if (builtin_functions.Count == 0)
+            {
+                populateBuiltins();
+            }
             localVars = new Dictionary<string, string>(table.localVars);
         }
 
@@ -133,6 +142,11 @@ namespace billc
             functions.Add(f);
         }
 
+        public static void addConstructor(FunctionDecl f)
+        {
+            builtin_functions.Add(f);
+        }
+
         public static void addClass(string id, ClassDecl cd)
         {
             classes.Add(id, cd);
@@ -158,10 +172,6 @@ namespace billc
         public static bool isBuiltinFunction(string fid)
         {
             //var builtins = new List<string>{ "toInt", "println", "print", "toStr" };
-            if (builtin_functions.Count == 0)
-            {
-                populateBuiltins();
-            }
             return builtin_functions.Any(f => f.id.id == fid);
         }
 

@@ -65,7 +65,9 @@ namespace billc
             string classConst = "class foo(int a){ }\n void main() { foo x = new foo(5); }";
             */
             //string listConst = "void main() { List<int> x = new List<int>();\n int a = x[0]; }";
-            string listConst = "void main() { List<int> x = {5}; x.add(2); println(toStr(x.size()));}";
+            //string listConst = "void main() { List<int> x = {5}; x.add(2); println(toStr(x.size()));}";
+            //string classFieldTest = "class foo(int a){ }\n void main() { foo x = new foo(10); }";
+            string classFieldTest = "class foo(int a){ }\n void main() { foo x = new foo(10); println(toStr(x.a));}";
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
 
@@ -76,7 +78,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(listConst);
+                program = (ProgramNode)parser.Parse(classFieldTest);
                 //Console.WriteLine("Usage: billc <filename>");
                 //return;
             } else

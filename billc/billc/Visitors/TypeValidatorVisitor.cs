@@ -49,7 +49,7 @@ namespace billc.Visitors
             }
             //Add constructor as classname.new
             var fdecl = new FunctionDecl(cdecl.fields, new Identifier(cdecl.id.id + ".new"), cdecl.id.id, new List<Statement>());
-            SymbolTable.addFunction(fdecl);
+            SymbolTable.addConstructor(fdecl);
         }
 
         public void visit(BinaryOperator bop)
@@ -550,6 +550,46 @@ namespace billc.Visitors
                 }
             }
             resultType = listLiteral.getResultType();
+        }
+
+        public void visit(ClassLiteral classLiteral)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void visit(FieldAccess fieldAccess)
+        {
+            TypeValidatorVisitor tvv = new TypeValidatorVisitor(this);
+            fieldAccess.classLiteral.accept(tvv);
+            if(!tvv.isValidProgram)
+            {
+                isValidProgram = false;
+                return;
+            }
+            if (!doesTypeExist(tvv.resultType))
+            {
+                isValidProgram = false;
+                errorReporter.Error("Unknown type '" + fieldAccess.classLiteral + "'", fieldAccess);
+                return;
+            }
+
+            if (!SymbolTable.classes.ContainsKey(tvv.resultType))
+            {
+                isValidProgram = false;
+                errorReporter.Error("Type '" + tvv.resultType + "' is not a class.", fieldAccess);
+                return;
+            }
+
+            ClassDecl cd = SymbolTable.classes[tvv.resultType];
+            bool hasField = cd.fields.Any(fp => fp.id.Equals(fieldAccess.fieldName));
+            if (!hasField)
+            {
+                isValidProgram = false;
+                errorReporter.Error("Class '" + tvv.resultType + "' has no field '" + fieldAccess.fieldName + "'.", fieldAccess);
+                return;
+            }
+            FormalParam fparam = cd.fields.Find(fp => fp.id.Equals(fieldAccess.fieldName));
+            resultType = fparam.type;
         }
     }
 }

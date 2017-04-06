@@ -81,11 +81,13 @@
     <Compile Include="Tests\TypeValidatorVisitorTests.cs" />
     <Compile Include="TreeNodes\Assignment.cs" />
     <Compile Include="TreeNodes\BinaryOperator.cs" />
+    <Compile Include="TreeNodes\ClassLiteral.cs" />
     <Compile Include="TreeNodes\Continue.cs" />
     <Compile Include="TreeNodes\Break.cs" />
     <Compile Include="TreeNodes\ClassDecl.cs" />
     <Compile Include="TreeNodes\Conditional.cs" />
     <Compile Include="TreeNodes\Expression.cs" />
+    <Compile Include="TreeNodes\FieldAccess.cs" />
     <Compile Include="TreeNodes\ForLoop.cs" />
     <Compile Include="TreeNodes\FormalParam.cs" />
     <Compile Include="TreeNodes\FunctionDecl.cs" />

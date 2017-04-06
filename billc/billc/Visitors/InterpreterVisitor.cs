@@ -27,6 +27,10 @@ namespace billc.Visitors
         /// </summary>
         internal Dictionary<string, Literal> primitive_vars = new Dictionary<string, Literal>();
         /// <summary>
+        /// Name of variable to the object it represents
+        /// </summary>
+        internal Dictionary<string, ClassLiteral> object_vars = new Dictionary<string, ClassLiteral>();
+        /// <summary>
         /// Maps name of list variable to the actual list object
         /// </summary>
         internal Dictionary<string, List<Expression>> lists = new Dictionary<string, List<Expression>>();
@@ -65,6 +69,7 @@ namespace billc.Visitors
         public InterpreterVisitor(InterpreterVisitor iv)
         {
             primitive_vars = new Dictionary<string, Literal>(iv.primitive_vars);
+            object_vars = new Dictionary<string, ClassLiteral>(iv.object_vars);
             lists = new Dictionary<string, List<Expression>>(iv.lists);
             id_to_type = new Dictionary<Identifier, string>(iv.id_to_type);
             errorReporter = iv.errorReporter;
@@ -109,14 +114,25 @@ namespace billc.Visitors
             }
             else
             {
-                //For now just handle lists
-                if (!(sub_exp.result_ref is List<Expression>))
+                if (sub_exp.result_ref is List<Expression>)
                 {
-                    errorReporter.Fatal("Expected reference type in local var decl but was not List<Expression>!");
-                    throw new BillRuntimeException();
+                    //Was a list type
+                    lists.Add(ldecl.id.id, sub_exp.result_ref as List<Expression>);
+                    id_to_type.Add(ldecl.id, ldecl.type);
                 }
-                lists.Add(ldecl.id.id, sub_exp.result_ref as List<Expression>);
-                id_to_type.Add(ldecl.id, ldecl.type);
+                else
+                {
+                    if (sub_exp.result_ref is ClassLiteral)
+                    {
+                        //Was an object type
+                        object_vars.Add(ldecl.id.id, sub_exp.result_ref as ClassLiteral);
+                    }
+                    else
+                    {
+                        errorReporter.Fatal("Expected ClassLiteral type in LocalVarDecl in Interpreter.");
+                        throw new BillRuntimeException();
+                    }
+                }
             }
         }
 
@@ -142,7 +158,13 @@ namespace billc.Visitors
                 result_ref = lists[id.id];
             } else
             {
-                throw new NotImplementedException();
+                if(!object_vars.ContainsKey(id.id))
+                {
+                    errorReporter.Fatal("Interpreted encountered undefined object.");
+                    throw new BillRuntimeException();
+                }
+                wasReferenceResult = true;
+                result_ref = object_vars[id.id];
             }
         }
 
@@ -290,12 +312,35 @@ namespace billc.Visitors
 
         public void handleConstructors(FunctionInvocation fi)
         {
+            wasReferenceResult = true;
             if (fi.fxnId.id.IsList())
             {
                 //string listType = string.Concat(fi.fxnId.id.Substring(5).TakeWhile(c => c != '>'));
                 result_ref = new List<Expression>();
-                wasReferenceResult = true;
+                return;
             }
+            string className = string.Concat(fi.fxnId.id.Take(fi.fxnId.id.IndexOf('.')));
+            InterpreterVisitor param_iv = new InterpreterVisitor(println, input);
+            List<Expression> classVals = new List<Expression>();
+            for (int i = 0; i < fi.paramsIn.Count; i++)
+            {
+                param_iv.result = null;
+                fi.paramsIn[i].accept(param_iv);
+                if (param_iv.result == null)
+                {
+                    errorReporter.Fatal("Interpreter encountered null literal in constructor invocation.");
+                    throw new BillRuntimeException();
+                }
+                if (param_iv.wasReferenceResult)
+                {
+                    classVals.Add(param_iv.result_ref as Expression);
+                } else
+                {
+                    classVals.Add(param_iv.result);
+                }
+                param_iv.wasReferenceResult = false;
+            }
+            result_ref = new ClassLiteral(new Identifier(className), classVals);
         }
 
         public void visit(WhileLoop wloop)
@@ -486,6 +531,7 @@ namespace billc.Visitors
                     primitive_vars[kv.Key] = kv.Value;
                 }
             }
+            //TODO: add this for objects, maybe lists too
         }
 
         public void visit(IndexOperation indexOperation)
@@ -521,6 +567,29 @@ namespace billc.Visitors
         {
             wasReferenceResult = true;
             result_ref = listLiteral.list;
+        }
+
+        public void visit(ClassLiteral classLiteral)
+        {
+            result_ref = classLiteral;
+            wasReferenceResult = true;
+        }
+
+        public void visit(FieldAccess fieldAccess)
+        {
+            InterpreterVisitor iv = new InterpreterVisitor(this);
+            fieldAccess.classLiteral.accept(iv);
+            if (!(iv.result_ref is ClassLiteral))
+            {
+                errorReporter.Fatal("Expected a class literal in field access in interpreter.");
+                throw new BillRuntimeException();
+            }
+            ClassLiteral classLit = iv.result_ref as ClassLiteral;
+            ClassDecl cdecl = SymbolTable.classes[classLit.type.id];
+
+            int index = cdecl.fields.FindIndex(fp => fp.id.Equals(fieldAccess.fieldName));
+            Expression res = classLit.fieldValues[index];
+            res.accept(this);
         }
     }
 }

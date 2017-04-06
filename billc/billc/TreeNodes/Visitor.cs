@@ -18,9 +18,11 @@ namespace billc.TreeNodes
         void visit(Literal literal);
         void visit(FormalParam fparam);
         void visit(ListLiteral listLiteral);
+        void visit(FieldAccess fieldAccess);
 
         //void visit(Expression exp);
         void visit(LocalVarDecl ldecl);
+        void visit(ClassLiteral classLiteral);
         void visit(Conditional cond);
         void visit(UnaryOperator unop);
         void visit(Return ret);

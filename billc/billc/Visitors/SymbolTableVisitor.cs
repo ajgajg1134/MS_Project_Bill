@@ -62,6 +62,16 @@ namespace billc.Visitors
             throw new NotImplementedException();
         }
 
+        public void visit(FieldAccess fieldAccess)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void visit(ClassLiteral classLiteral)
+        {
+            throw new NotImplementedException();
+        }
+
         public void visit(IndexOperation indexOperation)
         {
             throw new NotImplementedException();
