@@ -177,8 +177,40 @@ namespace billc.Visitors
         {
             if (!table.isLocalVar(id.id))
             {
-                isValidProgram = false;
-                errorReporter.Error(id + " does not exist in current scope.", id);
+                //Check for setting a field on an object
+                if (id.id.IsFieldIdentifier())
+                {
+                    string objectName = id.id.GetBeforeField();
+                    if (!table.isLocalVar(objectName))
+                    {
+                        isValidProgram = false;
+                        errorReporter.Error(objectName + " does not exist in current scope.", id);
+                        return;
+                    }
+                    string objType = table.getLocalVar(objectName);
+                    if (!SymbolTable.isClass(objType))
+                    {
+                        isValidProgram = false;
+                        errorReporter.Error(objType + " is not a valid class, can not access field of a non-class.", id);
+                        return;
+                    }
+                    string fieldName = id.id.GetField();
+                    ClassDecl cd = SymbolTable.classes[objType];
+                    bool hasField = cd.fields.Any(fp => fp.id.id.Equals(fieldName));
+                    if (!hasField)
+                    {
+                        isValidProgram = false;
+                        errorReporter.Error("Class '" + objType + "' has no field '" + fieldName + "'.", id);
+                        return;
+                    }
+                    FormalParam fparam = cd.fields.Find(fp => fp.id.id.Equals(fieldName));
+                    resultType = fparam.type;
+                }
+                else
+                {
+                    isValidProgram = false;
+                    errorReporter.Error(id + " does not exist in current scope.", id);
+                }
             }
             else
             {
@@ -339,12 +371,13 @@ namespace billc.Visitors
             {
                 return;
             }
+            string varType = resultType;
             astmt.rhs.accept(this);
             if (!isValidProgram)
             {
                 return;
             }
-            if(table.getLocalVar(astmt.id.id) != resultType){
+            if(varType != resultType){
                 isValidProgram = false;
                 errorReporter.Error("Variable '" + astmt.id + "' is of type " + table.getLocalVar(astmt.id.id) + ", but expression is of type " + resultType, astmt);
             }

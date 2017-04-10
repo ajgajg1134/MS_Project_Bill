@@ -44,6 +44,7 @@ namespace billc.Visitors
         internal Println println;
         internal Input input;
 
+
         internal static int stack_counter = 0;
         internal const int MAX_STACK = 1000;
 

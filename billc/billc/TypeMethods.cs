@@ -18,5 +18,22 @@ namespace billc
             string removeBeg = s.Substring(5);
             return removeBeg.Substring(0, removeBeg.Length - 1);
         }
+
+        public static bool IsFieldIdentifier(this string s)
+        {
+            return s.Contains(".");
+        }
+
+        public static string GetBeforeField(this string s)
+        {
+            int index = s.IndexOf('.');
+            return s.Substring(0, index);
+        }
+
+        public static string GetField(this string s)
+        {
+            int index = s.IndexOf('.');
+            return s.Substring(index + 1);
+        }
     }
 }
