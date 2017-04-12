@@ -193,7 +193,12 @@ namespace billc.TreeNodes
                         default:
                             return null;
                     }
-                        case lit_type.floating:
+                case lit_type.floating:
+                    //Upcast rhs to double if it's an integer
+                    if (r.type == lit_type.integer)
+                    {
+                        r.d = r.i;
+                    }
                     switch (bop)
                     {
                         case binops.eq:

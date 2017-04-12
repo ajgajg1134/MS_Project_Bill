@@ -92,6 +92,17 @@ namespace billc.Visitors
                 errorReporter.Error(rightType + " on right hand side not valid with operator '" + BinaryOperator.binopToString(bop.op) + "'", bop);
                 return;
             }
+
+            if (leftType == "String" || rightType == "String")
+            {
+                if (leftType != "String" || rightType != "String")
+                {
+                    //There are no valid binary operations with string and non-string
+                    isValidProgram = false;
+                    errorReporter.Error("Can not perform binary operation and String and non-String type.", bop);
+                    return;
+                }
+            }
             resultType = BinaryOperator.getResultTypeFromOp(bop.op, leftType, rightType);
         }
 
