@@ -228,6 +228,12 @@ namespace billc.TreeNodes
                             return null;
                     }
                 case lit_type.integer:
+                    //If rhs is floating this should be redone as a floating point op
+                    if (r.type == lit_type.floating)
+                    {
+                        double d = l.i;
+                        return performBinOp(new Literal(d), r, bop);
+                    }
                     switch (bop)
                     {
                         case binops.eq:
