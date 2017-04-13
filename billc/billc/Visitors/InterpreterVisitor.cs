@@ -214,12 +214,6 @@ namespace billc.Visitors
                     }
                 }
                 result = param_iv.result;
-                //Copy any object changes
-                foreach(var kv in param_iv.object_vars)
-                {
-                    
-                }
-
             }
             else if (SymbolTable.isBuiltinFunction(fi.fxnId.id))
             {
