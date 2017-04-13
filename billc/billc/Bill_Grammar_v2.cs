@@ -1903,7 +1903,16 @@ namespace com.calitha.goldparser
 
                 case (int)RuleConstants.RULE_FORMALPARAM_IDENTIFIER:
                     //<Formal Param> ::= <Qualified ID> Identifier
-                    string fparamtype = (string)CreateObject(token.Tokens[0]);
+                    object fparamtypeobj = CreateObject(token.Tokens[0]);
+                    string fparamtype;
+                    if (fparamtypeobj is Identifier)
+                    {
+                        fparamtype = (fparamtypeobj as Identifier).id;
+                    }
+                    else
+                    {
+                        fparamtype = (string)fparamtypeobj;
+                    }
                     Identifier fparamid = (Identifier)CreateObject(token.Tokens[1]);
                     return new FormalParam(fparamid, fparamtype);
 

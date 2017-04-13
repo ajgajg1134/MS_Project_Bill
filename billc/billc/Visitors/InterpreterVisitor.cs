@@ -185,6 +185,15 @@ namespace billc.Visitors
                 {
                     result = null;
                     fi.paramsIn[i].accept(this);
+                    if (wasReferenceResult)
+                    {
+                        if (result_ref is ClassLiteral)
+                        {
+                            param_iv.object_vars[fi.actualFunction.fParams[i].id.id] = result_ref as ClassLiteral;
+                        }
+                        wasReferenceResult = false;
+                        continue;
+                    }
                     if (result == null)
                     {
                         errorReporter.Fatal("Interpreter encountered null literal in function invocation.");
@@ -205,6 +214,11 @@ namespace billc.Visitors
                     }
                 }
                 result = param_iv.result;
+                //Copy any object changes
+                foreach(var kv in param_iv.object_vars)
+                {
+                    
+                }
 
             }
             else if (SymbolTable.isBuiltinFunction(fi.fxnId.id))
@@ -438,6 +452,21 @@ namespace billc.Visitors
         public void visit(Assignment astmt)
         {
             astmt.rhs.accept(this);
+            if (astmt.id.id.IsFieldIdentifier())
+            {
+                string objName = astmt.id.id.GetBeforeField();
+                string fieldName = astmt.id.id.GetField();
+                ClassLiteral classLit = object_vars[objName];
+                ClassDecl classDecl = SymbolTable.classes[classLit.type.id];
+                int paramIndex = classDecl.fields.FindIndex(fp => fp.id.id.Equals(fieldName));
+                if (wasReferenceResult)
+                {
+                    classLit.fieldValues[paramIndex] = result_ref as Expression;
+                } else
+                {
+                    classLit.fieldValues[paramIndex] = result;
+                }
+            }
             primitive_vars[astmt.id.id] = result;
         }
 
@@ -532,7 +561,15 @@ namespace billc.Visitors
                     primitive_vars[kv.Key] = kv.Value;
                 }
             }
-            //TODO: add this for objects, maybe lists too
+
+            foreach(var kv in lowerScope.object_vars)
+            {
+                if (object_vars.ContainsKey(kv.Key))
+                {
+                    object_vars[kv.Key] = kv.Value;
+                }
+            }
+            //TODO: maybe for lists?
         }
 
         public void visit(IndexOperation indexOperation)
