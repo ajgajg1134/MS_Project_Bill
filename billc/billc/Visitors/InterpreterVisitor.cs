@@ -326,6 +326,7 @@ namespace billc.Visitors
             {
                 //string listType = string.Concat(fi.fxnId.id.Substring(5).TakeWhile(c => c != '>'));
                 result_ref = new List<Expression>();
+                wasReferenceResult = true;
                 return;
             }
             string className = string.Concat(fi.fxnId.id.Take(fi.fxnId.id.IndexOf('.')));
