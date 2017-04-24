@@ -6,7 +6,7 @@
 "Name"     = 'TBD'
 "Version"  = '1.0'
 "Author"   = 'Andrew Glaude'
-"About"    = 'TBD was created as an ideal CS1 language at RIT for an MS Project.'
+"About"    = 'BILL was created as an ideal CS1 language at RIT for an MS Project.'
            | 'Based heavily on other OOP languages like C# and Java.'
 
 "Start Symbol" = <Compilation Unit>

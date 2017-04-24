@@ -321,7 +321,7 @@ namespace billc.Visitors
 
         public void handleConstructors(FunctionInvocation fi)
         {
-            wasReferenceResult = true;
+            wasReferenceResult = false;
             if (fi.fxnId.id.IsList())
             {
                 //string listType = string.Concat(fi.fxnId.id.Substring(5).TakeWhile(c => c != '>'));
@@ -329,26 +329,27 @@ namespace billc.Visitors
                 return;
             }
             string className = string.Concat(fi.fxnId.id.Take(fi.fxnId.id.IndexOf('.')));
-            InterpreterVisitor param_iv = new InterpreterVisitor(println, input);
+            //InterpreterVisitor param_iv = new InterpreterVisitor(println, input);
             List<Expression> classVals = new List<Expression>();
             for (int i = 0; i < fi.paramsIn.Count; i++)
             {
-                param_iv.result = null;
-                fi.paramsIn[i].accept(param_iv);
-                if (param_iv.result == null)
+                this.result = null;
+                fi.paramsIn[i].accept(this);
+                if (this.result == null)
                 {
                     errorReporter.Fatal("Interpreter encountered null literal in constructor invocation.");
                     throw new BillRuntimeException();
                 }
-                if (param_iv.wasReferenceResult)
+                if (this.wasReferenceResult)
                 {
-                    classVals.Add(param_iv.result_ref as Expression);
+                    classVals.Add(this.result_ref as Expression);
                 } else
                 {
-                    classVals.Add(param_iv.result);
+                    classVals.Add(this.result);
                 }
-                param_iv.wasReferenceResult = false;
+                this.wasReferenceResult = false;
             }
+            wasReferenceResult = true;
             result_ref = new ClassLiteral(new Identifier(className), classVals);
         }
 

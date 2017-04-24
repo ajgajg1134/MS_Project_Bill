@@ -69,6 +69,7 @@ namespace billc
             //string classFieldTest = "class foo(int a){ }\n void main() { foo x = new foo(10); }";
             //string classFieldTest = "class foo(int a){ }\n void main() { foo x = new foo(10); x.a = 5;\n println(toStr(x.a));}";
             string classRefTest = "class Foo(int a){ }\n void bar(Foo x){ x.a = 5; }\n void main(){ Foo f = new Foo(2); bar(f); println(toStr(f.a)); }";
+            string classCrashFix = "class Person(String name){ }\n void main() { println(\"Enter a name: \"); String nm = input(); Person p = new Person(nm); println(\"Your name is \" + p.name);}";
 
             MyParser parser = new MyParser("Bill_Grammar_v2.cgt");
 
@@ -79,7 +80,7 @@ namespace billc
             if(args.Length == 0)
             {
                 //running in debug mode for now (TODO replace with a usage message)
-                program = (ProgramNode)parser.Parse(classRefTest);
+                program = (ProgramNode)parser.Parse(classCrashFix);
                 //Console.WriteLine("Usage: billc <filename>");
                 //return;
             } else
